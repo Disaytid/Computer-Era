@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
+using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,9 +24,48 @@ namespace Computer_Era
     /// </summary>
     public partial class MainWindow : Window
     {
+        SQLiteConnection connection = ConnectDB();
+
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public static SQLiteConnection ConnectDB()
+        {
+            string baseName = "ComputerEra.db3";
+
+            if (System.IO.File.Exists(baseName))
+            {
+                SQLiteConnection connection = new SQLiteConnection("Data Source = " + baseName);
+                connection.Open();
+                return connection;
+            }
+            else
+            {
+                SQLiteConnection.CreateFile(baseName);
+
+                SQLiteConnection.CreateFile(baseName);
+
+                SQLiteFactory factory = (SQLiteFactory)DbProviderFactories.GetFactory("System.Data.SQLite");
+                using (SQLiteConnection connection = (SQLiteConnection)factory.CreateConnection())
+                {
+                    connection.ConnectionString = "Data Source = " + baseName;
+                    connection.Open();
+
+                    using (SQLiteCommand command = new SQLiteCommand(connection))
+                    {
+                        command.CommandText = @"CREATE TABLE [saves] (
+                    [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    [name] char(100) NOT NULL,
+                    [date] datetime NOT NULL
+                    );";
+                        command.CommandType = CommandType.Text;
+                        command.ExecuteNonQuery();
+                    }
+                    return connection;
+                }
+            }
         }
 
         private void NewGame_Click(object sender, RoutedEventArgs e)

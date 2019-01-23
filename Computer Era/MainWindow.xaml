@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="Computer Era" Height="350" Width="525" Background="White">
     <Grid>
-        <StackPanel Name="GameMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Visible">
+        <StackPanel Name="GameMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Visible" d:IsHidden="True">
             <TextBlock Text="Computer Era" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
             <Button Content="Продолжить" Margin="0, 0, 0, 5"/>
             <Button Name="NewGame" Content="Новая игра" Margin="0, 5, 0, 5" Click="NewGame_Click"/>
@@ -30,10 +30,10 @@
                 <Button Name="StartNewGame" Content="Начать" Click="StartNewGame_Click"/>
             </DockPanel>
         </StackPanel>
-        <StackPanel Name="Game" Margin="0,0,0,50" Visibility="Hidden">
+        <StackPanel Name="Game" Margin="0,0,0,50" Visibility="Visible">
             <TextBlock Text="Новая игра" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
         </StackPanel>
-        <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Hidden">
+        <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Visible">
             <Menu HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Background="{x:Null}" UseLayoutRounding="False" VerticalContentAlignment="Top">
                 <MenuItem HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50">
                     <MenuItem.Background>
