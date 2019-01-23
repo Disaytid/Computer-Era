@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Computer_Era"
         mc:Ignorable="d"
-        Title="Computer Era" Height="350" Width="525" Background="White">
+        Title="Computer Era" Height="350" Width="525" Background="White" SizeChanged="window_SizeChanged">
     <Grid>
+        <!-- Главное меню -->
         <StackPanel Name="GameMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Visible" d:IsHidden="True">
             <TextBlock Text="Computer Era" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
             <Button Content="Продолжить" Margin="0, 0, 0, 5"/>
@@ -16,6 +17,8 @@
             <Button Content="Об авторе" Margin="0, 5, 0, 5"/>
             <Button Content="Выход" Margin="0, 5, 0, 0"/>
         </StackPanel>
+        
+        <!-- Новая игра -->
         <StackPanel Name="CreateNewGame" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Hidden">
             <TextBlock Text="Новая игра" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
             <DockPanel Margin="0,0,0,5">
@@ -30,15 +33,24 @@
                 <Button Name="StartNewGame" Content="Начать" Click="StartNewGame_Click"/>
             </DockPanel>
         </StackPanel>
-        <StackPanel Name="Game" Margin="0,0,0,50" Visibility="Visible">
-            <TextBlock Text="Новая игра" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
-        </StackPanel>
+
+        <!-- Игра -->
+        <Grid Name="Game" Margin="0,0,0,50" Visibility="Visible">
+            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+                
+            </Grid>
+        </Grid>
         <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Visible">
             <Menu HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Background="{x:Null}" UseLayoutRounding="False" VerticalContentAlignment="Top">
                 <MenuItem HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50">
                     <MenuItem.Background>
                         <ImageBrush ImageSource="Resources/start_button.png" Stretch="UniformToFill"/>
                     </MenuItem.Background>
+                    <MenuItem Header="Выключение" FontSize="22" Background="{Binding Background, ElementName=GamePanel}" Foreground="White">
+                        <MenuItem.Icon>
+                            <Image Source ="pack://application:,,,/Resources/power-button.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
             </Menu>
         </ToolBarPanel>

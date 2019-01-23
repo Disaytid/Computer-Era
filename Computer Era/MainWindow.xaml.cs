@@ -68,6 +68,35 @@ namespace Computer_Era
             }
         }
 
+        private void DrawDesktop()
+        {
+            Desktop.ColumnDefinitions.Clear();
+            Desktop.RowDefinitions.Clear();
+
+            double cell_size = 96;
+            double size = Math.Floor(Desktop.ActualWidth / cell_size);
+            double len = Desktop.ActualWidth / size;
+
+            //MessageBox.Show((Desktop.ActualWidth / cell_size).ToString());
+
+            for (int i = 0; i < size; i++)
+            {
+                ColumnDefinition col = new ColumnDefinition
+                { Width = new GridLength(len, GridUnitType.Star) };
+                Desktop.ColumnDefinitions.Insert(i, col);
+            }
+
+            size = Math.Floor(Desktop.ActualHeight / cell_size);
+            len = Desktop.ActualHeight / size;
+
+            for (int i = 0; i < size; i++)
+            {
+                RowDefinition col = new RowDefinition
+                { Height = new GridLength(len, GridUnitType.Star) };
+                Desktop.RowDefinitions.Insert(i, col);
+            }
+        }
+
         private void NewGame_Click(object sender, RoutedEventArgs e)
         {
             GameMenu.Visibility = Visibility.Hidden;
@@ -84,6 +113,13 @@ namespace Computer_Era
             brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg"));
             brush.Stretch = Stretch.UniformToFill;
             this.Background = brush;
+
+            DrawDesktop();
+        }
+
+        private void window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (Game.Visibility == Visibility.Visible) { DrawDesktop(); }
         }
     }
 }
