@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Computer_Era.Game.Objects;
 
 namespace Computer_Era
 {
@@ -25,6 +26,7 @@ namespace Computer_Era
     public partial class MainWindow : Window
     {
         SQLiteConnection connection = ConnectDB();
+        List<Program> programs = new List<Program>();
 
         public MainWindow()
         {
@@ -68,6 +70,31 @@ namespace Computer_Era
             }
         }
 
+        private void LoadSave()
+        {
+            //int app_id = 1;
+
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = @"SELECT * from sp_apps;";
+                command.CommandType = CommandType.Text;
+                SQLiteDataReader data_reader = command.ExecuteReader();
+
+                while (data_reader.Read())
+                {
+                    int id = Convert.ToInt32(data_reader["id"]);
+                    string name = Convert.ToString(data_reader["name"]);
+                    string control_name = Convert.ToString(data_reader["control_name"]);
+                    string description = Convert.ToString(data_reader["description"]);
+                    string icon_name = Convert.ToString(data_reader["icon_name"]);
+                    int row = Convert.ToInt32(data_reader["row"]);
+                    int column = Convert.ToInt32(data_reader["column"]);
+
+                    programs.Add(new Program(id, name, control_name, description, icon_name, row, column));
+                }
+            }
+        }
+
         private void DrawDesktop()
         {
             Desktop.ColumnDefinitions.Clear();
@@ -95,6 +122,38 @@ namespace Computer_Era
                 { Height = new GridLength(len, GridUnitType.Star) };
                 Desktop.RowDefinitions.Insert(i, col);
             }
+
+            foreach (var program in programs)
+            {
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.IconName + ".png"));
+                brush.Stretch = Stretch.UniformToFill;
+
+                Button button = new Button {
+                    Background = brush,
+                    Width = 64,
+                    Height = 64,
+                    BorderThickness = new Thickness(0, 0, 0, 0),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+
+                TextBlock textBlock = new TextBlock {
+                    Text = program.Name, FontSize = 10,
+                    Foreground = new SolidColorBrush(Colors.White),
+                    HorizontalAlignment = HorizontalAlignment.Center
+                };
+
+                StackPanel stackPanel = new StackPanel
+                {
+                    Margin = new Thickness(10, 10, 10, 10)
+                };
+                stackPanel.Children.Add(button);
+                stackPanel.Children.Add(textBlock);
+
+                stackPanel.SetValue(Grid.RowProperty, program.Row);
+                stackPanel.SetValue(Grid.ColumnProperty, program.Column);
+                Desktop.Children.Add(stackPanel);
+            }
         }
 
         private void NewGame_Click(object sender, RoutedEventArgs e)
@@ -114,6 +173,7 @@ namespace Computer_Era
             brush.Stretch = Stretch.UniformToFill;
             this.Background = brush;
 
+            LoadSave();
             DrawDesktop();
         }
 
