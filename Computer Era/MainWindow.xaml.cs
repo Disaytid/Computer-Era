@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Computer_Era.Game;
 using Computer_Era.Game.Objects;
 
 namespace Computer_Era
@@ -25,49 +26,14 @@ namespace Computer_Era
     /// </summary>
     public partial class MainWindow : Window
     {
-        SQLiteConnection connection = ConnectDB();
+        DataBase dataBase = new DataBase("ComputerEra.db3");
+        public SQLiteConnection connection;
         List<Program> programs = new List<Program>();
 
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        public static SQLiteConnection ConnectDB()
-        {
-            string baseName = "ComputerEra.db3";
-
-            if (System.IO.File.Exists(baseName))
-            {
-                SQLiteConnection connection = new SQLiteConnection("Data Source = " + baseName);
-                connection.Open();
-                return connection;
-            }
-            else
-            {
-                SQLiteConnection.CreateFile(baseName);
-
-                SQLiteConnection.CreateFile(baseName);
-
-                SQLiteFactory factory = (SQLiteFactory)DbProviderFactories.GetFactory("System.Data.SQLite");
-                using (SQLiteConnection connection = (SQLiteConnection)factory.CreateConnection())
-                {
-                    connection.ConnectionString = "Data Source = " + baseName;
-                    connection.Open();
-
-                    using (SQLiteCommand command = new SQLiteCommand(connection))
-                    {
-                        command.CommandText = @"CREATE TABLE [saves] (
-                    [id] integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                    [name] char(100) NOT NULL,
-                    [date] datetime NOT NULL
-                    );";
-                        command.CommandType = CommandType.Text;
-                        command.ExecuteNonQuery();
-                    }
-                    return connection;
-                }
-            }
+            connection = dataBase.ConnectDB();
         }
 
         private void LoadSave()
@@ -76,7 +42,7 @@ namespace Computer_Era
 
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
-                command.CommandText = @"SELECT * from sp_apps;";
+                command.CommandText = @"SELECT * from sv_apps;";
                 command.CommandType = CommandType.Text;
                 SQLiteDataReader data_reader = command.ExecuteReader();
 
@@ -123,8 +89,10 @@ namespace Computer_Era
                 Desktop.RowDefinitions.Insert(i, col);
             }
 
+            //Прорисовка программ на рабочем столе
             foreach (var program in programs)
             {
+                //Написать проверку размеров сетки
                 ImageBrush brush = new ImageBrush();
                 brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.IconName + ".png"));
                 brush.Stretch = Stretch.UniformToFill;

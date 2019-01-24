@@ -36,8 +36,15 @@
 
         <!-- Игра -->
         <Grid Name="Game" Margin="0,0,0,50" Visibility="Visible">
-            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled">
+            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Hidden">
                 
+            </Grid>
+            <Grid Name="Inventory">
+                <StackPanel Name="InventoryList">
+                    <StackPanel.ScrollOwner>
+                        <ScrollViewer/>
+                    </StackPanel.ScrollOwner>
+                </StackPanel>
             </Grid>
         </Grid>
         <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Visible">
