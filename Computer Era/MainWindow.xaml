@@ -8,7 +8,7 @@
         Title="Computer Era" Height="350" Width="525" Background="White" SizeChanged="window_SizeChanged">
     <Grid>
         <!-- Главное меню -->
-        <StackPanel Name="GameMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Visible" d:IsHidden="True">
+        <StackPanel Name="GameMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Visible">
             <TextBlock Text="Computer Era" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
             <Button Content="Продолжить" Margin="0, 0, 0, 5"/>
             <Button Name="NewGame" Content="Новая игра" Margin="0, 5, 0, 5" Click="NewGame_Click"/>
@@ -35,11 +35,11 @@
         </StackPanel>
 
         <!-- Игра -->
-        <Grid Name="Game" Margin="0,0,0,50" Visibility="Visible">
-            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Hidden">
+        <Grid Name="Game" Margin="0,0,0,50" Visibility="Hidden">
+            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible">
                 
             </Grid>
-            <Grid Name="Inventory">
+            <Grid Name="Inventory" Visibility="Hidden">
                 <StackPanel Name="InventoryList">
                     <StackPanel.ScrollOwner>
                         <ScrollViewer/>

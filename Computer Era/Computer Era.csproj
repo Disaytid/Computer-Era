@@ -85,6 +85,7 @@
     </Compile>
     <Compile Include="Game\DataBase.cs" />
     <Compile Include="Game\Inventory.cs" />
+    <Compile Include="Game\Objects\Items.cs" />
     <Compile Include="Game\Objects\Program.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
