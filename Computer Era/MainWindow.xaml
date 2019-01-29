@@ -39,21 +39,20 @@
             <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible">
                 
             </Grid>
-            <Grid Name="Inventory" Visibility="Hidden">
-                <StackPanel Name="InventoryList">
-                    <StackPanel.ScrollOwner>
-                        <ScrollViewer/>
-                    </StackPanel.ScrollOwner>
-                </StackPanel>
-            </Grid>
+            <Grid Name="Program" Visibility="Hidden"/>
         </Grid>
-        <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Visible">
+        <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Hidden">
             <Menu HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Background="{x:Null}" UseLayoutRounding="False" VerticalContentAlignment="Top">
                 <MenuItem HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50">
                     <MenuItem.Background>
                         <ImageBrush ImageSource="Resources/start_button.png" Stretch="UniformToFill"/>
                     </MenuItem.Background>
-                    <MenuItem Header="Выключение" FontSize="22" Background="{Binding Background, ElementName=GamePanel}" Foreground="White">
+                    <MenuItem Name="MenuInventoryItem" Header="Кладовка" FontSize="24" Background="{Binding Background, ElementName=GamePanel}" Foreground="White" Click="MenuInventoryItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source ="pack://application:,,,/Resources/cardboard-box.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Выключение" FontSize="24" Background="{Binding Background, ElementName=GamePanel}" Foreground="White">
                         <MenuItem.Icon>
                             <Image Source ="pack://application:,,,/Resources/power-button.png"/>
                         </MenuItem.Icon>

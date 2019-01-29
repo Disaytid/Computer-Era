@@ -29,6 +29,7 @@ namespace Computer_Era
         DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
         List<Program> programs = new List<Program>();
+        Inventory inventory;
 
         public MainWindow()
         {
@@ -148,6 +149,12 @@ namespace Computer_Era
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (Game.Visibility == Visibility.Visible) { DrawDesktop(); }
+        }
+
+        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e)
+        {
+            inventory = null;
+            inventory = new Inventory(Program);
         }
     }
 }
