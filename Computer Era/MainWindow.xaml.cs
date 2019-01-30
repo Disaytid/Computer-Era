@@ -6,6 +6,7 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using Computer_Era.Game;
 using Computer_Era.Game.Forms;
 using Computer_Era.Game.Objects;
@@ -32,6 +34,8 @@ namespace Computer_Era
         public SQLiteConnection connection;
         List<Program> programs = new List<Program>();
         Items items;
+        DispatcherTimer timer = new DispatcherTimer();
+        DateTime GameDate = new DateTime(1990, 1, 1,7,0,0);
 
         public MainWindow()
         {
@@ -39,6 +43,9 @@ namespace Computer_Era
             connection = dataBase.ConnectDB();
 
             items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
+            timer.Tick += new EventHandler(TimerTick);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
+            
         }
 
         private void LoadSave()
@@ -63,70 +70,6 @@ namespace Computer_Era
 
                     programs.Add(new Program(id, name, control_name, description, icon_name, row, column));
                 }
-            }
-        }
-
-        private void CreateItem() //DELETE
-        {
-            //{"builtin_fans": "1", "places_fans": "5", "liquid_cooling": "true", "usb2_0": "2", "usb3_0": "1", "headphone_jack": "true", "microphone_jack": "true"}
-            int id = 2;
-            string name = "GIGABYTE GA-A320M-H";
-            string type = "motherboard";
-            int price = 3440;
-            DateTime date = new DateTime(2018, 1, 1);
-
-            MotherboardProperties properties = new MotherboardProperties
-            {
-                MotherboardType = MotherboardTypes.MicroATX,
-                Socket = MotherboardSockets.AM4,
-                MultiCoreProcessor = true,
-                Chipset = "AMD A320",
-                BIOS = MotherboardBIOS.AMI,
-                EFI = true,
-                RamType = RAMTypes.DDR4,
-                RAMSlots = 2,
-                MinFrequency = 2133,
-                MaxFrequency = 3200,
-                RAMVolume = 32,
-                IDE = 0,
-                SATA2_0 = 0,
-                SATA3_0 = 4,
-                PCI = 0,
-                PCI_Ex1 = 2,
-                PCI_Ex4 = 0,
-                PCI_Ex8 = 0,
-                PCI_Ex16 = 1,
-                PCIE2_0 = true,
-                PCIE3_0 = true,
-                Sound = true,
-                EthernetSpeed = 1000,
-                PS2Keyboard = true,
-                PS2Mouse = true,
-                USB2_0 = 0,
-                USB3_0 = 6
-            };
-
-            using (SQLiteCommand command = new SQLiteCommand(connection))
-            {
-                command.CommandText = @"INSERT INTO items (name, type, price, manufacturing_date, properties) VALUES (@Name, @Type, @Price, @ManufacturingDate, @Properties);";
-                command.CommandType = CommandType.Text;
-
-                // Создание параметров
-                command.Parameters.Add("@Name", DbType.String);
-                command.Parameters.Add("@Type", DbType.String);
-                command.Parameters.Add("@Price", DbType.Int32);
-                command.Parameters.Add("@ManufacturingDate", DbType.Date);
-                command.Parameters.Add("@Properties", DbType.String);
-
-                // Установка значений параметров
-                command.Parameters["@Name"].Value = name;
-                command.Parameters["@Type"].Value = type;
-                command.Parameters["@Price"].Value = price;
-                command.Parameters["@ManufacturingDate"].Value = date;
-                string json_properties = JsonConvert.SerializeObject(properties);
-                command.Parameters["@Properties"].Value = json_properties;
-
-                command.ExecuteNonQuery();
             }
         }
 
@@ -193,6 +136,12 @@ namespace Computer_Era
             }
         }
 
+        void TimerTick (object sender, EventArgs args)
+        {
+            GameDate = GameDate.AddMinutes(1);
+            LabelTime.Text = GameDate.ToString("HH:mm \r\n dd.MM.yyyy");
+        }
+
         private void NewGame_Click(object sender, RoutedEventArgs e)
         {
             GameMenu.Visibility = Visibility.Hidden;
@@ -212,6 +161,8 @@ namespace Computer_Era
 
             LoadSave();
             DrawDesktop();
+            LabelTime.Text = GameDate.ToString("HH:mm \r\n dd.MM.yyyy");
+            timer.Start();
         }
 
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -226,6 +177,29 @@ namespace Computer_Era
             Inventory inventory = new Inventory(items);
             Program.Children.Add(inventory);
             Program.Visibility = Visibility.Visible;
+        }
+
+        private void PauseItem_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+        }
+
+        private void PlayItem_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
+            timer.Start();
+        }
+
+        private void FastPlayItem_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            timer.Start();
+        }
+
+        private void VeryFastPlayItem_Click(object sender, RoutedEventArgs e)
+        {
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+            timer.Start();
         }
     }
 }

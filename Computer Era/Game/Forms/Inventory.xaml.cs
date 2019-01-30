@@ -24,6 +24,7 @@ namespace Computer_Era.Game.Forms
         {
             InitializeComponent();
             MaxSize = 16;
+            Title.Text = "Кладовка (" + MaxSize + " ячеек)";
             LoadItems(items);
         }
 

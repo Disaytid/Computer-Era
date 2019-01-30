@@ -36,12 +36,12 @@
 
         <!-- Игра -->
         <Grid Name="Game" Margin="0,0,0,50" Visibility="Hidden">
-            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible">
+            <Grid Name="Desktop" ShowGridLines="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible">
                 
             </Grid>
             <Grid Name="Program" Visibility="Hidden"/>
         </Grid>
-        <ToolBarPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Hidden">
+        <DockPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Hidden" LastChildFill="False">
             <Menu HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Background="{x:Null}" UseLayoutRounding="False" VerticalContentAlignment="Top">
                 <MenuItem HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50">
                     <MenuItem.Background>
@@ -59,6 +59,31 @@
                     </MenuItem>
                 </MenuItem>
             </Menu>
-        </ToolBarPanel>
+            <TextBlock x:Name="LabelTime" Text="01.01.0001" DockPanel.Dock="Right" Foreground="White" VerticalAlignment="Center" Margin="5,0" TextAlignment="Center">
+                <TextBlock.ContextMenu>
+                    <ContextMenu Background="#7FF6F6F6">
+                        <MenuItem x:Name="PauseItem" Header="Пауза" Click="PauseItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source ="pack://application:,,,/Resources/pause-button.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="PlayItem" Header="Обычная скорость" Click="PlayItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source ="pack://application:,,,/Resources/play-button.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="FastPlayItem" Header="x2" Click="FastPlayItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source ="pack://application:,,,/Resources/fastplay-button.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem x:Name="VeryFastPlayItem" Header="x4" Click="VeryFastPlayItem_Click">
+                            <MenuItem.Icon>
+                                <Image Source ="pack://application:,,,/Resources/veryfastplay-button.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </TextBlock.ContextMenu></TextBlock>
+        </DockPanel>
     </Grid>
 </Window>
