@@ -201,5 +201,12 @@ namespace Computer_Era
             timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
             timer.Start();
         }
+
+        private void MenuMapItem_Click(object sender, RoutedEventArgs e)
+        {
+            Map map = new Map();
+            Program.Children.Add(map);
+            Program.Visibility = Visibility.Visible;
+        }
     }
 }

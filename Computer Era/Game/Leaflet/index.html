@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html lang="en" style="height: 98%;">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" charset="utf-8" href="leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script type="text/javascript" charset="utf-8" src="leaflet.js"></script>
+
+    <script>
+        function onLoad() {
+            var mymap = L.map('mapid').setView([53.5932, 25.824], 16);
+
+            L.tileLayer('tiles/{z}/{x}/{y}.png',
+                { maxZoom: 17 }).addTo(mymap);
+
+            L.marker([53.59565, 25.8233], { icon: evilTowerIcon }).bindPopup("<b>Биржа труда</b><br>Устроим на работу вас и даже вашу собаку.<br><a href='#' onclick='ReadState(&quot;labor_exchange&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59535, 25.8131], { icon: bankIcon }).bindPopup("<b>Банк</b><br>Сохраним ваши деньги для себя.<br><a href='#' onclick='ReadState(&quot;bank&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59092, 25.81885], { icon: marketIcon }).bindPopup("<b>Рынок радиотоваров</b><br>У нас можно купить технику неизвестного происхождения.<br><a href='#' onclick='ReadState(&quot;radio_market&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59000, 25.8258], { icon: microchipIcon }).bindPopup("<b>Магазин компьютерных комплектующих</b><br>Качественные комплектующие за приемлимую цену.<br><a href='#' onclick='ReadState(&quot;computer_parts_store&quot;)'>Перейти</a>").addTo(mymap);
+        }
+    </script>
+
+    <!-- Computer Era CSS -->
+    <link rel="stylesheet" href="index.css" />
+
+    <!-- Computer Era JS -->
+    <script type="text/javascript" charset="utf-8" src="index.js"></script>
+
+    <title>Карта города</title>
+</head>
+<body style="height: 100%; margin: 0;" onload="onLoad();">
+    <div id="mapid"></div>
+</body>
+</html>

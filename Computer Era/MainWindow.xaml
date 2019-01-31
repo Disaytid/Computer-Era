@@ -47,6 +47,11 @@
                     <MenuItem.Background>
                         <ImageBrush ImageSource="Resources/start_button.png" Stretch="UniformToFill"/>
                     </MenuItem.Background>
+                    <MenuItem Name="MenuMapItem" Header="Карта" FontSize="24" Background="{Binding Background, ElementName=GamePanel}" Foreground="White" Click="MenuMapItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source ="pack://application:,,,/Resources/treasure-map.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Name="MenuInventoryItem" Header="Кладовка" FontSize="24" Background="{Binding Background, ElementName=GamePanel}" Foreground="White" Click="MenuInventoryItem_Click">
                         <MenuItem.Icon>
                             <Image Source ="pack://application:,,,/Resources/cardboard-box.png"/>
