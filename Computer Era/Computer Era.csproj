@@ -179,6 +179,12 @@
     <Resource Include="Resources\treasure-map.png" />
     <Resource Include="Game\Leaflet\images\bank.png" />
     <Resource Include="Game\Leaflet\images\evil-tower.png" />
+    <Resource Include="Game\Leaflet\images\bucket.png" />
+    <Resource Include="Game\Leaflet\images\coffee-cup.png" />
+    <Resource Include="Game\Leaflet\images\martini.png" />
+    <Resource Include="Game\Leaflet\images\milk-carton.png" />
+    <Resource Include="Game\Leaflet\images\pc.png" />
+    <Resource Include="Game\Leaflet\images\wheelbarrow.png" />
     <Content Include="Game\Leaflet\index.js" />
     <Resource Include="Game\Leaflet\tiles\13\4682\2645.png" />
     <Resource Include="Game\Leaflet\tiles\13\4682\2646.png" />
