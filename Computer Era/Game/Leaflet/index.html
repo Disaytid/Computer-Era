@@ -14,21 +14,30 @@
     <script>
         function onLoad() {
             var mymap = L.map('mapid').setView([53.5932, 25.824], 16);
+            mymap.setMaxBounds([[53.5832, 25.804], [53.6032, 25.844]]);
 
             L.tileLayer('tiles/{z}/{x}/{y}.png',
-                { maxZoom: 17 }).addTo(mymap);
+                { minZoom: 16, maxZoom: 17 }).addTo(mymap);
 
-            L.marker([53.59565, 25.8233], { icon: evilTowerIcon }).bindPopup("<b>Биржа труда</b><br>Устроим на работу вас и даже вашу собаку.<br><a href='#' onclick='ReadState(&quot;labor_exchange&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.59535, 25.8131], { icon: bankIcon }).bindPopup("<b>Банк</b><br>Сохраним ваши деньги для себя.<br><a href='#' onclick='ReadState(&quot;bank&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59695, 25.82120], { icon: evilTowerIcon }).bindPopup("<b>Биржа труда</b><br>Устроим на работу вас и даже вашу собаку.<br><a href='#' onclick='ReadState(&quot;labor_exchange&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59535, 25.81310], { icon: bankIcon }).bindPopup("<b>Банк</b><br>Сохраним ваши деньги для себя.<br><a href='#' onclick='ReadState(&quot;bank&quot;)'>Перейти</a>").addTo(mymap);
             L.marker([53.59092, 25.81885], { icon: marketIcon }).bindPopup("<b>Рынок радиотоваров</b><br>У нас можно купить технику неизвестного происхождения.<br><a href='#' onclick='ReadState(&quot;radio_market&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.59000, 25.8258], { icon: microchipIcon }).bindPopup("<b>Магазин компьютерных комплектующих</b><br>Качественные комплектующие за приемлимую цену.<br><a href='#' onclick='ReadState(&quot;computer_parts_store&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.59565, 25.8097], { icon: pcIcon }).bindPopup("<b>Магазин компьютеров в сборе</b><br>Мы не умеем собирать компьютеры поэтому покупаем и продаем их уже собранными.<br><a href='#' onclick='ReadState(&quot;computer_store&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59000, 25.82580], { icon: microchipIcon }).bindPopup("<b>Магазин компьютерных комплектующих</b><br>Качественные комплектующие за приемлимую цену.<br><a href='#' onclick='ReadState(&quot;computer_parts_store&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59565, 25.80970], { icon: pcIcon }).bindPopup("<b>Магазин компьютеров в сборе</b><br>Мы не умеем собирать компьютеры поэтому покупаем и продаем их уже собранными.<br><a href='#' onclick='ReadState(&quot;computer_store&quot;)'>Перейти</a>").addTo(mymap);
             L.marker([53.59160, 25.82160], { icon: coffeeCupIcon }).bindPopup("<b>Кафе</b><br>Мы знаем что кофе мужского рода.<br><a href='#' onclick='ReadState(&quot;cafe&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.59320, 25.8305], { icon: marketIcon }).bindPopup("<b>Большой рынок</b><br>Больше рынок, больше хлама.<br><a href='#' onclick='ReadState(&quot;big_market&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59320, 25.83050], { icon: marketIcon }).bindPopup("<b>Большой рынок</b><br>Больше рынок, больше хлама.<br><a href='#' onclick='ReadState(&quot;big_market&quot;)'>Перейти</a>").addTo(mymap);
             L.marker([53.59385, 25.82130], { icon: milkCartonIcon }).bindPopup("<b>Продуктовый магазин</b><br>Свежие и не очень свежие продукты.<br><a href='#' onclick='ReadState(&quot;grocery_store&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.58865, 25.8091], { icon: wheelbarrowIcon }).bindPopup("<b>Магазин строительных материалов</b><br>Лидер по поставкам синей изоленты.<br><a href='#' onclick='ReadState(&quot;hardware_store&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.59325, 25.8234], { icon: martiniIcon }).bindPopup("<b>Бар</b><br>Трезвых не выпускаем.<br><a href='#' onclick='ReadState(&quot;bar&quot;)'>Перейти</a>").addTo(mymap);
-            L.marker([53.59375, 25.8108], { icon: bucketIcon }).bindPopup("<b>Баня</b><br>Веники не выдаем.<br><a href='#' onclick='ReadState(&quot;bathhouse&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.58865, 25.80910], { icon: wheelbarrowIcon }).bindPopup("<b>Магазин строительных материалов</b><br>Лидер по поставкам синей изоленты.<br><a href='#' onclick='ReadState(&quot;hardware_store&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59325, 25.82340], { icon: martiniIcon }).bindPopup("<b>Бар</b><br>Трезвых не выпускаем.<br><a href='#' onclick='ReadState(&quot;bar&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59375, 25.81080], { icon: bucketIcon }).bindPopup("<b>Баня</b><br>Веники не выдаем.<br><a href='#' onclick='ReadState(&quot;bathhouse&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59565, 25.82330], { icon: filmProjectorIcon }).bindPopup("<b>Кинотеатр</b><br>Запайсайтесь попкорном.<br><a href='#' onclick='ReadState(&quot;cinema&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59180, 25.84180], { icon: jerrycanIcon }).bindPopup("<b>Заправка</b><br>Дятловская лучше.<br><a href='#' onclick='ReadState(&quot;refueling&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59345, 25.80670], { icon: marketIcon }).bindPopup("<b>Маленький рынок</b><br>У нас есть ненужный вам хлам.<br><a href='#' onclick='ReadState(&quot;small_market&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.58988, 25.81040], { icon: weightLiftingIcon }).bindPopup("<b>Тренажерный зал</b><br>Надо подкачаться, надо надо подкачаться.<br><a href='#' onclick='ReadState(&quot;gym&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59610, 25.81065], { icon: compactDiscIcon }).bindPopup("<b>Киоск с дисками</b><br>Каждая царапина целая история.<br><a href='#' onclick='ReadState(&quot;disc_stand&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59345, 25.83900], { icon: carIcon }).bindPopup("<b>Авторынок</b><br>Не бита не крашена.<br><a href='#' onclick='ReadState(&quot;car_market&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.59330, 25.81595], { icon: houseIcon }).bindPopup("<b>Агенство недвижимости</b><br>От сарая до пентхауса.<br><a href='#' onclick='ReadState(&quot;estate_agency&quot;)'>Перейти</a>").addTo(mymap);
+            L.marker([53.58908, 25.81555], { icon: modernCityIcon }).bindPopup("<b>Бизнес центр</b><br>Тут люди делают деньги, наверное...<br><a href='#' onclick='ReadState(&quot;business_center&quot;)'>Перейти</a>").addTo(mymap);
         }
     </script>
 

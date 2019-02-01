@@ -15,8 +15,15 @@ var bankIcon = new BuildingIcon({ iconUrl: 'images/bank.png' }),
     milkCartonIcon = new BuildingIcon({ iconUrl: 'images/milk-carton.png' }),
     wheelbarrowIcon = new BuildingIcon({ iconUrl: 'images/wheelbarrow.png' }),
     martiniIcon = new BuildingIcon({ iconUrl: 'images/martini.png' }),
-    bucketIcon = new BuildingIcon({ iconUrl: 'images/bucket.png' });
+    bucketIcon = new BuildingIcon({ iconUrl: 'images/bucket.png' }),
+    filmProjectorIcon = new BuildingIcon({ iconUrl: 'images/film-projector.png' }), 
+    jerrycanIcon = new BuildingIcon({ iconUrl: 'images/jerrycan.png' }),
+    weightLiftingIcon = new BuildingIcon({ iconUrl: 'images/weight-lifting.png' }),
+    compactDiscIcon = new BuildingIcon({ iconUrl: 'images/compact-disc.png' }),
+    carIcon = new BuildingIcon({ iconUrl: 'images/car.png' }),
+    houseIcon = new BuildingIcon({ iconUrl: 'images/house.png' }),
+    modernCityIcon = new BuildingIcon({ iconUrl: 'images/modern-city.png' });
 
 function ReadState(options) {
     window.external.ReadState(options);
-};
+}; 
