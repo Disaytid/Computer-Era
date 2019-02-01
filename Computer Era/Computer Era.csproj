@@ -78,6 +78,9 @@
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </ApplicationDefinition>
+    <Page Include="Game\Dictionarys\Menu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Forms\Inventory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -185,6 +188,13 @@
     <Resource Include="Game\Leaflet\images\milk-carton.png" />
     <Resource Include="Game\Leaflet\images\pc.png" />
     <Resource Include="Game\Leaflet\images\wheelbarrow.png" />
+    <Resource Include="Game\Leaflet\images\car.png" />
+    <Resource Include="Game\Leaflet\images\compact-disc.png" />
+    <Resource Include="Game\Leaflet\images\film-projector.png" />
+    <Resource Include="Game\Leaflet\images\house.png" />
+    <Resource Include="Game\Leaflet\images\jerrycan.png" />
+    <Resource Include="Game\Leaflet\images\modern-city.png" />
+    <Resource Include="Game\Leaflet\images\weight-lifting.png" />
     <Content Include="Game\Leaflet\index.js" />
     <Resource Include="Game\Leaflet\tiles\13\4682\2645.png" />
     <Resource Include="Game\Leaflet\tiles\13\4682\2646.png" />

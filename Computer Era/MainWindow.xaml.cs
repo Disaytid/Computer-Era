@@ -36,6 +36,7 @@ namespace Computer_Era
         Items items;
         DispatcherTimer timer = new DispatcherTimer();
         DateTime GameDate = new DateTime(1990, 1, 1,7,0,0);
+        UserControl lastForm = null;
 
         public MainWindow()
         {
@@ -176,6 +177,8 @@ namespace Computer_Era
             //inventory = new Inventory(Program, items);
             Inventory inventory = new Inventory(items);
             Program.Children.Add(inventory);
+            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
+            lastForm = inventory;
             Program.Visibility = Visibility.Visible;
         }
 
@@ -206,6 +209,8 @@ namespace Computer_Era
         {
             Map map = new Map();
             Program.Children.Add(map);
+            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
+            lastForm = map;
             Program.Visibility = Visibility.Visible;
         }
     }
