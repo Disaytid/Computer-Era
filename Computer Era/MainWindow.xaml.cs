@@ -34,9 +34,14 @@ namespace Computer_Era
         public SQLiteConnection connection;
         List<Program> programs = new List<Program>();
         Items items;
+        Money money;
         DispatcherTimer timer = new DispatcherTimer();
         DateTime GameDate = new DateTime(1990, 1, 1,7,0,0);
         UserControl lastForm = null;
+
+        //DEV
+        int dcout_click = 25;
+        int dclick_fix;
 
         public MainWindow()
         {
@@ -44,9 +49,11 @@ namespace Computer_Era
             connection = dataBase.ConnectDB();
 
             items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
+            money = new Money(connection, 1); //Загрузка валют
+
+            //Главный игровой таймер
             timer.Tick += new EventHandler(TimerTick);
             timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
-            
         }
 
         private void LoadSave()
@@ -182,6 +189,24 @@ namespace Computer_Era
             Program.Visibility = Visibility.Visible;
         }
 
+        private void MenuMapItem_Click(object sender, RoutedEventArgs e)
+        {
+            Map map = new Map(timer.Interval);
+            Program.Children.Add(map);
+            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
+            lastForm = map;
+            Program.Visibility = Visibility.Visible;
+        }
+
+        private void MenuPurseItem_Click(object sender, RoutedEventArgs e)
+        {
+            Purse purse = new Purse(money.PlayerCurrency, GameDate);
+            Program.Children.Add(purse);
+            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
+            lastForm = purse;
+            Program.Visibility = Visibility.Visible;
+        }
+
         private void PauseItem_Click(object sender, RoutedEventArgs e)
         {
             timer.Stop();
@@ -189,29 +214,28 @@ namespace Computer_Era
 
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
             timer.Start();
         }
 
         private void FastPlayItem_Click(object sender, RoutedEventArgs e)
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
             timer.Start();
         }
 
         private void VeryFastPlayItem_Click(object sender, RoutedEventArgs e)
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+            if (dclick_fix < dcout_click)
+            {
+                dclick_fix += 1;
+            } else {
+                dclick_fix = 0;
+                GameDate = GameDate.AddMonths(10);
+            }
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
             timer.Start();
         }
 
-        private void MenuMapItem_Click(object sender, RoutedEventArgs e)
-        {
-            Map map = new Map();
-            Program.Children.Add(map);
-            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
-            lastForm = map;
-            Program.Visibility = Visibility.Visible;
-        }
     }
 }

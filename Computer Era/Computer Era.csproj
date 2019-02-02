@@ -89,6 +89,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\Purse.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -105,7 +108,11 @@
     <Compile Include="Game\Forms\Map.xaml.cs">
       <DependentUpon>Map.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Forms\Purse.xaml.cs">
+      <DependentUpon>Purse.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Objects\Items.cs" />
+    <Compile Include="Game\Objects\Money.cs" />
     <Compile Include="Game\Objects\Program.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -177,6 +184,9 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\currency\coin.png" />
+    <Resource Include="Resources\currency\usd.png" />
+    <Resource Include="Resources\wallet.png" />
     <Resource Include="Game\Leaflet\images\market.png" />
     <Resource Include="Game\Leaflet\images\microchip.png" />
     <Resource Include="Resources\treasure-map.png" />

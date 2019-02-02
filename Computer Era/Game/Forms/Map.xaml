@@ -11,6 +11,21 @@
             <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
             <TextBlock Name="Title" Text="Карта" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </DockPanel>
-        <WebBrowser Name="MapBrowser" Margin="0,32,0,0" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" />
+        <WebBrowser Name="MapBrowser" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Height="{Binding ActualHeight, ElementName=stackPanel, Mode=OneWay}" Margin="0,32,0,0" />
+        <Grid Name="TransitionPanel"  Background="White" Margin="0,32,0,0" Visibility="Visible">
+            <StackPanel Name="ChoiсePanel" VerticalAlignment="Center" MaxWidth="500">
+                <TextBlock Text="На чем добираться будем?" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" Margin="10,0,10,5"/>
+                <Button x:Name="Walk" Content="Пешком" VerticalAlignment="Center" Margin="10, 5" Click="Walk_Click"></Button>
+                <Button Content="На общественном транспорте" VerticalAlignment="Center" Margin="10, 5"></Button>
+                <Button Content="На велосипеде" VerticalAlignment="Center" Margin="10, 5"></Button>
+                <Button Content="На самокате" VerticalAlignment="Center" Margin="10, 5"></Button>
+                <Button Content="На моноколесе" VerticalAlignment="Center" Margin="10, 5"></Button>
+                <Button Content="На машине" VerticalAlignment="Center" Margin="10, 5, 10, 0"></Button>
+            </StackPanel>
+            <StackPanel Name="MovePanel" VerticalAlignment="Center" MaxWidth="500" Visibility="Hidden">
+                <TextBlock Text="Перемещение в пространстве и времени" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" Margin="10,0,10,5"/>
+                <ProgressBar Name="MoveProgress" Height="25" Margin="10, 5, 10, 0"></ProgressBar>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

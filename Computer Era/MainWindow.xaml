@@ -57,6 +57,11 @@
                     <MenuItem.Icon>
                         <Image Source ="pack://application:,,,/Resources/start_button.png" Stretch="Fill"/>
                     </MenuItem.Icon>
+                    <MenuItem Name="MenuPurseItem" Header="Кошелек" Style="{StaticResource MenuItem}" Click="MenuPurseItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source ="pack://application:,,,/Resources/wallet.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <MenuItem Name="MenuMapItem" Header="Карта" Style="{StaticResource MenuItem}" Click="MenuMapItem_Click">
                         <MenuItem.Icon>
                             <Image Source ="pack://application:,,,/Resources/treasure-map.png"/>

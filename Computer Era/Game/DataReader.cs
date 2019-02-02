@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Computer_Era.Game.Forms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -12,14 +13,19 @@ namespace Computer_Era.Game
     [ComVisible(true)]
     public class MapReader
     {
-        public MapReader()
-        {
+        object map;
 
+        public MapReader(object sender)
+        {
+            map = sender;
         }
         
         public void ReadState(string obj)
         {
-            MessageBox.Show(obj);
+            if (map is Map)
+            {
+                (map as Map).TransitionProcessing(obj);
+            }
         }
     }
 
