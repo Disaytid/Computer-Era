@@ -1,27 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SQLite;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Computer_Era.Game;
 using Computer_Era.Game.Forms;
 using Computer_Era.Game.Objects;
-using Newtonsoft.Json;
 
 namespace Computer_Era
 {
@@ -32,9 +20,14 @@ namespace Computer_Era
     {
         DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
+
+        //Объекты (Game/Objects)
         List<Program> programs = new List<Program>();
         Items items;
         Money money;
+        Professions professions;
+        Companies companies;
+
         DispatcherTimer timer = new DispatcherTimer();
         DateTime GameDate = new DateTime(1990, 1, 1,7,0,0);
         UserControl lastForm = null;
@@ -50,6 +43,8 @@ namespace Computer_Era
 
             items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
             money = new Money(connection, 1); //Загрузка валют
+            professions = new Professions(connection); //Загрузка списка профессий
+            companies = new Companies(connection); //Загрузка списка компаний
 
             //Главный игровой таймер
             timer.Tick += new EventHandler(TimerTick);
@@ -89,8 +84,6 @@ namespace Computer_Era
             double cell_size = 96;
             double size = Math.Floor(Desktop.ActualWidth / cell_size);
             double len = Desktop.ActualWidth / size;
-
-            //MessageBox.Show((Desktop.ActualWidth / cell_size).ToString());
 
             for (int i = 0; i < size; i++)
             {
@@ -191,7 +184,7 @@ namespace Computer_Era
 
         private void MenuMapItem_Click(object sender, RoutedEventArgs e)
         {
-            Map map = new Map(timer.Interval);
+            Map map = new Map(this, timer.Interval);
             Program.Children.Add(map);
             if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
             lastForm = map;
@@ -235,6 +228,23 @@ namespace Computer_Era
             }
             timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
             timer.Start();
+        }
+
+        public void ShowBuilding(string obj)
+        {
+            switch (obj)
+            {
+                case "labor_exchange":
+                    LaborExchange l_ex = new LaborExchange(professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, GameDate);
+                    Program.Children.Add(l_ex);
+                    if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
+                    lastForm = l_ex;
+                    Program.Visibility = Visibility.Visible;
+                    break;
+                default:
+                    MessageBox.Show("Вы прибыли к " + obj + "!");
+                    break;
+            }
         }
 
     }

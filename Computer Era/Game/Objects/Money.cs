@@ -35,7 +35,6 @@ namespace Computer_Era.Game.Objects
                     PlayerCurrency.Add(new Currency(id, sys_name, name, abbreviation, date_appearance, course, count));
                 }
             }
-
         }
     }
 
@@ -43,10 +42,10 @@ namespace Computer_Era.Game.Objects
     {
         int Id { get; }
         public string SystemName { get;}
-        public string Name { get; set; }
-        public string Abbreviation { get; set; }
+        public string Name { get; }
+        public string Abbreviation { get;}
         public DateTime DateAppearance { get; }
-        public double Course { get; set; } //Написать обработчик
+        public double Course { get; } //Написать обработчик
         private double count = 0;
 
         public double Count

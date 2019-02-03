@@ -23,13 +23,15 @@ namespace Computer_Era.Game.Forms
     /// </summary>
     public partial class Map : UserControl
     {
+        Object main;
         DispatcherTimer Timer = new DispatcherTimer();
         string Obj;
 
-        public Map(TimeSpan timeSpan)
+        public Map(object sender, TimeSpan timeSpan)
         {
             InitializeComponent();
 
+            main = sender;
             Timer.Tick += new EventHandler(TimerTick);
             Timer.Interval = timeSpan;
 
@@ -69,7 +71,10 @@ namespace Computer_Era.Game.Forms
             if (MoveProgress.Value == 100)
             {
                 Timer.Stop();
-                MessageBox.Show("Вы прибыли к " + Obj + "!");
+                if (main is MainWindow)
+                {
+                    (main as MainWindow).ShowBuilding(Obj);
+                }
             } else {
                 if (MoveProgress.Value < 100) { MoveProgress.Value += 1; }
             }

@@ -85,6 +85,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\LaborExchange.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Forms\Map.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -105,14 +108,19 @@
     <Compile Include="Game\Forms\Inventory.xaml.cs">
       <DependentUpon>Inventory.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Forms\LaborExchange.xaml.cs">
+      <DependentUpon>LaborExchange.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Forms\Map.xaml.cs">
       <DependentUpon>Map.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\Forms\Purse.xaml.cs">
       <DependentUpon>Purse.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Objects\Companies.cs" />
     <Compile Include="Game\Objects\Items.cs" />
     <Compile Include="Game\Objects\Money.cs" />
+    <Compile Include="Game\Objects\Professions.cs" />
     <Compile Include="Game\Objects\Program.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -184,6 +192,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\business-01.png" />
     <Resource Include="Resources\currency\coin.png" />
     <Resource Include="Resources\currency\usd.png" />
     <Resource Include="Resources\wallet.png" />
@@ -205,6 +214,7 @@
     <Resource Include="Game\Leaflet\images\jerrycan.png" />
     <Resource Include="Game\Leaflet\images\modern-city.png" />
     <Resource Include="Game\Leaflet\images\weight-lifting.png" />
+    <Resource Include="Resources\backdrop.jpg" />
     <Content Include="Game\Leaflet\index.js" />
     <Resource Include="Game\Leaflet\tiles\13\4682\2645.png" />
     <Resource Include="Game\Leaflet\tiles\13\4682\2646.png" />
