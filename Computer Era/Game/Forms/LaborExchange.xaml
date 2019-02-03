@@ -15,14 +15,18 @@
                 <ImageBrush ImageSource="/Computer Era;component/Resources/backdrop.jpg" Stretch="UniformToFill"/>
             </Grid.Background>
             <Grid>
-                <DockPanel VerticalAlignment="Top" MaxHeight="200">
+                <DockPanel VerticalAlignment="Top" MaxHeight="200" Background="White">
                     <Image Source="/Computer Era;component/Resources/business-01.png" HorizontalAlignment="Left" Width="300"/>
                     <StackPanel>
-                        <TextBlock Text="Здравствуйте, чем могу вам помочь?" FontSize="18" TextWrapping="Wrap" Margin="10,0,10,5" Foreground="White" />
+                        <TextBlock Text="Здравствуйте, чем могу вам помочь?" FontSize="18" TextWrapping="Wrap" Margin="10,0,10,5" />
                         <Button Content="Я хочу уволиться!" Margin="10,5,10,0" HorizontalAlignment="Left" MinWidth="200" IsEnabled="False" />
                     </StackPanel>
                 </DockPanel>
-                <Grid Name="Jobs" Margin="0,197,0,0" ShowGridLines="False" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+                <ScrollViewer Margin="0,197,0,0" VerticalScrollBarVisibility="Auto">
+                    <Grid Name="Jobs" ShowGridLines="False">
+                    
+                    </Grid>
+                </ScrollViewer>
             </Grid>
         </Grid>
     </Grid>
