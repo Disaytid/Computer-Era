@@ -22,33 +22,31 @@ namespace Computer_Era
         public SQLiteConnection connection;
 
         //Объекты (Game/Objects)
+        GameEvents events;
         List<Program> programs = new List<Program>();
         Items items;
         Money money;
         Professions professions;
         Companies companies;
 
-        DispatcherTimer timer = new DispatcherTimer();
-        DateTime GameDate = new DateTime(1990, 1, 1,7,0,0);
         UserControl lastForm = null;
 
         //DEV
-        int dcout_click = 25;
-        int dclick_fix;
+        //int dcout_click = 25;
+        //int dclick_fix;
 
         public MainWindow()
         {
             InitializeComponent();
             connection = dataBase.ConnectDB();
 
+            events = new GameEvents(); //События и игровое время
+            events.GameTimer.Minute += this.TimerTick;
+
             items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
             money = new Money(connection, 1); //Загрузка валют
             professions = new Professions(connection); //Загрузка списка профессий
             companies = new Companies(connection); //Загрузка списка компаний
-
-            //Главный игровой таймер
-            timer.Tick += new EventHandler(TimerTick);
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
         }
 
         private void LoadSave()
@@ -137,10 +135,9 @@ namespace Computer_Era
             }
         }
 
-        void TimerTick (object sender, EventArgs args)
+        void TimerTick ()
         {
-            GameDate = GameDate.AddMinutes(1);
-            LabelTime.Text = GameDate.ToString("HH:mm \r\n dd.MM.yyyy");
+            LabelTime.Text = events.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
         }
 
         private void NewGame_Click(object sender, RoutedEventArgs e)
@@ -162,8 +159,9 @@ namespace Computer_Era
 
             LoadSave();
             DrawDesktop();
-            LabelTime.Text = GameDate.ToString("HH:mm \r\n dd.MM.yyyy");
-            timer.Start();
+            LabelTime.Text = events.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
+            events.GameTimer.Timer.Start();
+            
         }
 
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -184,7 +182,7 @@ namespace Computer_Era
 
         private void MenuMapItem_Click(object sender, RoutedEventArgs e)
         {
-            Map map = new Map(this, timer.Interval);
+            Map map = new Map(this, events.GameTimer.Timer.Interval);
             Program.Children.Add(map);
             if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
             lastForm = map;
@@ -193,7 +191,7 @@ namespace Computer_Era
 
         private void MenuPurseItem_Click(object sender, RoutedEventArgs e)
         {
-            Purse purse = new Purse(money.PlayerCurrency, GameDate);
+            Purse purse = new Purse(money.PlayerCurrency, events.GameTimer.DateAndTime);
             Program.Children.Add(purse);
             if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
             lastForm = purse;
@@ -202,32 +200,25 @@ namespace Computer_Era
 
         private void PauseItem_Click(object sender, RoutedEventArgs e)
         {
-            timer.Stop();
+            events.GameTimer.Timer.Stop();
         }
 
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            timer.Start();
+            events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            events.GameTimer.Timer.Start();
         }
 
         private void FastPlayItem_Click(object sender, RoutedEventArgs e)
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            timer.Start();
+            events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+            events.GameTimer.Timer.Start();
         }
 
         private void VeryFastPlayItem_Click(object sender, RoutedEventArgs e)
         {
-            if (dclick_fix < dcout_click)
-            {
-                dclick_fix += 1;
-            } else {
-                dclick_fix = 0;
-                GameDate = GameDate.AddMonths(10);
-            }
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
-            timer.Start();
+            events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
+            events.GameTimer.Timer.Start();
         }
 
         public void ShowBuilding(string obj)
@@ -235,7 +226,7 @@ namespace Computer_Era
             switch (obj)
             {
                 case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, GameDate);
+                    LaborExchange l_ex = new LaborExchange(professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events.GameTimer.DateAndTime);
                     Program.Children.Add(l_ex);
                     if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
                     lastForm = l_ex;

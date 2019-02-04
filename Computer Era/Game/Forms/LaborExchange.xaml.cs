@@ -137,7 +137,7 @@ namespace Computer_Era.Game.Forms
         private void CreateJobCards(Collection<Profession> profession, Collection<Company> companies, DateTime game_date)
         {
             List<Company> current_companies = companies.ToList();
-            current_companies.RemoveAll(e => e.OpeningYear.Year > game_date.Year);
+            current_companies.RemoveAll(e => e.OpeningYear.Year > game_date.Year); //проверить почему не работает
 
             for (int i = 0; i < profession.Count; i++)
             {
