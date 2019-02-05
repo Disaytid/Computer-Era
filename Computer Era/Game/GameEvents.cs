@@ -15,36 +15,42 @@ namespace Computer_Era.Game
     public class GameEvents
     {
         public List<GameEvent> Events = new List<GameEvent>();
-        public DateTime GameDate = new DateTime(1990, 1, 1, 7, 0, 0); //после проверки удалить
+        public DateTime GameDate = new DateTime();
 
         public GameTimer GameTimer = new GameTimer();
 
         public GameEvents()
         {
-            //GameTimer.Week += Handler1.Message;
 
-            GameTimer.Hour += this.Hour;
-            GameTimer.Day += this.Day;
-
-            Events.Add(new GameEvent(1, "123", GameDate, Periodicity.Hour, 1, new MethodContainer(Test)));
-            Events.Add(new GameEvent(2, "456", GameDate, Periodicity.Day, 1, new MethodContainer(Test)));
         }
 
-        private void Test()
+        private void EventRun(GameEvent game_event) //Запускает переданный эвент и удаляет в случае отключенного перезапуска
         {
+            if (DateTime.Compare(game_event.ResponseTime, GameTimer.DateAndTime) <= 0)
+            {
+                game_event.Method();
 
+                if (game_event.Restart)
+                {
+                    game_event.ResponseTime = game_event.ResponseTime.AddHours(game_event.PeriodicityValue);
+                }
+                else {  Events.Remove(game_event); }
+            }
         }
 
         private void Minute()
         {
-
+            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Minute).ToList())
+            {
+                EventRun(game_event);
+            }
         }
 
         private void Hour()
         {
             foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Hour).ToList())
             {
-                //MessageBox.Show("Прошел час у " + game_event.Name);
+                EventRun(game_event);
             }
         }
 
@@ -58,23 +64,31 @@ namespace Computer_Era.Game
 
         private void Week()
         {
-
+            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Week).ToList())
+            {
+                EventRun(game_event);
+            }
         }
 
         private void Month()
         {
-
+            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Month).ToList())
+            {
+                EventRun(game_event);
+            }
         }
 
         private void Year()
         {
-
+            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Year).ToList())
+            {
+                EventRun(game_event);
+            }
         }
     }
 
     public enum Periodicity
     {
-        No,
         Year,
         Month,
         Week,
@@ -87,12 +101,14 @@ namespace Computer_Era.Game
     {
         public int Id;
         public string Name;
-        DateTime ResponseTime;
+        public DateTime ResponseTime;
         public Periodicity Periodicity;
         public int PeriodicityValue;
         public MethodContainer Method;
+        public bool Restart;
 
-        public GameEvent(int id, string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method)
+
+        public GameEvent(int id, string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart=false)
         {
             Id = id;
             Name = name;
@@ -100,6 +116,7 @@ namespace Computer_Era.Game
             Periodicity = periodicity;
             PeriodicityValue = periodicity_value;
             Method = method;
+            Restart = restart;
         }
     }
 
@@ -108,11 +125,6 @@ namespace Computer_Era.Game
         public DateTime DateAndTime = new DateTime(1990, 1, 1, 7, 0, 0); //Запилить защиту от изменений из вне
         public DispatcherTimer Timer = new DispatcherTimer();
         private DateTime OldDateAndTime;
-
-        private int OldMinute;
-        private int OldHour;
-        private int OldDay;
-        private int OldMonth;
 
         public delegate void MethodContainer();
 
@@ -129,48 +141,68 @@ namespace Computer_Era.Game
             Timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
 
             OldDateAndTime = DateAndTime;
-
-            OldMinute = DateAndTime.Minute;
-            OldHour = DateAndTime.Hour;
-            OldDay = DateAndTime.Day;
-            OldMonth = DateAndTime.Month;
         }
 
         public void TimerTick(object sender, EventArgs args)
         {
             DateAndTime = DateAndTime.AddMinutes(1);
 
-            //Переписать все проверки они не верны
-            if (DateAndTime.Minute > OldMinute)
+            Minutes();
+            Hours();
+            Days();
+            Months();
+            Years();
+        }
+
+        private void Minutes()
+        {
+            if (DateAndTime.Minute > OldDateAndTime.Minute & DateAndTime.Hour == OldDateAndTime.Hour 
+                || DateAndTime.Minute < OldDateAndTime.Minute & DateAndTime.Hour > OldDateAndTime.Hour
+                || DateAndTime.Minute < OldDateAndTime.Minute & DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day > OldDateAndTime.Day
+                || DateAndTime.Minute < OldDateAndTime.Minute & DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month
+                || DateAndTime.Minute < OldDateAndTime.Minute & DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > OldDateAndTime.Year)
             {
-                OldMinute += DateAndTime.Minute - OldMinute;
-                if (OldMinute == 60) { OldMinute = 0;  }
+                OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, OldDateAndTime.Day, OldDateAndTime.Hour, DateAndTime.Minute, OldDateAndTime.Second);
                 Minute?.Invoke();
             }
-            if (DateAndTime.Hour > OldHour & DateAndTime.Day == OldDay || DateAndTime.Hour < OldHour & DateAndTime.Day > OldDay)
+        }
+
+        private void Hours()
+        {
+            if (DateAndTime.Hour > OldDateAndTime.Hour & DateAndTime.Day == OldDateAndTime.Day || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day > OldDateAndTime.Day)
             {
-                OldHour += DateAndTime.Hour - OldHour;
-                if (OldHour == 24) { OldHour = 0; }
+                OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, OldDateAndTime.Day, DateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Hour?.Invoke();
             }
-            if (DateAndTime.Day > OldDay & DateAndTime.Month == OldMonth || DateAndTime.Day < OldDay & DateAndTime.Month > OldMonth)
+        }
+
+        private void Days()
+        {
+            if (DateAndTime.Day > OldDateAndTime.Day & DateAndTime.Month == OldDateAndTime.Month || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month)
             {
-                OldDay += DateAndTime.Day - OldDay;
-                if (OldHour > DateTime.DaysInMonth(DateAndTime.Year, DateAndTime.Month)) { OldDay = 1; }
+                OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, DateAndTime.Day, OldDateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Day?.Invoke();
                 if (DateAndTime.DayOfWeek == DayOfWeek.Sunday)
                 {
                     Week?.Invoke();
                 }
             }
+        }
+
+        private void Months()
+        {
             if (DateAndTime.Month > OldDateAndTime.Month & DateAndTime.Year == OldDateAndTime.Year || DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > OldDateAndTime.Year)
             {
-                OldDateAndTime = OldDateAndTime.AddMonths(1);
+                OldDateAndTime = new DateTime(OldDateAndTime.Year, DateAndTime.Month, OldDateAndTime.Day, OldDateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Month?.Invoke();
             }
+        }
+
+        private void Years()
+        {
             if (DateAndTime.Year > OldDateAndTime.Year)
             {
-                OldDateAndTime = OldDateAndTime.AddYears(1);
+                OldDateAndTime = new DateTime(DateAndTime.Year, OldDateAndTime.Month, OldDateAndTime.Day, OldDateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Year?.Invoke();
             }
         }
