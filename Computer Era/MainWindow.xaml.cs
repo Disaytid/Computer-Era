@@ -22,6 +22,7 @@ namespace Computer_Era
         public SQLiteConnection connection;
 
         //Объекты (Game/Objects)
+        PlayerProfile Player;
         GameEvents events;
         List<Program> programs = new List<Program>();
         Items items;
@@ -40,13 +41,47 @@ namespace Computer_Era
             InitializeComponent();
             connection = dataBase.ConnectDB();
 
-            events = new GameEvents(); //События и игровое время
-            events.GameTimer.Minute += this.TimerTick;
 
-            items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
-            money = new Money(connection, 1); //Загрузка валют
-            professions = new Professions(connection); //Загрузка списка профессий
-            companies = new Companies(connection); //Загрузка списка компаний
+        }
+
+        private void StartNewGame_Click(object sender, RoutedEventArgs e)
+        {
+            if (PlayerName.Text.Length > 0)
+            {
+                Player = new PlayerProfile(PlayerName.Text);
+                this.Title = "Computer Era | Играет: " + PlayerName.Text;
+                MenuPlayerItem.Header = PlayerName.Text;
+
+                // ================================================================================ //
+
+                events = new GameEvents(); //События и игровое время
+                events.GameTimer.Minute += this.TimerTick;
+
+                items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
+                money = new Money(connection, 1); //Загрузка валют
+                professions = new Professions(connection); //Загрузка списка профессий
+                companies = new Companies(connection); //Загрузка списка компаний
+
+                // ================================================================================ //
+
+                CreateNewGame.Visibility = Visibility.Hidden;
+                Game.Visibility = Visibility.Visible;
+                GamePanel.Visibility = Visibility.Visible;
+
+                ImageBrush brush = new ImageBrush();
+                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg"));
+                brush.Stretch = Stretch.UniformToFill;
+                this.Background = brush;
+
+                LoadSave();
+                DrawDesktop();
+                LabelTime.Text = events.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
+                events.GameTimer.Timer.Start();
+            }
+            else
+            {
+                MessageBox.Show("Пожалуйста введите имя =)", "Имя любимое мое, мое любимое", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
         private void LoadSave()
@@ -146,24 +181,6 @@ namespace Computer_Era
             CreateNewGame.Visibility = Visibility.Visible;
         }
 
-        private void StartNewGame_Click(object sender, RoutedEventArgs e)
-        {
-            CreateNewGame.Visibility = Visibility.Hidden;
-            Game.Visibility = Visibility.Visible;
-            GamePanel.Visibility = Visibility.Visible;
-
-            ImageBrush brush = new ImageBrush();
-            brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg"));
-            brush.Stretch = Stretch.UniformToFill;
-            this.Background = brush;
-
-            LoadSave();
-            DrawDesktop();
-            LabelTime.Text = events.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
-            events.GameTimer.Timer.Start();
-            
-        }
-
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (Game.Visibility == Visibility.Visible) { DrawDesktop(); }
@@ -226,7 +243,7 @@ namespace Computer_Era
             switch (obj)
             {
                 case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events);
+                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events);
                     Program.Children.Add(l_ex);
                     if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
                     lastForm = l_ex;

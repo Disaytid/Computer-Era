@@ -32,6 +32,7 @@ namespace Computer_Era.Game.Forms
         public double Complexity { get; } //Огрничить от 0 до 1
         public DateTime FromTime { get; }
         public DateTime ToTime { get; }
+        public DateTime DateEmployment { get; set; }
         public SolidColorBrush StickerColor { get; }
 
         public JobCard(Profession profession, List<Company> company, DateTime game_date, int id, Random rnd) {
@@ -122,24 +123,27 @@ namespace Computer_Era.Game.Forms
     public partial class LaborExchange : UserControl
     {
         Collection<JobCard> JobCards = new Collection<JobCard>();
+
+        PlayerProfile Player;
+
         GameEvents GameEvents;
 
-        JobCard CurrentJobCard;
         GameEvent CurrentGameEvent;
         DateTime BeginningWork;
 
         Collection<Currency> PlayerCurency;
 
-        DateTime Timer;
         Random rnd = new Random();
 
-        public LaborExchange(Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events)
+        public LaborExchange(PlayerProfile player, Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events)
         {
             InitializeComponent();
 
+            Player = player;
+            if (player.Job != null) { Dismissal.IsEnabled = true; }
+
             GameEvents = events;
             PlayerCurency = curency;
-            Timer = events.GameTimer.DateAndTime;
 
             CreateJobCards(profession, companies, events.GameTimer.DateAndTime);
         }
@@ -198,8 +202,6 @@ namespace Computer_Era.Game.Forms
                     double count = Math.Ceiling(JobCards.Count / size);
                     double sc = (i + 1) * size;
                     double stCount = count;
-
-                    //if (sc > Profession.Count) { stCount -=1; } //Пересмотреть
 
                     for (int j = 0; j < count; j++)
                     {
@@ -277,16 +279,17 @@ namespace Computer_Era.Game.Forms
         {
             if (e.ClickCount == 1)
             {
-                if (CurrentJobCard == null)
+                if (Player.Job == null)
                 {
                     if (sender is StackPanel)
                     {
-                        CurrentJobCard = JobCards[Convert.ToInt32((sender as StackPanel).Tag)];
+                        Player.Job = JobCards[Convert.ToInt32((sender as StackPanel).Tag)];
+                        Player.Job.DateEmployment = GameEvents.GameTimer.DateAndTime.AddDays(1);
 
-                        BeginningWork = Timer.AddDays(1);
+                        BeginningWork = GameEvents.GameTimer.DateAndTime.AddDays(1);
                         CurrentGameEvent = new GameEvent("job", BeginningWork, Periodicity.Month, 1, Payroll, true);
-                        MessageBox.Show("Поздравляем вы устроильсь на вакансию: " + CurrentJobCard.Name + " с окладом " + CurrentJobCard.Salary);
-                        Dismissal.IsEnabled = true;
+                        GameEvents.Events.Add(CurrentGameEvent);
+                        MessageBox.Show("Поздравляем вы устроильсь на вакансию: " + Player.Job.Name + " с окладом " + Player.Job.Salary * PlayerCurency[0].Course + " " + PlayerCurency[0].Abbreviation);
                     }
                 } else {
                     MessageBox.Show("У вас уже есть работа, сначала увольтесь!");
@@ -296,8 +299,16 @@ namespace Computer_Era.Game.Forms
 
         public void Payroll()
         {
+            MessageBox.Show(DateTime.DaysInMonth(CurrentGameEvent.ResponseTime.Year, CurrentGameEvent.ResponseTime.Month).ToString());
             double amount;
-            amount = 1; //Написать рассчет
+            if (BeginningWork.Year != 1)
+            {
+                amount = DateTime.DaysInMonth(CurrentGameEvent.ResponseTime.Year, CurrentGameEvent.ResponseTime.Month) - BeginningWork.Day;
+                BeginningWork = new DateTime(1, 1, 1);
+            } else {
+                amount = DateTime.DaysInMonth(CurrentGameEvent.ResponseTime.Year, CurrentGameEvent.ResponseTime.Month);
+            }
+            amount = amount * (Player.Job.Salary * PlayerCurency[0].Course);
 
             PlayerCurency[0].TopUp(amount);
         }
@@ -308,14 +319,36 @@ namespace Computer_Era.Game.Forms
             {
                 DrawGrid();
             }          
-        }
+        } 
 
-        private void Dismissal_Click(object sender, RoutedEventArgs e)
-        {
-
-            CurrentJobCard = null;
+        private void Dismissal_Click(object sender, RoutedEventArgs e) //Дописать зависимость от времени работы
+        { 
             Dismissal.IsEnabled = false;
-            MessageBox.Show("Поздравляем вы уволились!");
+
+            foreach (GameEvent value in GameEvents.Events.Where(v => v.Name == "job"))
+            {
+                CurrentGameEvent = value;
+                break;
+            }
+
+            GameEvents.Events.Remove(CurrentGameEvent);
+
+            double amount = 0;
+            if (Player.Job.DateEmployment < GameEvents.GameTimer.DateAndTime) { 
+                if (Player.Job.DateEmployment.Month == GameEvents.GameTimer.DateAndTime.Month & Player.Job.DateEmployment.Year == GameEvents.GameTimer.DateAndTime.Year)
+                {
+                    amount = GameEvents.GameTimer.DateAndTime.Day - Player.Job.DateEmployment.Day;
+                } else {
+                    amount = GameEvents.GameTimer.DateAndTime.Day;
+                }   
+                amount = amount * (Player.Job.Salary * PlayerCurency[0].Course);
+            }
+
+            Player.Job = null;
+            CurrentGameEvent = null;
+
+            PlayerCurency[0].TopUp(amount);
+            MessageBox.Show("Поздравляем вы уволились, вам выплачено " + amount + " " + PlayerCurency[0].Abbreviation);
         }
     }
 }

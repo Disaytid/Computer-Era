@@ -121,6 +121,7 @@
     <Compile Include="Game\Objects\Companies.cs" />
     <Compile Include="Game\Objects\Items.cs" />
     <Compile Include="Game\Objects\Money.cs" />
+    <Compile Include="Game\Objects\PlayerProfile.cs" />
     <Compile Include="Game\Objects\Professions.cs" />
     <Compile Include="Game\Objects\Program.cs" />
     <Compile Include="MainWindow.xaml.cs">
@@ -193,6 +194,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\player-na.png" />
     <Resource Include="Resources\business-01.png" />
     <Resource Include="Resources\currency\coin.png" />
     <Resource Include="Resources\currency\usd.png" />

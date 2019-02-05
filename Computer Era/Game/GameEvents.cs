@@ -15,13 +15,17 @@ namespace Computer_Era.Game
     public class GameEvents
     {
         public List<GameEvent> Events = new List<GameEvent>();
-        public DateTime GameDate = new DateTime();
 
         public GameTimer GameTimer = new GameTimer();
 
         public GameEvents()
         {
-
+            GameTimer.Minute += Minute;
+            GameTimer.Hour += Hour;
+            GameTimer.Day += Day;
+            GameTimer.Week += Week;
+            GameTimer.Month += Month;
+            GameTimer.Year += Year;
         }
 
         private void EventRun(GameEvent game_event) //Запускает переданный эвент и удаляет в случае отключенного перезапуска
@@ -32,7 +36,29 @@ namespace Computer_Era.Game
 
                 if (game_event.Restart)
                 {
-                    game_event.ResponseTime = game_event.ResponseTime.AddHours(game_event.PeriodicityValue);
+                    switch (game_event.Periodicity)
+                    {
+                        case Periodicity.Minute:
+                            game_event.ResponseTime = game_event.ResponseTime.AddMinutes(game_event.PeriodicityValue);
+                            break;
+                        case Periodicity.Hour:
+                            game_event.ResponseTime = game_event.ResponseTime.AddHours(game_event.PeriodicityValue);
+                            break;
+                        case Periodicity.Day:
+                            game_event.ResponseTime = game_event.ResponseTime.AddDays(game_event.PeriodicityValue);
+                            break;
+                        case Periodicity.Week:
+                            game_event.ResponseTime = game_event.ResponseTime.AddDays(game_event.PeriodicityValue * 7);
+                            break;
+                        case Periodicity.Month:
+                            game_event.ResponseTime = game_event.ResponseTime.AddMonths(game_event.PeriodicityValue);
+                            break;
+                        case Periodicity.Year:
+                            game_event.ResponseTime = game_event.ResponseTime.AddYears(game_event.PeriodicityValue);
+                            break;
+                        default:
+                            break;
+                    }
                 }
                 else {  Events.Remove(game_event); }
             }
@@ -58,7 +84,7 @@ namespace Computer_Era.Game
         {
             foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Day).ToList())
             {
-                MessageBox.Show("Прошел день у " + game_event.Name);
+                EventRun(game_event);
             }
         }
 
@@ -167,7 +193,10 @@ namespace Computer_Era.Game
 
         private void Hours()
         {
-            if (DateAndTime.Hour > OldDateAndTime.Hour & DateAndTime.Day == OldDateAndTime.Day || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day > OldDateAndTime.Day)
+            if (DateAndTime.Hour > OldDateAndTime.Hour & DateAndTime.Day == OldDateAndTime.Day
+                || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day > OldDateAndTime.Day
+                || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month
+                || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > DateAndTime.Year)
             {
                 OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, OldDateAndTime.Day, DateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Hour?.Invoke();
@@ -176,7 +205,9 @@ namespace Computer_Era.Game
 
         private void Days()
         {
-            if (DateAndTime.Day > OldDateAndTime.Day & DateAndTime.Month == OldDateAndTime.Month || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month)
+            if (DateAndTime.Day > OldDateAndTime.Day & DateAndTime.Month == OldDateAndTime.Month
+                || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month
+                || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > DateAndTime.Year)
             {
                 OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, DateAndTime.Day, OldDateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Day?.Invoke();
