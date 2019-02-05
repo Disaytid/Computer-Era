@@ -99,7 +99,6 @@ namespace Computer_Era.Game
 
     public class GameEvent
     {
-        public int Id;
         public string Name;
         public DateTime ResponseTime;
         public Periodicity Periodicity;
@@ -108,9 +107,8 @@ namespace Computer_Era.Game
         public bool Restart;
 
 
-        public GameEvent(int id, string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart=false)
+        public GameEvent(string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart=false)
         {
-            Id = id;
             Name = name;
             ResponseTime = response_time;
             Periodicity = periodicity;

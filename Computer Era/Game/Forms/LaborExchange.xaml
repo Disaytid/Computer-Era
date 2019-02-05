@@ -19,7 +19,7 @@
                     <Image Source="/Computer Era;component/Resources/business-01.png" HorizontalAlignment="Left" Width="300"/>
                     <StackPanel>
                         <TextBlock Text="Здравствуйте, чем могу вам помочь?" FontSize="18" TextWrapping="Wrap" Margin="10,0,10,5" />
-                        <Button Content="Я хочу уволиться!" Margin="10,5,10,0" HorizontalAlignment="Left" MinWidth="200" IsEnabled="False" />
+                        <Button x:Name="Dismissal" Content="Я хочу уволиться!" Margin="10,5,10,0" HorizontalAlignment="Left" MinWidth="200" IsEnabled="False" Click="Dismissal_Click" />
                     </StackPanel>
                 </DockPanel>
                 <ScrollViewer Margin="0,197,0,0" VerticalScrollBarVisibility="Auto">

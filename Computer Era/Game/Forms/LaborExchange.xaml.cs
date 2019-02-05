@@ -25,6 +25,7 @@ namespace Computer_Era.Game.Forms
 
     public class JobCard
     {
+        public int Id { get; }
         public string Name { get; }
         public string CompanyName { get; }
         public double Salary { get; }
@@ -33,7 +34,8 @@ namespace Computer_Era.Game.Forms
         public DateTime ToTime { get; }
         public SolidColorBrush StickerColor { get; }
 
-        public JobCard(Profession profession, List<Company> company, DateTime game_date, Random rnd) {
+        public JobCard(Profession profession, List<Company> company, DateTime game_date, int id, Random rnd) {
+            Id = id;
             Name = profession.Name;
 
             //Название компании
@@ -120,28 +122,37 @@ namespace Computer_Era.Game.Forms
     public partial class LaborExchange : UserControl
     {
         Collection<JobCard> JobCards = new Collection<JobCard>();
+        GameEvents GameEvents;
+
+        JobCard CurrentJobCard;
+        GameEvent CurrentGameEvent;
+        DateTime BeginningWork;
 
         Collection<Currency> PlayerCurency;
 
+        DateTime Timer;
         Random rnd = new Random();
 
-        public LaborExchange(Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, DateTime game_date)
+        public LaborExchange(Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events)
         {
             InitializeComponent();
 
+            GameEvents = events;
             PlayerCurency = curency;
+            Timer = events.GameTimer.DateAndTime;
 
-            CreateJobCards(profession, companies, game_date);
+            CreateJobCards(profession, companies, events.GameTimer.DateAndTime);
         }
 
         private void CreateJobCards(Collection<Profession> profession, Collection<Company> companies, DateTime game_date)
         {
-            List<Company> current_companies = companies.ToList();
-            current_companies.RemoveAll(e => e.OpeningYear.Year > game_date.Year); //проверить почему не работает
+            List<Company> current_companies = new List<Company>();
+            current_companies = companies.ToList();
+            current_companies.RemoveAll(e => DateTime.Compare(e.OpeningYear, game_date) > 0);
 
             for (int i = 0; i < profession.Count; i++)
             {
-                JobCards.Add(new JobCard(profession[i], current_companies, game_date, rnd));
+                JobCards.Add(new JobCard(profession[i], current_companies, game_date, i, rnd));
             }
         }
 
@@ -222,7 +233,7 @@ namespace Computer_Era.Game.Forms
 
             TextBlock professionSalary = new TextBlock
             {
-                Text = "Оклад: " + JobCards[index].Salary * PlayerCurency[0].Course  + " " + PlayerCurency[0].Abbreviation,
+                Text = "Оклад: " + JobCards[index].Salary * PlayerCurency[0].Course + " " + PlayerCurency[0].Abbreviation,
                 FontSize = 18,
                 Foreground = new SolidColorBrush(Colors.Blue),
                 Margin = new Thickness(10, 5, 10, 5)
@@ -238,13 +249,17 @@ namespace Computer_Era.Game.Forms
 
             StackPanel stackPanel = new StackPanel
             {
+                Tag = JobCards[index].Id.ToString(),
                 Margin = new Thickness(10, 10, 10, 10),
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = 250,
                 Width = 250,
-                Background = JobCards[index].StickerColor
+                Background = JobCards[index].StickerColor,
+                Cursor = Cursors.Hand,
             };
+
+            stackPanel.MouseDown += new MouseButtonEventHandler(StackPanel_MouseDown);
 
             stackPanel.Children.Add(professionName);
             stackPanel.Children.Add(professionSalary);
@@ -258,12 +273,49 @@ namespace Computer_Era.Game.Forms
             this.Visibility = Visibility.Collapsed;
         }
 
+        private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 1)
+            {
+                if (CurrentJobCard == null)
+                {
+                    if (sender is StackPanel)
+                    {
+                        CurrentJobCard = JobCards[Convert.ToInt32((sender as StackPanel).Tag)];
+
+                        BeginningWork = Timer.AddDays(1);
+                        CurrentGameEvent = new GameEvent("job", BeginningWork, Periodicity.Month, 1, Payroll, true);
+                        MessageBox.Show("Поздравляем вы устроильсь на вакансию: " + CurrentJobCard.Name + " с окладом " + CurrentJobCard.Salary);
+                        Dismissal.IsEnabled = true;
+                    }
+                } else {
+                    MessageBox.Show("У вас уже есть работа, сначала увольтесь!");
+                }
+            }
+        }
+
+        public void Payroll()
+        {
+            double amount;
+            amount = 1; //Написать рассчет
+
+            PlayerCurency[0].TopUp(amount);
+        }
+
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (this.Visibility == Visibility.Visible)
             {
                 DrawGrid();
             }          
+        }
+
+        private void Dismissal_Click(object sender, RoutedEventArgs e)
+        {
+
+            CurrentJobCard = null;
+            Dismissal.IsEnabled = false;
+            MessageBox.Show("Поздравляем вы уволились!");
         }
     }
 }

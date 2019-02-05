@@ -226,7 +226,7 @@ namespace Computer_Era
             switch (obj)
             {
                 case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events.GameTimer.DateAndTime);
+                    LaborExchange l_ex = new LaborExchange(professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events);
                     Program.Children.Add(l_ex);
                     if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
                     lastForm = l_ex;
