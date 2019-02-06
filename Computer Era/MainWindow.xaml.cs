@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using Computer_Era.Game;
 using Computer_Era.Game.Forms;
 using Computer_Era.Game.Objects;
+using Computer_Era.Game.Widgets;
 
 namespace Computer_Era
 {
@@ -25,6 +26,7 @@ namespace Computer_Era
         PlayerProfile Player;
         GameEvents events;
         List<Program> programs = new List<Program>();
+        Widgets Widgets = new Widgets();
         Items items;
         Money money;
         Professions professions;
@@ -61,6 +63,12 @@ namespace Computer_Era
                 money = new Money(connection, 1); //Загрузка валют
                 professions = new Professions(connection); //Загрузка списка профессий
                 companies = new Companies(connection); //Загрузка списка компаний
+
+                // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
+
+                Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(Player, events)));
+                Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(money, events)));
+                Widgets.Draw(WidgetPanel);
 
                 // ================================================================================ //
 

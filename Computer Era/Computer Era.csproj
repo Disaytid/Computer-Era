@@ -95,6 +95,14 @@
     <Page Include="Game\Forms\Purse.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Widgets\MoneyWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Game\Widgets\PlayerWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -124,6 +132,13 @@
     <Compile Include="Game\Objects\PlayerProfile.cs" />
     <Compile Include="Game\Objects\Professions.cs" />
     <Compile Include="Game\Objects\Program.cs" />
+    <Compile Include="Game\Objects\Widgets.cs" />
+    <Compile Include="Game\Widgets\MoneyWidget.xaml.cs">
+      <DependentUpon>MoneyWidget.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Widgets\PlayerWidget.xaml.cs">
+      <DependentUpon>PlayerWidget.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -144,9 +159,10 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.ru-RU.resx" />
     <None Include="Game\Leaflet\leaflet-src.esm.js.map" />
     <None Include="Game\Leaflet\leaflet-src.js.map" />
     <None Include="Game\Leaflet\leaflet.js.map" />

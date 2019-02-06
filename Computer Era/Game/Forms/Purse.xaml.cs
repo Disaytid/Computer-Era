@@ -44,9 +44,6 @@ namespace Computer_Era.Game.Forms
                     {
                         uri = new Uri("pack://application:,,,/Resources/currency/coin.png");
                     }
-                  
-
-                    BitmapImage image = new BitmapImage();
 
                     items_source.Add(new PurseCurrency() { Image = new BitmapImage(uri), Name = currency[i].Name, Count = currency[i].Count.ToString() + " " + currency[i].Abbreviation });
                 }
