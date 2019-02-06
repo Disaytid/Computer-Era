@@ -88,6 +88,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Computer.
+        /// </summary>
+        public static string Computer {
+            get {
+                return ResourceManager.GetString("Computer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Continue.
         /// </summary>
         public static string ContinueGame {

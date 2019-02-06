@@ -126,6 +126,9 @@
   <data name="AssemblyType" xml:space="preserve">
     <value>Тип</value>
   </data>
+  <data name="Computer" xml:space="preserve">
+    <value>Компьютер</value>
+  </data>
   <data name="ContinueGame" xml:space="preserve">
     <value>Продолжить</value>
   </data>
@@ -137,6 +140,9 @@
   </data>
   <data name="NewGame" xml:space="preserve">
     <value>Новая игра</value>
+  </data>
+  <data name="PlayerName" xml:space="preserve">
+    <value>Имя</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Настройки</value>

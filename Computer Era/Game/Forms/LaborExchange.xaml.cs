@@ -99,7 +99,7 @@ namespace Computer_Era.Game.Forms
             rnd.Next(4000);
 
             //Цвет стикера
-            switch (rnd.Next(1, 4))
+            switch (rnd.Next(1, 5))
             {
                 case 1:
                     StickerColor = new SolidColorBrush(Color.FromRgb(255, 224, 175));
@@ -226,7 +226,7 @@ namespace Computer_Era.Game.Forms
 
             TextBlock professionName = new TextBlock
             {
-                Text = "Требуеться " + JobCards[index].Name + " в компанию " + '\u0022' + JobCards[index].CompanyName + '\u0022',
+                Text = "Требуется " + JobCards[index].Name + " в компанию " + '\u0022' + JobCards[index].CompanyName + '\u0022',
                 TextWrapping = TextWrapping.Wrap,
                 FontSize = 18,
                 Foreground = new SolidColorBrush(Colors.Blue),

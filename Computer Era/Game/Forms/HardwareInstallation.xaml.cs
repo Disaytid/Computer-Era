@@ -48,5 +48,25 @@ namespace Computer_Era.Game.Forms
         {
             this.Visibility = Visibility.Hidden;
         }
+
+        private void AddAssembly_Click(object sender, RoutedEventArgs e)
+        {
+            string name = AssemblyList.Text;
+
+            foreach (String item in AssemblyList.Items)
+            {
+                if (item == name)
+                {
+                    name = null;
+                    MessageBox.Show("Данное имя уже существует!");
+                    break;
+                }
+            }
+
+            if (name != null)
+            {
+                AssemblyList.Items.Add(name);
+            }
+        }
     }
 }

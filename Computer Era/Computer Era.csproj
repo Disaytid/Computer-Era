@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="Game\GameEvents.cs" />
     <Compile Include="Game\Objects\Companies.cs" />
+    <Compile Include="Game\Objects\Computers.cs" />
     <Compile Include="Game\Objects\Items.cs" />
     <Compile Include="Game\Objects\Money.cs" />
     <Compile Include="Game\Objects\PlayerProfile.cs" />
@@ -217,6 +218,8 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\trash-can.png" />
+    <Resource Include="Resources\add.png" />
     <Resource Include="Resources\screwdriver.png" />
     <Resource Include="Resources\player-na.png" />
     <Resource Include="Resources\business-01.png" />

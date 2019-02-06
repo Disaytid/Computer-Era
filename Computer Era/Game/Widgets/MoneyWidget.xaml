@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Computer_Era.Game.Widgets"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid Background="#E5747474" Margin="10">
+    <Grid Background="#CC747474" Margin="10">
         <StackPanel Name="CurrencyList" Margin="10">
             <StackPanel.ContextMenu>
                 <ContextMenu/>

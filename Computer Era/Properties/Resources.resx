@@ -126,6 +126,9 @@
   <data name="AssemblyType" xml:space="preserve">
     <value>Type</value>
   </data>
+  <data name="Computer" xml:space="preserve">
+    <value>Computer</value>
+  </data>
   <data name="ContinueGame" xml:space="preserve">
     <value>Continue</value>
   </data>
