@@ -120,6 +120,12 @@
   <data name="AboutTheAuthor" xml:space="preserve">
     <value>About the author</value>
   </data>
+  <data name="AssemblyName" xml:space="preserve">
+    <value>Assembly name</value>
+  </data>
+  <data name="AssemblyType" xml:space="preserve">
+    <value>Type</value>
+  </data>
   <data name="ContinueGame" xml:space="preserve">
     <value>Continue</value>
   </data>

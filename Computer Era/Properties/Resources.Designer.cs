@@ -70,6 +70,24 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Assembly name.
+        /// </summary>
+        public static string AssemblyName {
+            get {
+                return ResourceManager.GetString("AssemblyName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Type.
+        /// </summary>
+        public static string AssemblyType {
+            get {
+                return ResourceManager.GetString("AssemblyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Continue.
         /// </summary>
         public static string ContinueGame {

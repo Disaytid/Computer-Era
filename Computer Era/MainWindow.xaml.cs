@@ -194,33 +194,47 @@ namespace Computer_Era
             if (Game.Visibility == Visibility.Visible) { DrawDesktop(); }
         }
 
-        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e)
+        private void NewWindow(UserControl control)
         {
-            //inventory = null;
-            //inventory = new Inventory(Program, items);
-            Inventory inventory = new Inventory(items);
-            Program.Children.Add(inventory);
+            Program.Children.Add(control);
             if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
-            lastForm = inventory;
+            lastForm = control;
             Program.Visibility = Visibility.Visible;
         }
 
+        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e)
+        {
+            Inventory inventory = new Inventory(items);
+            NewWindow(inventory);
+        }
         private void MenuMapItem_Click(object sender, RoutedEventArgs e)
         {
             Map map = new Map(this, events.GameTimer.Timer.Interval);
-            Program.Children.Add(map);
-            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
-            lastForm = map;
-            Program.Visibility = Visibility.Visible;
+            NewWindow(map);
         }
-
         private void MenuPurseItem_Click(object sender, RoutedEventArgs e)
         {
-            Purse purse = new Purse(money.PlayerCurrency, events.GameTimer.DateAndTime);
-            Program.Children.Add(purse);
-            if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
-            lastForm = purse;
-            Program.Visibility = Visibility.Visible;
+            Purse pl_cur = new Purse(money.PlayerCurrency, events.GameTimer.DateAndTime);
+            NewWindow(pl_cur);
+        }
+        private void MenuHardwareItem_Click(object sender, RoutedEventArgs e)
+        {
+            HardwareInstallation hard_install = new HardwareInstallation(items);
+            NewWindow(hard_install);
+        }
+
+        public void ShowBuilding(string obj)
+        {
+            switch (obj)
+            {
+                case "labor_exchange":
+                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events);
+                    NewWindow(l_ex);
+                    break;
+                default:
+                    MessageBox.Show("Вы прибыли к " + obj + "!");
+                    break;
+            }
         }
 
         private void PauseItem_Click(object sender, RoutedEventArgs e)
@@ -245,23 +259,5 @@ namespace Computer_Era
             events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
             events.GameTimer.Timer.Start();
         }
-
-        public void ShowBuilding(string obj)
-        {
-            switch (obj)
-            {
-                case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events);
-                    Program.Children.Add(l_ex);
-                    if (lastForm != null) { lastForm.Visibility = Visibility.Hidden; }
-                    lastForm = l_ex;
-                    Program.Visibility = Visibility.Visible;
-                    break;
-                default:
-                    MessageBox.Show("Вы прибыли к " + obj + "!");
-                    break;
-            }
-        }
-
     }
 }

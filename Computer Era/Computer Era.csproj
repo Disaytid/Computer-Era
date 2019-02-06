@@ -81,6 +81,10 @@
     <Page Include="Game\Dictionarys\Menu.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\HardwareInstallation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Forms\Inventory.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -113,6 +117,9 @@
     </Compile>
     <Compile Include="Game\DataBase.cs" />
     <Compile Include="Game\DataReader.cs" />
+    <Compile Include="Game\Forms\HardwareInstallation.xaml.cs">
+      <DependentUpon>HardwareInstallation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Forms\Inventory.xaml.cs">
       <DependentUpon>Inventory.xaml</DependentUpon>
     </Compile>
@@ -210,6 +217,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\screwdriver.png" />
     <Resource Include="Resources\player-na.png" />
     <Resource Include="Resources\business-01.png" />
     <Resource Include="Resources\currency\coin.png" />

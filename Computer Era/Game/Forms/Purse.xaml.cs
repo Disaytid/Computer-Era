@@ -60,7 +60,7 @@ namespace Computer_Era.Game.Forms
 
     class PurseCurrency
     {  
-        public ImageSource Image { get; set; }  
+        public ImageSource Image { get; set; }
         public string Name { get; set; }
         public string Count { get; set; }
     }

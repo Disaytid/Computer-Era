@@ -120,6 +120,12 @@
   <data name="AboutTheAuthor" xml:space="preserve">
     <value>О авторе</value>
   </data>
+  <data name="AssemblyName" xml:space="preserve">
+    <value>Имя сборки</value>
+  </data>
+  <data name="AssemblyType" xml:space="preserve">
+    <value>Тип</value>
+  </data>
   <data name="ContinueGame" xml:space="preserve">
     <value>Продолжить</value>
   </data>

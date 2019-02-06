@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Computer_Era.Game.Forms.HardwareInstallation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:res="clr-namespace:Computer_Era.Properties"
+             xmlns:local="clr-namespace:Computer_Era.Game.Forms"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="600">
+    <Grid>
+        <DockPanel VerticalAlignment="Top" Background="#E5747474" Height="32">
+            <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
+            <TextBlock Name="Title" Text="Установка комплектующих" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </DockPanel>
+        <DockPanel Margin="0,32,0,0" Background="White">
+            <StackPanel DockPanel.Dock="Left" Width="300">
+                <DockPanel Margin="10, 10, 10, 5">
+                    <Label Content="{x:Static res:Resources.AssemblyType}" ContentStringFormat="{}{0}: "/>
+                    <ComboBox/>
+                </DockPanel>
+                <DockPanel Margin="10, 5, 10, 5">
+                    <Label Content="{x:Static res:Resources.AssemblyName}" ContentStringFormat="{}{0}: "/>
+                    <ComboBox/>
+                </DockPanel>
+            </StackPanel>
+            <Grid DockPanel.Dock="Right">
+                <ListBox Name="СomponentsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=СomponentsList, Mode=OneWay}">
+                                <DockPanel>
+                                    <Image Grid.Column="0" Height="64" Source="{Binding Image}" />
+                                    <StackPanel DockPanel.Dock="Right" Width="128">
+                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=ManufacturingDate, StringFormat=yyyy г.}" />
+                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Price, StringFormat={}Стоимость: {0} р.}" />
+                                    </StackPanel>
+                                    <StackPanel DockPanel.Dock="Bottom">
+                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Type}" FontSize="14" />
+                                        <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Name}" FontSize="24" />
+                                    </StackPanel>
+                                </DockPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</UserControl>
