@@ -15,7 +15,7 @@
             <ListBox Name="InventoryList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=InventoryList, Mode=OneWay}">
+                        <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=InventoryList, Mode=OneWay}" ToolTipService.ShowDuration="30000" ToolTip="{Binding Tag}">
                             <DockPanel>
                                 <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}" />
                                 <StackPanel DockPanel.Dock="Right" Width="128">

@@ -36,16 +36,16 @@ namespace Computer_Era.Game.Forms
             {items_source.Add(new ListBoxComponent(items.Cases[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Cases[i].ToString()));}
 
             for (int i = 0; i <= items.Motherboards.Count - 1; i++) //MOTHERBOARDS
-            {items_source.Add(new ListBoxComponent(items.Motherboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Motherboards[i].ToString()));}
+            {items_source.Add(new ListBoxComponent(items.Motherboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/circuitry.png")), items.Motherboards[i].ToString()));}
 
             for (int i = 0; i <= items.PowerSupplyUnits.Count - 1; i++) //PowerSupplyUnits
-            { items_source.Add(new ListBoxComponent(items.PowerSupplyUnits[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.PowerSupplyUnits[i].ToString())); }
+            { items_source.Add(new ListBoxComponent(items.PowerSupplyUnits[i], new BitmapImage(new Uri("pack://application:,,,/Resources/plug.png")), items.PowerSupplyUnits[i].ToString())); }
 
             for (int i = 0; i <= items.CPUs.Count - 1; i++) //CPUs
-            { items_source.Add(new ListBoxComponent(items.CPUs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.CPUs[i].ToString())); }
+            { items_source.Add(new ListBoxComponent(items.CPUs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/processor.png")), items.CPUs[i].ToString())); }
 
             for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
-            { items_source.Add(new ListBoxComponent(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.RAMs[i].ToString())); }
+            { items_source.Add(new ListBoxComponent(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")), items.RAMs[i].ToString())); }
 
             InventoryList.ItemsSource = items_source;
         }

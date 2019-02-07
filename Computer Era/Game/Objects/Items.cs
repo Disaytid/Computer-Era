@@ -113,6 +113,7 @@ namespace Computer_Era.Game.Objects
     public enum CaseTypes
     {
         AT,
+        ATX,
         Slim,
         MiniTower,
         MidiTower,
@@ -156,7 +157,16 @@ namespace Computer_Era.Game.Objects
         public override string ToString()
         {
             string info = "Имя: " + Name + Environment.NewLine;
-            info += "Тип корпуса: " + Properties.CaseType;
+            info += "Тип корпуса: " + Properties.CaseType + Environment.NewLine;
+            info += "Секций 3.5: " + Properties.Sections3_5 + Environment.NewLine;
+            info += "Секций 2.5: " + Properties.Sections2_5 + Environment.NewLine;
+            info += "Встроенных вентиляторов: " + Properties.Builtin_Fans + Environment.NewLine;
+            info += "Мест для вентиляторов: " + Properties.PlacesFans + Environment.NewLine;
+            info += "Поддержка жидкостного охлождения: " + (Properties.LiquidCooling ? "Да" : "Нет") + Environment.NewLine;
+            info += "USB гнезд 2.0: " + Properties.USB2_0 + Environment.NewLine;
+            info += "USB гнезд 3.0: " + Properties.USB3_0 + Environment.NewLine;
+            info += "Гнездо для наушников: " + (Properties.HeadphoneJack ? "Да" : "Нет") + Environment.NewLine;
+            info += "Гнездо для микрофона: " + (Properties.MicrophoneJack ? "Да" : "Нет");
             return info;
         }
     }
@@ -252,6 +262,50 @@ namespace Computer_Era.Game.Objects
 
             Properties = properties;
         }
+
+        public bool CheckCompatibility(CaseProperties @case)
+        {
+
+            return false;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Тип материнской платы: " + Properties.MotherboardType + Environment.NewLine;
+            info += "Сокет: " + Properties.Socket + Environment.NewLine;
+            info += "Поддержка многоядерных процессоров: " + (Properties.MultiCoreProcessor ? "Да" : "Нет") + Environment.NewLine;
+            info += "Чипсет: " + Properties.Chipset + Environment.NewLine;
+            info += "Биос: " + Properties.BIOS + Environment.NewLine;
+            info += "Оддержка EFI: " + (Properties.EFI ? "Да" : "Нет") + Environment.NewLine;
+
+            info += Environment.NewLine + "Память" + Environment.NewLine;
+            info += "Тип: " + Properties.RamType + Environment.NewLine;
+            info += "Количество слотов: " + Properties.RAMSlots + Environment.NewLine;
+            info += "Частота: " + Properties.MinFrequency + " - " + Properties.MaxFrequency + Environment.NewLine;
+            info += "Максимальный объем: " + Properties.RAMVolume + Environment.NewLine + Environment.NewLine;
+
+            info += "Количество гнезд IDE: " + Properties.IDE + Environment.NewLine;
+            info += "Количество гнезд SATA 2.0: " + Properties.SATA2_0 + Environment.NewLine;
+            info += "Количество гнезд SATA 3.0: " + Properties.SATA3_0 + Environment.NewLine + Environment.NewLine;
+
+            info += "Количество шин PCI: " + Properties.PCI + Environment.NewLine;
+            info += "Количество шин PCI-Express x1: " + Properties.PCI_Ex1 + Environment.NewLine;
+            info += "Количество шин PCI-Express x4: " + Properties.PCI_Ex4 + Environment.NewLine;
+            info += "Количество шин PCI-Express x8: " + Properties.PCI_Ex8 + Environment.NewLine;
+            info += "Количество шин PCI-Express x16: " + Properties.PCI_Ex16 + Environment.NewLine + Environment.NewLine;
+
+            info += "Поддержка PCI-Express 2.0: " + (Properties.PCIE2_0 ? "Да" : "Нет") + Environment.NewLine;
+            info += "Поддержка PCI-Express 3.0: " + (Properties.PCIE3_0 ? "Да" : "Нет") + Environment.NewLine;
+            info += "Наличие звуковой карты: " + (Properties.PCIE3_0 ? "Да" : "Нет") + Environment.NewLine;
+            info += "Скорость сетевой карты: " + Properties.EthernetSpeed + Environment.NewLine + Environment.NewLine;
+
+            info += "PS/2 для клавиатуры: " + (Properties.PS2Keyboard ? "Да" : "Нет") + Environment.NewLine;
+            info += "PS/2 для мышки: " + (Properties.PS2Mouse ? "Да" : "Нет") + Environment.NewLine;
+            info += "USB гнезд 2.0: " + Properties.USB2_0 + Environment.NewLine;
+            info += "USB гнезд 3.0: " + Properties.USB3_0;
+            return info;
+        }
     }
 
     // = CPU ========================================================================== //
@@ -260,8 +314,8 @@ namespace Computer_Era.Game.Objects
     {
         public Sockets Socket { get; set; }         //Сокет
         public int NumberCores { get; set; }        //Количество ядер
-        public int MinCPUFrequency { get; set; }    //Минимальное тепловыделение
-        public int MaxCPUFrequency { get; set; }    //Минимальное тепловыделение
+        public int MinCPUFrequency { get; set; }    //Минимальная частота
+        public int MaxCPUFrequency { get; set; }    //Максимальная частота
 
         public int MinHeatDissipation { get; set; } //Минимальное тепловыделение
         public int MaxHeatDissipation { get; set; } //Максимальное тепловыделение
@@ -281,6 +335,17 @@ namespace Computer_Era.Game.Objects
             ManufacturingDate = man_date;
 
             Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Сокет: " + Properties.Socket + Environment.NewLine;
+            info += "Количество ядер: " + Properties.NumberCores + Environment.NewLine;
+            info += "Частота процессора: " + Properties.MinCPUFrequency + " - " + Properties.MaxCPUFrequency + Environment.NewLine;
+            info += "Тепловыделение: " + Properties.MinHeatDissipation + " - " + Properties.MaxHeatDissipation + Environment.NewLine;
+            info += "Максимальная рабочая температура: " + Properties.MaximumTemperature;
+            return info;
         }
     }
 
@@ -307,6 +372,16 @@ namespace Computer_Era.Game.Objects
             ManufacturingDate = man_date;
 
             Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Тип памяти: " + Properties.RAMTypes + Environment.NewLine;
+            info += "Частота: " + Properties.ClockFrequency + Environment.NewLine;
+            info += "Объем: " + Properties.Volume + Environment.NewLine;
+            info += "Напряжение: " + Properties.SupplyVoltage;
+            return info;
         }
     }
 
@@ -353,6 +428,22 @@ namespace Computer_Era.Game.Objects
             ManufacturingDate = man_date;
 
             Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Форм фактор: " + Properties.PSUType + Environment.NewLine;
+            info += "Питание к материнской плате: " + Properties.TypeCM + Environment.NewLine;
+            info += "Количество пинов CPU 4+4: " + Properties.Pin4plus4CPU + Environment.NewLine;
+            info += "Количество пинов PCI-E 6+2: " + Properties.Pin6plus2PCIE + Environment.NewLine;
+            info += "Количество пинов SATA 15: " + Properties.Pin6plus2PCIE + Environment.NewLine;
+            info += "Количество пинов IDE 4: " + Properties.Pin6plus2PCIE + Environment.NewLine;
+            info += "Уровень шума: " + Properties.MinNoiseLevel + " - " + Properties.MaxNoiseLevel + Environment.NewLine;
+            info += "Защита от перенапряжения: " + (Properties.OvervoltageProtection ? "Да" : "Нет") + Environment.NewLine;
+            info += "Защита от перегрузки: " + (Properties.OverloadProtection ? "Да" : "Нет") + Environment.NewLine;
+            info += "Защита от короткого замыкания: " + (Properties.ShortCircuitProtection ? "Да" : "Нет");
+            return info;
         }
     }
 }
