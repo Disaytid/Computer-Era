@@ -12,6 +12,9 @@ namespace Computer_Era.Game.Objects
         SQLiteConnection Connection;
         public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
+        public Collection<RAM> RAMs = new Collection<RAM>();
+        public Collection<PowerSupplyUnit> PowerSupplyUnits = new Collection<PowerSupplyUnit>();
+        public Collection<CPU> CPUs = new Collection<CPU>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -44,6 +47,21 @@ namespace Computer_Era.Game.Objects
                             MotherboardProperties motherboard_properties = JsonConvert.DeserializeObject<MotherboardProperties>(json);
                             Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, motherboard_properties));
                             break;
+                        case "ram":
+                            json = Convert.ToString(data_reader["properties"]);
+                            RAMProperties ram_properties = JsonConvert.DeserializeObject<RAMProperties>(json);
+                            RAMs.Add(new RAM(id, name, type, price, manufacturing_date, ram_properties));
+                            break;
+                        case "psu":
+                            json = Convert.ToString(data_reader["properties"]);
+                            PowerSupplyUnitProperties psu_properties = JsonConvert.DeserializeObject<PowerSupplyUnitProperties>(json);
+                            PowerSupplyUnits.Add(new PowerSupplyUnit(id, name, type, price, manufacturing_date, psu_properties));
+                            break;
+                        case "cpu":
+                            json = Convert.ToString(data_reader["properties"]);
+                            CPUProperties cpu_properties = JsonConvert.DeserializeObject<CPUProperties>(json);
+                            CPUs.Add(new CPU(id, name, type, price, manufacturing_date, cpu_properties));
+                            break;
                         default:
                             break;
                     }
@@ -68,9 +86,15 @@ namespace Computer_Era.Game.Objects
                 switch (type)
                 {
                     case "case":
-                        return "Cистемный блок";
+                        return "Корпус";
                     case "motherboard":
                         return "Материнская плата";
+                    case "ram":
+                        return "Оперативная память";
+                    case "psu":
+                        return "Блок питания";
+                    case "cpu":
+                        return "Процессор";
                     default:
                         return type;
                 }
@@ -84,7 +108,8 @@ namespace Computer_Era.Game.Objects
         }
     }
 
-    //CASES
+    // = CASES ======================================================================== //
+
     public enum CaseTypes
     {
         AT,
@@ -115,9 +140,9 @@ namespace Computer_Era.Game.Objects
 
     public class Case : Item
     {
-        CaseProperties Propertys = new CaseProperties();
+        CaseProperties Properties = new CaseProperties();
 
-        public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties propertys)
+        public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
         {
             UId = uid;
             Name = name;
@@ -125,11 +150,19 @@ namespace Computer_Era.Game.Objects
             Price = price;
             ManufacturingDate = man_date;
 
-            Propertys = propertys;
+            Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Тип корпуса: " + Properties.CaseType;
+            return info;
         }
     }
 
-    //
+    // = MOTHERBOARDS ================================================================= //
+
     public enum MotherboardTypes
     {
         ATX,
@@ -149,9 +182,10 @@ namespace Computer_Era.Game.Objects
         BabyAT
     }
 
-    public enum MotherboardSockets
+    public enum Sockets
     {
-        AM4
+        AM4,
+        LGA1151
     }
 
     public enum MotherboardBIOS
@@ -174,7 +208,7 @@ namespace Computer_Era.Game.Objects
     public class MotherboardProperties
     {
         public MotherboardTypes MotherboardType;    //Тип корпуса
-        public MotherboardSockets Socket;           //Сокет
+        public Sockets Socket;                      //Сокет
         public bool MultiCoreProcessor;             //Поддержка многоядерных процессоров
         public string Chipset;                      //Чипсет
         public MotherboardBIOS BIOS;                //Биос
@@ -206,9 +240,9 @@ namespace Computer_Era.Game.Objects
 
     public class Motherboard : Item
     {
-        MotherboardProperties Propertys = new MotherboardProperties();
+        MotherboardProperties Properties = new MotherboardProperties();
 
-        public Motherboard(int uid, string name, string type, int price, DateTime man_date, MotherboardProperties propertys)
+        public Motherboard(int uid, string name, string type, int price, DateTime man_date, MotherboardProperties properties)
         {
             UId = uid;
             Name = name;
@@ -216,7 +250,109 @@ namespace Computer_Era.Game.Objects
             Price = price;
             ManufacturingDate = man_date;
 
-            Propertys = propertys;
+            Properties = properties;
+        }
+    }
+
+    // = CPU ========================================================================== //
+
+    public class CPUProperties
+    {
+        public Sockets Socket { get; set; }         //Сокет
+        public int NumberCores { get; set; }        //Количество ядер
+        public int MinCPUFrequency { get; set; }    //Минимальное тепловыделение
+        public int MaxCPUFrequency { get; set; }    //Минимальное тепловыделение
+
+        public int MinHeatDissipation { get; set; } //Минимальное тепловыделение
+        public int MaxHeatDissipation { get; set; } //Максимальное тепловыделение
+        public int MaximumTemperature { get; set; } //Максимальная рабочая температура (градусы по цельсию)
+    }
+
+    public class CPU : Item
+    {
+        public CPUProperties Properties { get; set; } = new CPUProperties();
+
+        public CPU(int uid, string name, string type, int price, DateTime man_date, CPUProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+    }
+
+    // = RAMS ========================================================================= //
+
+    public class RAMProperties
+    {
+        public RAMTypes RAMTypes { get; set; }      //Тип памяти
+        public int ClockFrequency { get; set; }     //Частота
+        public int Volume { get; set; }             //Объем в мб.
+        public double SupplyVoltage { get; set; }   //Напряжение питания
+    }
+
+    public class RAM : Item
+    {
+        RAMProperties Properties { get; set; } = new RAMProperties();
+
+        public RAM(int uid, string name, string type, int price, DateTime man_date, RAMProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+    }
+
+    // = POWER  SUPPLY UNIT ============================================================ //
+
+    public enum PSUTypes
+    {
+        ATX
+    }
+
+    public enum TypeConnectorMotherboard
+    {
+        pin20plus4
+    }
+
+    public class PowerSupplyUnitProperties
+    {
+        public PSUTypes PSUType { get; set; }                   //Форм фактор
+        public TypeConnectorMotherboard TypeCM { get; set; }    //Тип коннектора питания к материнской плате
+
+        public int Pin4plus4CPU { get; set; }                   //Количество пинов 4+4 CPU
+        public int Pin6plus2PCIE { get; set; }                  //Количество PCI-E пинов 6+2
+        public int Pin15SATA { get; set; }                      //Количество 15 пинов SATA
+        public int Pin4IDE { get; set; }                        //Количество 4 пинов IDE
+
+        public int MinNoiseLevel { get; set; }                  //Минимальный уровень шума дБА
+        public int MaxNoiseLevel { get; set; }                  //Максимальный уровень шума дБА
+
+        public bool OvervoltageProtection { get; set; }         //Защита от перенапряжения
+        public bool OverloadProtection { get; set; }            //Защита от перегрузки
+        public bool ShortCircuitProtection { get; set; }        //Защита от короткого замыкания
+    }
+
+    public class PowerSupplyUnit : Item
+    {
+        public PowerSupplyUnitProperties Properties { get; set; } = new PowerSupplyUnitProperties();
+
+        public PowerSupplyUnit(int uid, string name, string type, int price, DateTime man_date, PowerSupplyUnitProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
         }
     }
 }

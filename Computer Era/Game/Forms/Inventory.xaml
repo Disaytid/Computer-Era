@@ -17,14 +17,14 @@
                     <DataTemplate>
                         <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=InventoryList, Mode=OneWay}">
                             <DockPanel>
-                                <Image Grid.Column="0" Height="64" Source="{Binding Image}" />
+                                <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}" />
                                 <StackPanel DockPanel.Dock="Right" Width="128">
-                                    <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=ManufacturingDate, StringFormat=yyyy г.}" />
-                                    <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Price, StringFormat={}Стоимость: {0} р.}" />
+                                    <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.ManufacturingDate, StringFormat=yyyy г.}" />
+                                    <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.Price, StringFormat={}Стоимость: {0}}" />
                                 </StackPanel>
                                 <StackPanel DockPanel.Dock="Bottom">
-                                    <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Type}" FontSize="14" />
-                                    <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Name}" FontSize="24" />
+                                    <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Item.Type}" FontSize="14" />
+                                    <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Item.Name}" FontSize="24" />
                                 </StackPanel>
                             </DockPanel>
                         </Grid>

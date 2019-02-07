@@ -30,16 +30,22 @@ namespace Computer_Era.Game.Forms
 
         public void LoadItems(Items items)
         {
-            List<Item> items_source = new List<Item>();
+            List<ListBoxComponent> items_source = new List<ListBoxComponent>();
 
-            for (int i=0; i <= items.Cases.Count - 1; i++)
-            {
-                items_source.Add(new Item() {Image = new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), Type = items.Cases[i].Type, Name = items.Cases[i].Name, Price = items.Cases[i].Price, ManufacturingDate = items.Cases[i].ManufacturingDate });
-            }
-            for (int i = 0; i <= items.Motherboards.Count - 1; i++)
-            {
-                items_source.Add(new Item() { Image = new BitmapImage(new Uri("pack://application:,,,/Resources/circuitry.png")), Type = items.Motherboards[i].Type, Name = items.Motherboards[i].Name, Price = items.Motherboards[i].Price, ManufacturingDate = items.Motherboards[i].ManufacturingDate });
-            }
+            for (int i=0; i <= items.Cases.Count - 1; i++) //CASES
+            {items_source.Add(new ListBoxComponent(items.Cases[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Cases[i].ToString()));}
+
+            for (int i = 0; i <= items.Motherboards.Count - 1; i++) //MOTHERBOARDS
+            {items_source.Add(new ListBoxComponent(items.Motherboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Motherboards[i].ToString()));}
+
+            for (int i = 0; i <= items.PowerSupplyUnits.Count - 1; i++) //PowerSupplyUnits
+            { items_source.Add(new ListBoxComponent(items.PowerSupplyUnits[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.PowerSupplyUnits[i].ToString())); }
+
+            for (int i = 0; i <= items.CPUs.Count - 1; i++) //CPUs
+            { items_source.Add(new ListBoxComponent(items.CPUs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.CPUs[i].ToString())); }
+
+            for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
+            { items_source.Add(new ListBoxComponent(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.RAMs[i].ToString())); }
 
             InventoryList.ItemsSource = items_source;
         }
@@ -47,6 +53,19 @@ namespace Computer_Era.Game.Forms
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
+        }
+    }
+
+    public class ListBoxComponent : Item
+    {
+        public Item Item { get; set; }
+        public string Tag { get; set; }
+
+        public ListBoxComponent(Item item, BitmapImage image, string tag)
+        {
+            Item = item;
+            Item.Image = image;
+            Tag = tag;
         }
     }
 }

@@ -9,8 +9,8 @@ namespace Computer_Era.Game.Objects
 {
     class Computers
     {
-        Collection<Computer> PlayerComputers = new Collection<Computer>();
-        Computer CurrentPlayerComputer;
+        public Collection<Computer> PlayerComputers = new Collection<Computer>();
+        public Computer CurrentPlayerComputer;
 
     }
 
@@ -19,6 +19,9 @@ namespace Computer_Era.Game.Objects
         string Name { get; set; }
         Case Case { get; set; }
         Motherboard Motherboard { get; set; }
+        PowerSupplyUnit PSU { get; set; }
+        CPU CPU { get; set; }
+        Collection<RAM> RAMs { get; set; }
 
         public Computer(string name, Case @case)
         {
