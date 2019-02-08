@@ -125,6 +125,7 @@ namespace Computer_Era.Game.Objects
     public class CaseProperties
     {
         public CaseTypes CaseType;  //Тип корпуса
+        public Collection<MotherboardTypes> FormFactor;
         public int CoolerHeight;    //Максимальная высота куллера на процессоре до крышки
         public int VideocardLength; //Максимальная длинна видеокарты до крышки
         public int Sections3_5;     //Секций 3.5
