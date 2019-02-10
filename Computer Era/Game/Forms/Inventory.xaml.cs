@@ -55,17 +55,4 @@ namespace Computer_Era.Game.Forms
             this.Visibility = Visibility.Hidden;
         }
     }
-
-    public class ListBoxComponent : Item
-    {
-        public Item Item { get; set; }
-        public string Tag { get; set; }
-
-        public ListBoxComponent(Item item, BitmapImage image, string tag)
-        {
-            Item = item;
-            Item.Image = image;
-            Tag = tag;
-        }
-    }
 }

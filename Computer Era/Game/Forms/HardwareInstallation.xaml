@@ -13,7 +13,7 @@
             <TextBlock Name="Title" Text="Установка комплектующих" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </DockPanel>
         <DockPanel Margin="0,32,0,0" Background="White">
-            <StackPanel DockPanel.Dock="Left" Width="300">
+            <StackPanel DockPanel.Dock="Left" Width="400">
                 <DockPanel Margin="10, 10, 10, 5">
                     <Label Content="{x:Static res:Resources.AssemblyType}" ContentStringFormat="{}{0}: "/>
                     <ComboBox SelectedIndex="0">
@@ -33,22 +33,18 @@
                                 <ImageBrush ImageSource="/Computer Era;component/Resources/add.png"/>
                             </Button.Background>
                         </Button>
-                        <ComboBox x:Name="AssemblyList" IsEditable="True" HorizontalAlignment="Stretch" FlowDirection="LeftToRight"/>
+                        <ComboBox x:Name="AssemblyList" IsEditable="True" HorizontalAlignment="Stretch" FlowDirection="LeftToRight" SelectionChanged="AssemblyList_SelectionChanged"/>
                     </DockPanel>
                 </DockPanel>
-                <ListBox Name="Сomponents" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox Name="ComputerСomponents" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=Сomponents, Mode=OneWay}">
+                            <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=ComputerСomponents, Mode=OneWay}">
                                 <DockPanel>
-                                    <Image Grid.Column="0" Height="64" Source="{Binding Image}"/>
-                                    <StackPanel DockPanel.Dock="Right" Width="128">
-                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=ManufacturingDate, StringFormat=yyyy г.}"/>
-                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Price, StringFormat={}Стоимость: {0} р.}"/>
-                                    </StackPanel>
+                                    <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}"/>
                                     <StackPanel DockPanel.Dock="Bottom">
-                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Type}" FontSize="14"/>
-                                        <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Name}" FontSize="24"/>
+                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Item.Type}" FontSize="14"/>
+                                        <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Item.Name}" FontSize="24"/>
                                     </StackPanel>
                                 </DockPanel>
                             </Grid>
@@ -60,19 +56,19 @@
                 <ListBox Name="СomponentsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=СomponentsList, Mode=OneWay}">
+                            <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=СomponentsList, Mode=OneWay}" ToolTipService.ShowDuration="30000" ToolTip="{Binding Tag}">
                                 <DockPanel>
-                                    <Image Grid.Column="0" Height="64" Source="{Binding Image}"/>
+                                    <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}"/>
                                     <StackPanel DockPanel.Dock="Right" Width="128">
-                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=ManufacturingDate, StringFormat=yyyy г.}" />
-                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Price, StringFormat={}Стоимость: {0} р.}" />
+                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.ManufacturingDate, StringFormat=yyyy г.}" />
+                                        <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.Price, StringFormat={}Стоимость: {0} р.}" />
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                                        <Button Content="Добавить" Margin="10"></Button>
+                                        <Button x:Name="AddItemButton" Content="Добавить" Margin="10" Tag="{Binding Path=IObject}" Click="AddItemButton_Click"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left">
-                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Type}" FontSize="14" />
-                                        <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Name}" FontSize="24" />
+                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Item.Type}" FontSize="14" />
+                                        <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Item.Name}" FontSize="24" />
                                     </StackPanel>
                                 </DockPanel>
                             </Grid>

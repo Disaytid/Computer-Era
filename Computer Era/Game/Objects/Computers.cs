@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Computer_Era.Game.Objects
 {
-    class Computers
+    public class Computers
     {
         public Collection<Computer> PlayerComputers = new Collection<Computer>();
         public Computer CurrentPlayerComputer;
@@ -16,12 +16,12 @@ namespace Computer_Era.Game.Objects
 
     public class Computer //Для создания объекта "Computer" должны обязательно указываться корпус или материнская плата, без них объект бесполезен и равноценен пустому
     {
-        string Name { get; set; }
-        Case Case { get; set; }
-        Motherboard Motherboard { get; set; }
-        PowerSupplyUnit PSU { get; set; }
-        CPU CPU { get; set; }
-        Collection<RAM> RAMs { get; set; }
+        public string Name { get; set; }
+        public Case Case { get; set; }
+        public Motherboard Motherboard { get; set; }
+        public PowerSupplyUnit PSU { get; set; }
+        public CPU CPU { get; set; }
+        public Collection<RAM> RAMs { get; set; }
 
         public Computer(string name, Case @case)
         {

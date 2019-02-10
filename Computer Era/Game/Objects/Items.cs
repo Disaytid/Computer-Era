@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
+using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
 
@@ -72,7 +73,7 @@ namespace Computer_Era.Game.Objects
 
     public class Item
     {
-        public int UId;
+        public int UId { get; set; }
         public ImageSource Image { get; set; }
         public string Name { get; set; }
         private string type;
@@ -102,6 +103,8 @@ namespace Computer_Era.Game.Objects
             set { this.type = value; }
         }
 
+        public string GetTypeValue() { return type; }
+
         public string getManufacturingYear()
         {
             return ManufacturingDate.Year.ToString();
@@ -126,6 +129,7 @@ namespace Computer_Era.Game.Objects
     {
         public CaseTypes CaseType;  //Тип корпуса
         public Collection<MotherboardTypes> FormFactor;
+        public Collection<PSUTypes> FormFactorPSU;
         public int CoolerHeight;    //Максимальная высота куллера на процессоре до крышки
         public int VideocardLength; //Максимальная длинна видеокарты до крышки
         public int Sections3_5;     //Секций 3.5
@@ -142,7 +146,7 @@ namespace Computer_Era.Game.Objects
 
     public class Case : Item
     {
-        CaseProperties Properties = new CaseProperties();
+        public CaseProperties Properties = new CaseProperties();
 
         public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
         {
@@ -251,7 +255,7 @@ namespace Computer_Era.Game.Objects
 
     public class Motherboard : Item
     {
-        MotherboardProperties Properties = new MotherboardProperties();
+        public MotherboardProperties Properties = new MotherboardProperties();
 
         public Motherboard(int uid, string name, string type, int price, DateTime man_date, MotherboardProperties properties)
         {
@@ -266,6 +270,10 @@ namespace Computer_Era.Game.Objects
 
         public bool CheckCompatibility(CaseProperties @case)
         {
+            foreach (MotherboardTypes type in @case.FormFactor)
+            {
+                if (type == Properties.MotherboardType) { return true; }
+            }
 
             return false;
         }
@@ -362,7 +370,7 @@ namespace Computer_Era.Game.Objects
 
     public class RAM : Item
     {
-        RAMProperties Properties { get; set; } = new RAMProperties();
+        public RAMProperties Properties { get; set; } = new RAMProperties();
 
         public RAM(int uid, string name, string type, int price, DateTime man_date, RAMProperties properties)
         {
@@ -446,5 +454,22 @@ namespace Computer_Era.Game.Objects
             info += "Защита от короткого замыкания: " + (Properties.ShortCircuitProtection ? "Да" : "Нет");
             return info;
         }
+
+        public bool CheckCompatibility(CaseProperties @case)
+        {
+            foreach (PSUTypes type in @case.FormFactorPSU)
+            {
+                if (type == Properties.PSUType) { return true; }
+            }
+
+            return false;
+        }
+    }
+
+    // = CPU COLLER ==================================================================== //
+
+    public class CPUColler : Item
+    {
+        //Sockets Sockets;
     }
 }

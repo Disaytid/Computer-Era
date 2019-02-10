@@ -31,6 +31,7 @@ namespace Computer_Era
         Money money;
         Professions professions;
         Companies companies;
+        Computers computers;
 
         UserControl lastForm = null;
 
@@ -63,6 +64,7 @@ namespace Computer_Era
                 money = new Money(connection, 1); //Загрузка валют
                 professions = new Professions(connection); //Загрузка списка профессий
                 companies = new Companies(connection); //Загрузка списка компаний
+                computers = new Computers(); //Компьютеры в сборе
 
                 // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
 
@@ -219,7 +221,7 @@ namespace Computer_Era
         }
         private void MenuHardwareItem_Click(object sender, RoutedEventArgs e)
         {
-            HardwareInstallation hard_install = new HardwareInstallation(items);
+            HardwareInstallation hard_install = new HardwareInstallation(items, computers);
             NewWindow(hard_install);
         }
 
