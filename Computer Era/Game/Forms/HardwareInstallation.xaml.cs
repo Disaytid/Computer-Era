@@ -53,6 +53,9 @@ namespace Computer_Era.Game.Forms
             for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
             { items_source.Add(new ListBoxObject(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")), items.RAMs[i], items.RAMs[i].ToString())); }
 
+            for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
+            { items_source.Add(new ListBoxObject(items.CPUCoolers[i], new BitmapImage(new Uri("pack://application:,,,/Resources/computer-fan.png")), items.CPUCoolers[i], items.CPUCoolers[i].ToString())); }
+
             СomponentsList.ItemsSource = items_source;
         }
 

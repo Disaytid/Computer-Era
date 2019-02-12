@@ -219,6 +219,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\computer-fan.png" />
     <Resource Include="Resources\processor.png" />
     <Resource Include="Resources\plug.png" />
     <Resource Include="Resources\brain.png" />

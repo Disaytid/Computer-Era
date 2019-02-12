@@ -16,6 +16,7 @@ namespace Computer_Era.Game.Objects
         public Collection<RAM> RAMs = new Collection<RAM>();
         public Collection<PowerSupplyUnit> PowerSupplyUnits = new Collection<PowerSupplyUnit>();
         public Collection<CPU> CPUs = new Collection<CPU>();
+        public Collection<CPUCooler> CPUCoolers = new Collection<CPUCooler>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -63,11 +64,30 @@ namespace Computer_Era.Game.Objects
                             CPUProperties cpu_properties = JsonConvert.DeserializeObject<CPUProperties>(json);
                             CPUs.Add(new CPU(id, name, type, price, manufacturing_date, cpu_properties));
                             break;
+                        case "cpu-cooler":
+                            json = Convert.ToString(data_reader["properties"]);
+                            CPUCoolerProperties cpu_cooler_properties = JsonConvert.DeserializeObject<CPUCoolerProperties>(json);
+                            CPUCoolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, cpu_cooler_properties));
+                            break;
                         default:
                             break;
                     }
                 }
             }
+        }
+    }
+
+    public class Size //В милиметрах
+    {
+        int Width { get; set; }
+        int Height { get; set; }
+        int Depth { get; set; }
+
+        public Size(int width, int height, int depth)
+        {
+            Width = width;
+            Height = height;
+            Depth = depth;
         }
     }
 
@@ -96,6 +116,8 @@ namespace Computer_Era.Game.Objects
                         return "Блок питания";
                     case "cpu":
                         return "Процессор";
+                    case "cpu-cooler":
+                        return "Кулер на процессор";
                     default:
                         return type;
                 }
@@ -200,7 +222,18 @@ namespace Computer_Era.Game.Objects
     public enum Sockets
     {
         AM4,
-        LGA1151
+        LGA1151,
+        LGA775,
+        LGA1150,
+        LGA1155,
+        LGA1156,
+        AM2,
+        AM2plus,
+        AM3,
+        AM3plus,
+        FM1,
+        FM2,
+        FM2plus
     }
 
     public enum MotherboardBIOS
@@ -468,8 +501,31 @@ namespace Computer_Era.Game.Objects
 
     // = CPU COLLER ==================================================================== //
 
-    public class CPUColler : Item
+    public class CPUCoolerProperties
     {
-        //Sockets Sockets;
+        public Collection<Sockets> Sockets { get; set; }
+        public int MinRotationalSpeed { get; set; }
+        public int MaxRotationalSpeed { get; set; }
+        public int AirFlow { get; set; }                        //Воздушный поток в CFM
+        public double MinNoiseLevel { get; set; }                  //Минимальный уровень шума дБ
+        public double MaxNoiseLevel { get; set; }                  //Максимальный уровень шума дБ
+        public bool SpeedController { get; set; }               //Регулятор оборотов
+        public Size Size { get; set; }
+    }
+
+    public class CPUCooler : Item
+    {
+        public CPUCoolerProperties Properties { get; set;} = new CPUCoolerProperties();
+
+        public CPUCooler(int uid, string name, string type, int price, DateTime man_date, CPUCoolerProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
     }
 }
