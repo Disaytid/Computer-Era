@@ -220,6 +220,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\computer-fan.png" />
     <Resource Include="Resources\message-icons\coin.png" />
     <Resource Include="Resources\message-icons\info.png" />
     <Resource Include="Resources\talk.png" />

@@ -14,12 +14,10 @@ namespace Computer_Era.Game
 {
     public class GameMessages
     {
-        GameEvents Events;
-        Money Money;
-
-        Button ViewMessages;
-        StackPanel MessagesPanel;
-        StackPanel Bubble;
+        readonly GameEvents Events;
+        readonly Button ViewMessages;
+        readonly StackPanel MessagesPanel;
+        readonly StackPanel Bubble;
 
         int count_messages;
 

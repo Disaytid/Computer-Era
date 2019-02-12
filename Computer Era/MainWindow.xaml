@@ -15,6 +15,7 @@
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="Template" Value="{DynamicResource GameMenuItem}"/>
         </Style>
+        <Color x:Key="Blue">Black</Color>
     </Window.Resources>
 
     <Grid>
@@ -54,7 +55,9 @@
                 <StackPanel Name="WidgetPanel"></StackPanel>
             </Grid>
             <Grid Name="Program" Visibility="Hidden"/>
-            <StackPanel Name="GameMessagePanel" HorizontalAlignment="Right" Width="300" Background="#E5FFFFFF" Visibility="Collapsed"/>
+            <StackPanel Name="GameMessagePanel" HorizontalAlignment="Right" Width="300" Background="#E5FFFFFF" Visibility="Collapsed">
+                <Button Name="DellMessagesButton" Content="Удалить все уведомления" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="Blue" Click="DellMessagesButton_Click"/>
+            </StackPanel>
             <StackPanel Name="MessageBubble" Width="300" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#E5FFFFFF" Visibility="Collapsed"/>
         </Grid>
         <DockPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Hidden" LastChildFill="False">

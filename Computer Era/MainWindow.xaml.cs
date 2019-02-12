@@ -20,16 +20,15 @@ namespace Computer_Era
     public partial class MainWindow : Window
     {
         public Random Random = new Random(DateTime.Now.Millisecond);
-
-        DataBase dataBase = new DataBase("ComputerEra.db3");
+        readonly DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
 
         //Объекты (Game/Objects)
         PlayerProfile Player;
         GameEvents events;
         GameMessages messages;
-        List<Program> programs = new List<Program>();
-        Widgets Widgets = new Widgets();
+        readonly List<Program> programs = new List<Program>();
+        readonly Widgets Widgets = new Widgets();
         Items items;
         Money money;
         Professions professions;
@@ -82,9 +81,11 @@ namespace Computer_Era
                 Game.Visibility = Visibility.Visible;
                 GamePanel.Visibility = Visibility.Visible;
 
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg"));
-                brush.Stretch = Stretch.UniformToFill;
+                ImageBrush brush = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg")),
+                    Stretch = Stretch.UniformToFill
+                };
                 this.Background = brush;
 
                 LoadSave();
@@ -153,9 +154,11 @@ namespace Computer_Era
             foreach (var program in programs)
             {
                 //Написать проверку размеров сетки
-                ImageBrush brush = new ImageBrush();
-                brush.ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.IconName + ".png"));
-                brush.Stretch = Stretch.UniformToFill;
+                ImageBrush brush = new ImageBrush
+                {
+                    ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.IconName + ".png")),
+                    Stretch = Stretch.UniformToFill
+                };
 
                 Button button = new Button {
                     Background = brush,
@@ -234,7 +237,7 @@ namespace Computer_Era
             switch (obj)
             {
                 case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random);
+                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random, messages);
                     NewWindow(l_ex);
                     break;
                 default:
@@ -269,6 +272,12 @@ namespace Computer_Era
         private void GameMessage_Click(object sender, RoutedEventArgs e)
         {
             if (GameMessagePanel.Visibility == Visibility.Collapsed) { GameMessagePanel.Visibility = Visibility.Visible; } else { GameMessagePanel.Visibility = Visibility.Collapsed; }
+        }
+
+        private void DellMessagesButton_Click(object sender, RoutedEventArgs e)
+        {
+            GameMessagePanel.Children.RemoveRange(1, GameMessagePanel.Children.Count - 1);
+            GameMessage.Content = String.Empty;
         }
     }
 }

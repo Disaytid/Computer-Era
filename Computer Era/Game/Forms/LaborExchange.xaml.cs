@@ -35,7 +35,7 @@ namespace Computer_Era.Game.Forms
         public DateTime DateEmployment { get; set; }
         public SolidColorBrush StickerColor { get; }
 
-        public JobCard(Profession profession, List<Company> company, DateTime game_date, int id, Random rnd) {
+        public JobCard(Profession profession, List<Company> company, int id, Random rnd) {
             Id = id;
             Name = profession.Name;
 
@@ -105,20 +105,17 @@ namespace Computer_Era.Game.Forms
     
     public partial class LaborExchange : UserControl
     {
-        Collection<JobCard> JobCards = new Collection<JobCard>();
-
-        PlayerProfile Player;
-
-        GameEvents GameEvents;
+        readonly Collection<JobCard> JobCards = new Collection<JobCard>();
+        readonly PlayerProfile Player;
+        readonly GameEvents GameEvents;
+        readonly GameMessages Messages;
 
         GameEvent CurrentGameEvent;
         DateTime BeginningWork;
+        readonly Collection<Currency> PlayerCurency;
+        readonly Random rnd;
 
-        Collection<Currency> PlayerCurency;
-
-        Random rnd;
-
-        public LaborExchange(PlayerProfile player, Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events, Random random)
+        public LaborExchange(PlayerProfile player, Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events, Random random, GameMessages messages)
         {
             InitializeComponent();
 
@@ -127,6 +124,7 @@ namespace Computer_Era.Game.Forms
             if (player.Job != null) { Dismissal.IsEnabled = true; }
 
             GameEvents = events;
+            Messages = messages;
             PlayerCurency = curency;
 
             CreateJobCards(profession, companies, events.GameTimer.DateAndTime);
@@ -140,7 +138,7 @@ namespace Computer_Era.Game.Forms
 
             for (int i = 0; i < profession.Count; i++)
             {
-                JobCards.Add(new JobCard(profession[i], current_companies, game_date, i, rnd));
+                JobCards.Add(new JobCard(profession[i], current_companies, i, rnd));
             }
         }
 
@@ -184,8 +182,8 @@ namespace Computer_Era.Game.Forms
                     break;
                 } else {
                     double count = Math.Ceiling(JobCards.Count / size);
-                    double sc = (i + 1) * size;
-                    double stCount = count;
+                    //double sc = (i + 1) * size;
+                    //double stCount = count;
 
                     for (int j = 0; j < count; j++)
                     {
@@ -205,8 +203,8 @@ namespace Computer_Era.Game.Forms
         {
             //MessageBox.Show(index.ToString());
 
-            string text = JobCards[index].Name;
-            text = char.ToUpper(text[0]) + text.Substring(1);
+            //string text = JobCards[index].Name;
+            //text = char.ToUpper(text[0]) + text.Substring(1);
 
             TextBlock professionName = new TextBlock
             {
@@ -283,7 +281,6 @@ namespace Computer_Era.Game.Forms
 
         public void Payroll()
         {
-            MessageBox.Show(DateTime.DaysInMonth(CurrentGameEvent.ResponseTime.Year, CurrentGameEvent.ResponseTime.Month).ToString());
             double amount;
             if (BeginningWork.Year != 1)
             {
@@ -292,9 +289,10 @@ namespace Computer_Era.Game.Forms
             } else {
                 amount = DateTime.DaysInMonth(CurrentGameEvent.ResponseTime.Year, CurrentGameEvent.ResponseTime.Month);
             }
-            amount = amount * (Player.Job.Salary * PlayerCurency[0].Course);
+            amount *= (Player.Job.Salary * PlayerCurency[0].Course);
 
             PlayerCurency[0].TopUp(amount);
+            Messages.NewMessage("Поступление средств", "Танцуйте! Вам пришла зарплата, если вы еще не забыли вы работаете на должности \"" + Player.Job.Name + "\". Выплаты составили " + amount + " " + PlayerCurency[0].Abbreviation, GameMessages.Icon.Money);
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -325,7 +323,7 @@ namespace Computer_Era.Game.Forms
                 } else {
                     amount = GameEvents.GameTimer.DateAndTime.Day;
                 }   
-                amount = amount * (Player.Job.Salary * PlayerCurency[0].Course);
+                amount *= (Player.Job.Salary * PlayerCurency[0].Course);
             }
 
             Player.Job = null;

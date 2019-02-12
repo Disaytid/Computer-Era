@@ -24,12 +24,12 @@ namespace Computer_Era.Game.Forms
     /// </summary>
     public partial class Map : UserControl
     {
-        Object main;
-        DispatcherTimer Timer = new DispatcherTimer();
+        readonly Object main;
+        readonly DispatcherTimer Timer = new DispatcherTimer();
         string Obj;
-        Random rnd;
-        GameMessages Messages;
-        Money Money;
+        readonly Random rnd;
+        readonly GameMessages Messages;
+        readonly Money Money;
 
         public Map(object sender, TimeSpan timeSpan, Random random, GameMessages messages, Money money)
         {
@@ -68,7 +68,7 @@ namespace Computer_Era.Game.Forms
             TransitionPanel.Visibility = Visibility.Visible;
         }
 
-        private void Transition(int time)
+        private void Transition(int time) //Доделать, не используеться время
         {
             ChoiсePanel.Visibility = Visibility.Hidden;
             MovePanel.Visibility = Visibility.Visible;
@@ -84,10 +84,12 @@ namespace Computer_Era.Game.Forms
         {
             if (transition == TransitionType.Walk)
             {
-                int rm = rnd.Next(1, 21);
-                int money = Convert.ToInt32(Math.Floor(rm / 100 * Money.PlayerCurrency[0].Course));
-                Money.PlayerCurrency[0].TopUp(money);
-                if (rnd.Next(1, 101) <= 90) { Messages.NewMessage("Поступление средств", "Оказываеться прогулки на воздухе полезны не только для здоровья но и для кармана. Вы нашли на дороге " + money + " " + Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money); }
+                if (rnd.Next(1, 101) <= 90)
+                {
+                    int money = Convert.ToInt32((double)rnd.Next(1, 21) / (double)100 * Money.PlayerCurrency[0].Course);
+                    Money.PlayerCurrency[0].TopUp(money);
+                    Messages.NewMessage("Поступление средств", "Оказываеться прогулки на воздухе полезны не только для здоровья но и для кармана. Вы нашли на дороге " + money + " " + Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money);
+                }
             }
         }
 
