@@ -15,6 +15,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Threading;
+using Computer_Era.Game.Objects;
 
 namespace Computer_Era.Game.Forms
 {
@@ -26,14 +27,20 @@ namespace Computer_Era.Game.Forms
         Object main;
         DispatcherTimer Timer = new DispatcherTimer();
         string Obj;
+        Random rnd;
+        GameMessages Messages;
+        Money Money;
 
-        public Map(object sender, TimeSpan timeSpan)
+        public Map(object sender, TimeSpan timeSpan, Random random, GameMessages messages, Money money)
         {
             InitializeComponent();
 
             main = sender;
             Timer.Tick += new EventHandler(TimerTick);
             Timer.Interval = timeSpan;
+            rnd = random;
+            Messages = messages;
+            Money = money;
 
             MapReader mapReader = new MapReader(this);
             MapBrowser.ObjectForScripting = mapReader;
@@ -45,6 +52,13 @@ namespace Computer_Era.Game.Forms
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
             Visibility = Visibility.Hidden;
+        }
+
+        TransitionType transition;
+
+        private enum TransitionType
+        {
+            Walk
         }
 
         public void TransitionProcessing(string obj)
@@ -66,11 +80,23 @@ namespace Computer_Era.Game.Forms
             Timer.Start();
         }
 
+        private void EndTransition()
+        {
+            if (transition == TransitionType.Walk)
+            {
+                int rm = rnd.Next(1, 21);
+                int money = Convert.ToInt32(Math.Floor(rm / 100 * Money.PlayerCurrency[0].Course));
+                Money.PlayerCurrency[0].TopUp(money);
+                if (rnd.Next(1, 101) <= 90) { Messages.NewMessage("Поступление средств", "Оказываеться прогулки на воздухе полезны не только для здоровья но и для кармана. Вы нашли на дороге " + money + " " + Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money); }
+            }
+        }
+
         void TimerTick(object sender, EventArgs args)
         {
             if (MoveProgress.Value == 100)
             {
                 Timer.Stop();
+                EndTransition();
                 if (main is MainWindow)
                 {
                     (main as MainWindow).ShowBuilding(Obj);
@@ -82,6 +108,7 @@ namespace Computer_Era.Game.Forms
 
         private void Walk_Click(object sender, RoutedEventArgs e)
         {
+            transition = TransitionType.Walk;
             Transition(240);
         }
     }

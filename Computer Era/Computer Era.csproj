@@ -134,6 +134,7 @@
     </Compile>
     <Compile Include="Game\Forms\Views.cs" />
     <Compile Include="Game\GameEvents.cs" />
+    <Compile Include="Game\GameMessages.cs" />
     <Compile Include="Game\Objects\Companies.cs" />
     <Compile Include="Game\Objects\Computers.cs" />
     <Compile Include="Game\Objects\Items.cs" />
@@ -219,7 +220,9 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\computer-fan.png" />
+    <Resource Include="Resources\message-icons\coin.png" />
+    <Resource Include="Resources\message-icons\info.png" />
+    <Resource Include="Resources\talk.png" />
     <Resource Include="Resources\processor.png" />
     <Resource Include="Resources\plug.png" />
     <Resource Include="Resources\brain.png" />
@@ -960,6 +963,7 @@
     <Content Include="Game\Leaflet\leaflet.css" />
     <Content Include="Game\Leaflet\leaflet.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.109.2\build\net46\System.Data.SQLite.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

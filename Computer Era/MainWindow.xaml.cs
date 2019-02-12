@@ -19,12 +19,15 @@ namespace Computer_Era
     /// </summary>
     public partial class MainWindow : Window
     {
+        public Random Random = new Random(DateTime.Now.Millisecond);
+
         DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
 
         //Объекты (Game/Objects)
         PlayerProfile Player;
         GameEvents events;
+        GameMessages messages;
         List<Program> programs = new List<Program>();
         Widgets Widgets = new Widgets();
         Items items;
@@ -59,6 +62,7 @@ namespace Computer_Era
 
                 events = new GameEvents(); //События и игровое время
                 events.GameTimer.Minute += this.TimerTick;
+                messages = new GameMessages(events, GameMessage, GameMessagePanel, MessageBubble);
 
                 items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
                 money = new Money(connection, 1); //Загрузка валют
@@ -211,7 +215,7 @@ namespace Computer_Era
         }
         private void MenuMapItem_Click(object sender, RoutedEventArgs e)
         {
-            Map map = new Map(this, events.GameTimer.Timer.Interval);
+            Map map = new Map(this, events.GameTimer.Timer.Interval, Random, messages, money);
             NewWindow(map);
         }
         private void MenuPurseItem_Click(object sender, RoutedEventArgs e)
@@ -230,7 +234,7 @@ namespace Computer_Era
             switch (obj)
             {
                 case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events);
+                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random);
                     NewWindow(l_ex);
                     break;
                 default:
@@ -260,6 +264,11 @@ namespace Computer_Era
         {
             events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
             events.GameTimer.Timer.Start();
+        }
+
+        private void GameMessage_Click(object sender, RoutedEventArgs e)
+        {
+            if (GameMessagePanel.Visibility == Visibility.Collapsed) { GameMessagePanel.Visibility = Visibility.Visible; } else { GameMessagePanel.Visibility = Visibility.Collapsed; }
         }
     }
 }
