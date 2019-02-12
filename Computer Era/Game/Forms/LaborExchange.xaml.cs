@@ -50,11 +50,6 @@ namespace Computer_Era.Game.Forms
             //Оклад
             int floatSalary = Convert.ToInt32(profession.Salary * 10 / 100);
 
-            //Сделать потом нормальный рандом
-            rnd.Next(1000);
-            rnd.Next(2000);
-            rnd.Next(3000);
-            rnd.Next(4000);
             Salary = profession.Salary + rnd.Next(- floatSalary, floatSalary);
 
             Complexity = profession.Complexity;
@@ -79,24 +74,12 @@ namespace Computer_Era.Game.Forms
                     ToTime = FromTime.AddHours(profession.WorkingHours);
                     break;
                 default:
-                    //Сделать потом нормальный рандом
-                    rnd.Next(1000);
-                    rnd.Next(2000);
-                    rnd.Next(3000);
-                    rnd.Next(4000);
-
                     int case_id = rnd.Next(1, 4);
                     if (case_id == 1) { goto case 1; }
                     else if (case_id == 2) { goto case 2; }
                     else if (case_id == 3) { goto case 3; }
                     else { goto case 4; }
             }
-
-            //Сделать потом нормальный рандом
-            rnd.Next(1000);
-            rnd.Next(2000);
-            rnd.Next(3000);
-            rnd.Next(4000);
 
             //Цвет стикера
             switch (rnd.Next(1, 5))
@@ -133,12 +116,13 @@ namespace Computer_Era.Game.Forms
 
         Collection<Currency> PlayerCurency;
 
-        Random rnd = new Random();
+        Random rnd;
 
-        public LaborExchange(PlayerProfile player, Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events)
+        public LaborExchange(PlayerProfile player, Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events, Random random)
         {
             InitializeComponent();
 
+            rnd = random;
             Player = player;
             if (player.Job != null) { Dismissal.IsEnabled = true; }
 
