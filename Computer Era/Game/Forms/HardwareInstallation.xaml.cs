@@ -24,12 +24,14 @@ namespace Computer_Era.Game.Forms
     {
         Computers Computers;
         Items Items;
+        Money Money;
 
-        public HardwareInstallation(Items items, Computers computers)
+        public HardwareInstallation(Items items, Computers computers, Money money)
         {
             InitializeComponent();
             Computers = computers;
             Items = items;
+            Money = money;
             LoadItems(items);
             LoadComputers(computers);
         }
@@ -53,8 +55,14 @@ namespace Computer_Era.Game.Forms
             for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
             { items_source.Add(new ListBoxObject(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")), items.RAMs[i], items.RAMs[i].ToString())); }
 
-            for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
+            for (int i = 0; i <= items.CPUCoolers.Count - 1; i++) //CPUCooler
             { items_source.Add(new ListBoxObject(items.CPUCoolers[i], new BitmapImage(new Uri("pack://application:,,,/Resources/computer-fan.png")), items.CPUCoolers[i], items.CPUCoolers[i].ToString())); }
+
+            for (int i = 0; i <= items.HDDs.Count - 1; i++) //CPUCooler
+            { items_source.Add(new ListBoxObject(items.HDDs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/stone-tablet.png")), items.HDDs[i], items.HDDs[i].ToString())); }
+
+            for (int i = 0; i <= items.Monitors.Count - 1; i++) //Monitors
+            { items_source.Add(new ListBoxObject(items.Monitors[i], new BitmapImage(new Uri("pack://application:,,,/Resources/tv.png")), items.Monitors[i], items.Monitors[i].ToString())); }
 
             СomponentsList.ItemsSource = items_source;
         }
@@ -98,6 +106,14 @@ namespace Computer_Era.Game.Forms
             }
         }
 
+        private Collection<HDD> GetCollectionHDD(Collection<ListBoxObject> collection)
+        {
+            Collection<HDD> local_collection = new Collection<HDD>();
+            
+            foreach(ListBoxObject lbo in collection.Where(i => i.Item.GetTypeValue() == "hdd")) { local_collection.Add(lbo.IObject as HDD); }
+            return local_collection;
+        }
+
         private void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button & !String.IsNullOrEmpty(AssemblyList.Text))
@@ -114,16 +130,21 @@ namespace Computer_Era.Game.Forms
                     {
                         if (GetCount(items, "motherboard") == 0 || (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).CheckCompatibility(@case.Properties))
                         {
-                            if (GetCount(items, "psu") == 0 || (items.Single(i => i.Item.GetTypeValue() == "psu").IObject as PowerSupplyUnit).CheckCompatibility(@case.Properties))
+                            if (@case.CheckСapacity(GetCollectionHDD(items)))
                             {
-                                items.Add(new ListBoxObject(@case, @case, @case.ToString()));
+                                if (GetCount(items, "psu") == 0 || (items.Single(i => i.Item.GetTypeValue() == "psu").IObject as PowerSupplyUnit).CheckCompatibility(@case.Properties))
+                                {
+                                    items.Add(new ListBoxObject(@case, @case, @case.ToString()));
 
-                                ComputerСomponents.Items.Refresh();
+                                    ComputerСomponents.Items.Refresh();
 
-                                button.Content = "Установлено";
-                                button.IsEnabled = false;
-                            } else  {
-                                MessageBox.Show("Блок питания не станет в этот корпус!");
+                                    button.Content = "Установлено";
+                                    button.IsEnabled = false;
+                                } else {
+                                    MessageBox.Show("Блок питания не станет в этот корпус!");
+                                }
+                            } else {
+                                MessageBox.Show("Все диски сюда не влезут!");
                             }
                         } else {
                             MessageBox.Show("Материнская плата не станет в этот корпус!");
@@ -233,6 +254,77 @@ namespace Computer_Era.Game.Forms
                     } else {
                         MessageBox.Show("У вас нет материнской платы, и куда вы собрались вставлять память?");
                     }
+                } else if (button.Tag is CPUCooler) { //Дописать проверку на размер
+                    CPUCooler cpuCooler = button.Tag as CPUCooler;
+                    if (GetCount(items, cpuCooler.GetTypeValue()) == 0)
+                    {
+                        if (GetCount(items, "cpu") == 1)
+                        {
+                            if (cpuCooler.CheckCompatibility((items.Single(i => i.Item.GetTypeValue() == "cpu").IObject as CPU).Properties))
+                            {
+                                items.Add(new ListBoxObject(cpuCooler, cpuCooler, cpuCooler.ToString()));
+
+                                ComputerСomponents.Items.Refresh();
+
+                                button.Content = "Установлено";
+                                button.IsEnabled = false;
+                            } else {
+                                MessageBox.Show("Это сюда не встанет!");
+                            }
+                        } else {
+                            MessageBox.Show("Куда же всунуть эту непонятную штуку? Правильно некуда! У вас нет процессора.");
+                        }
+                    } else  {
+                        MessageBox.Show("У вас уже есть куллер для процессора в этой конфигурации!");
+                    }
+                } else if (button.Tag is HDD) {
+                    HDD hdd = button.Tag as HDD;
+
+                    if (GetCount(items, "motherboard") == 1)
+                    {
+                        if (GetCount(items, hdd.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "case").IObject as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))
+                        {
+                            if (GetCount(items, hdd.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).GetCountCompatibleSlots(hdd.Properties.FormFactor))
+                            {
+                                items.Add(new ListBoxObject(hdd, hdd, hdd.ToString()));
+
+                                ComputerСomponents.Items.Refresh();
+
+                                button.Content = "Установлено";
+                                button.IsEnabled = false;
+                            } else {
+                                MessageBox.Show("Ничего у вас не выйдет, нет свободных слотов!");
+                            }
+                        }  else {
+                            MessageBox.Show("Увы, но некуда поставить.");
+                        }
+                    } else {
+                        MessageBox.Show("У вас нет материнской платы, и куда вы собрались подключать диск?");
+                    }
+                } else if (button.Tag is Monitor) {
+                    Monitor monitor = button.Tag as Monitor;
+
+                    if (GetCount(items, "motherboard") == 1)
+                    {
+                        if (GetCount(items, monitor.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.VideoInterfaces.Count)
+                        {
+                            if (GetCount(items, monitor.GetTypeValue()) == 0 & monitor.IsCompatibility((items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.VideoInterfaces))
+                            {
+                                items.Add(new ListBoxObject(monitor, monitor, monitor.ToString()));
+
+                                ComputerСomponents.Items.Refresh();
+
+                                button.Content = "Установлено";
+                                button.IsEnabled = false;
+                            } else {
+                                MessageBox.Show("Нет совместимы выходов, попробуйте добавить преходник в конфигурацию!");
+                            }
+                        } else {
+                            MessageBox.Show("Нет свободных гнезд для подключения.");
+                        }
+                    } else {
+                        MessageBox.Show("У вас нет материнской платы!");
+                    }
                 }
             }  
         }
@@ -245,14 +337,20 @@ namespace Computer_Era.Game.Forms
             {
                 Collection<ListBoxObject> items = new Collection<ListBoxObject>();
                 if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Case, computer[0].Case, computer[0].Case.ToString())); }
-                if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Motherboard, computer[0].Motherboard, computer[0].Motherboard.ToString())); }
-                if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].CPU, computer[0].CPU, computer[0].CPU.ToString())); }
-                if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].PSU, computer[0].PSU, computer[0].PSU.ToString())); }
-                if (computer[0].Case != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram, ram, ram.ToString())); } }
+                if (computer[0].Motherboard != null) { items.Add(new ListBoxObject(computer[0].Motherboard, computer[0].Motherboard, computer[0].Motherboard.ToString())); }
+                if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU, computer[0].CPU, computer[0].CPU.ToString())); }
+                if (computer[0].PSU != null) { items.Add(new ListBoxObject(computer[0].PSU, computer[0].PSU, computer[0].PSU.ToString())); }
+                if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram, ram, ram.ToString())); } }
 
                 ComputerСomponents.ItemsSource = items;
             }
             ComputerСomponents.Items.Refresh();
+        }
+
+        private void TextBlock_Loaded(object sender, RoutedEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            textBlock.Text = Convert.ToString(Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course) + " " + Money.PlayerCurrency[0].Abbreviation;
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

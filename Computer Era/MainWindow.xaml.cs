@@ -228,7 +228,7 @@ namespace Computer_Era
         }
         private void MenuHardwareItem_Click(object sender, RoutedEventArgs e)
         {
-            HardwareInstallation hard_install = new HardwareInstallation(items, computers);
+            HardwareInstallation hard_install = new HardwareInstallation(items, computers, money);
             NewWindow(hard_install);
         }
 

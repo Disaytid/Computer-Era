@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
@@ -17,6 +18,8 @@ namespace Computer_Era.Game.Objects
         public Collection<PowerSupplyUnit> PowerSupplyUnits = new Collection<PowerSupplyUnit>();
         public Collection<CPU> CPUs = new Collection<CPU>();
         public Collection<CPUCooler> CPUCoolers = new Collection<CPUCooler>();
+        public Collection<HDD> HDDs = new Collection<HDD>();
+        public Collection<Monitor> Monitors = new Collection<Monitor>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -69,6 +72,16 @@ namespace Computer_Era.Game.Objects
                             CPUCoolerProperties cpu_cooler_properties = JsonConvert.DeserializeObject<CPUCoolerProperties>(json);
                             CPUCoolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, cpu_cooler_properties));
                             break;
+                        case "hdd":
+                            json = Convert.ToString(data_reader["properties"]);
+                            HDDProperties hdd_properties = JsonConvert.DeserializeObject<HDDProperties>(json);
+                            HDDs.Add(new HDD(id, name, type, price, manufacturing_date, hdd_properties));
+                            break;
+                        case "monitor":
+                            json = Convert.ToString(data_reader["properties"]);
+                            MonitorProperties monitor_properties = JsonConvert.DeserializeObject<MonitorProperties>(json);
+                            Monitors.Add(new Monitor(id, name, type, price, manufacturing_date, monitor_properties));
+                            break;
                         default:
                             break;
                     }
@@ -79,9 +92,9 @@ namespace Computer_Era.Game.Objects
 
     public class Size //В милиметрах
     {
-        int Width { get; set; }
-        int Height { get; set; }
-        int Depth { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Depth { get; set; }
 
         public Size(int width, int height, int depth)
         {
@@ -118,6 +131,10 @@ namespace Computer_Era.Game.Objects
                         return "Процессор";
                     case "cpu-cooler":
                         return "Кулер на процессор";
+                    case "hdd":
+                        return "Жесткий диск";
+                    case "monitor":
+                        return "Монитор";
                     default:
                         return type;
                 }
@@ -196,6 +213,32 @@ namespace Computer_Era.Game.Objects
             info += "Гнездо для микрофона: " + (Properties.MicrophoneJack ? "Да" : "Нет");
             return info;
         }
+
+        public int GetCountCompatiblePlaces(HDDFormFactor formFactor)
+        {
+            switch (formFactor)
+            {
+                case HDDFormFactor.three_five:
+                    return Properties.Sections3_5;
+                case HDDFormFactor.two_five:
+                    return Properties.Sections2_5;
+                default:
+                    return 0;
+            }
+        }
+
+        public bool CheckСapacity(Collection<HDD> hdds)
+        {
+            int hdd_35 = 0;
+            int hdd_25 = 0;
+            
+            foreach (HDD hdd in hdds)
+            {
+                if (hdd.Properties.FormFactor == HDDFormFactor.three_five) { hdd_35 += 1; }
+                if (hdd.Properties.FormFactor == HDDFormFactor.two_five) { hdd_25 += 1; }
+            }
+            if (hdd_35 <= Properties.Sections3_5 & hdd_25 <= Properties.Sections2_5) { return true; } else { return false; }
+        }
     }
 
     // = MOTHERBOARDS ================================================================= //
@@ -253,37 +296,46 @@ namespace Computer_Era.Game.Objects
         DDR4
     }
 
+    public enum VideoInterface
+    {
+        VGA,
+        DVI,
+        HDMI
+    }
+
     public class MotherboardProperties
     {
-        public MotherboardTypes MotherboardType;    //Тип корпуса
-        public Sockets Socket;                      //Сокет
-        public bool MultiCoreProcessor;             //Поддержка многоядерных процессоров
-        public string Chipset;                      //Чипсет
-        public MotherboardBIOS BIOS;                //Биос
-        public bool EFI;                            //Поддержка EFI
+        public MotherboardTypes MotherboardType;            //Тип корпуса
+        public Sockets Socket;                              //Сокет
+        public bool MultiCoreProcessor;                     //Поддержка многоядерных процессоров
+        public string Chipset;                              //Чипсет
+        public MotherboardBIOS BIOS;                        //Биос
+        public bool EFI;                                    //Поддержка EFI
 
-        public RAMTypes RamType;                    //Тип поддерживаемой памяти
-        public int RAMSlots;                        //Сколько слотов памяти
-        public int MinFrequency;                    //Минимальная частота
-        public int MaxFrequency;                    //Максимальная частота
-        public int RAMVolume;                       //Максимально поддерживаемый объем памяти
+        public RAMTypes RamType;                            //Тип поддерживаемой памяти
+        public int RAMSlots;                                //Сколько слотов памяти
+        public int MinFrequency;                            //Минимальная частота
+        public int MaxFrequency;                            //Максимальная частота
+        public int RAMVolume;                               //Максимально поддерживаемый объем памяти
 
-        public int IDE;                             //Количество гнезд IDE
-        public int SATA2_0;                         //Количество гнезд SATA 2.0
-        public int SATA3_0;                         //Количество гнезд SATA 3.0
-        public int PCI;                             //Количество шин PCI
-        public int PCI_Ex1;                         //Количество шин PCI-Ex1
-        public int PCI_Ex4;                         //Количество шин PCI-Ex4
-        public int PCI_Ex8;                         //Количество шин PCI-Ex8
-        public int PCI_Ex16;                        //Количество шин PCI-Ex16
-        public bool PCIE2_0;                        //Поддержка PCI-Express 2.0
-        public bool PCIE3_0;                        //Поддержка PCI-Express 3.0
-        public bool Sound;                          //Наличие встроенной звуковой карты
-        public int EthernetSpeed;                   //Скорость сетевой карты (если 0 карта отсутствует или вышла из строя)
-        public bool PS2Keyboard;                    //PS/2 для клавиатуры
-        public bool PS2Mouse;                       //PS/2 для мышки
-        public int USB2_0;                          //Количество USB гнезд 2.0
-        public int USB3_0;                          //Количество USB гнезд 3.0
+        public int IDE;                                     //Количество гнезд IDE
+        public int SATA2_0;                                 //Количество гнезд SATA 2.0
+        public int SATA3_0;                                 //Количество гнезд SATA 3.0
+        public int PCI;                                     //Количество шин PCI
+        public int PCI_Ex1;                                 //Количество шин PCI-Ex1
+        public int PCI_Ex4;                                 //Количество шин PCI-Ex4
+        public int PCI_Ex8;                                 //Количество шин PCI-Ex8
+        public int PCI_Ex16;                                //Количество шин PCI-Ex16
+        public bool PCIE2_0;                                //Поддержка PCI-Express 2.0
+        public bool PCIE3_0;                                //Поддержка PCI-Express 3.0
+        public bool EmbeddedGraphics;                       //Поддержка встроенной графики
+        public Collection<VideoInterface> VideoInterfaces;  //Гнезда для вывода на монитор     
+        public bool Sound;                                  //Наличие встроенной звуковой карты
+        public int EthernetSpeed;                           //Скорость сетевой карты (если 0 карта отсутствует или вышла из строя)
+        public bool PS2Keyboard;                            //PS/2 для клавиатуры
+        public bool PS2Mouse;                               //PS/2 для мышки
+        public int USB2_0;                                  //Количество USB гнезд 2.0
+        public int USB3_0;                                  //Количество USB гнезд 3.0
     }
 
     public class Motherboard : Item
@@ -299,16 +351,6 @@ namespace Computer_Era.Game.Objects
             ManufacturingDate = man_date;
 
             Properties = properties;
-        }
-
-        public bool CheckCompatibility(CaseProperties @case)
-        {
-            foreach (MotherboardTypes type in @case.FormFactor)
-            {
-                if (type == Properties.MotherboardType) { return true; }
-            }
-
-            return false;
         }
 
         public override string ToString()
@@ -347,6 +389,26 @@ namespace Computer_Era.Game.Objects
             info += "USB гнезд 2.0: " + Properties.USB2_0 + Environment.NewLine;
             info += "USB гнезд 3.0: " + Properties.USB3_0;
             return info;
+        }
+
+        public bool CheckCompatibility(CaseProperties @case)
+        {
+            foreach (MotherboardTypes type in @case.FormFactor)
+            {
+                if (type == Properties.MotherboardType) { return true; }
+            }
+
+            return false;
+        }
+
+        public int GetCountCompatibleSlots(HDDFormFactor formFactor)
+        {
+            if (formFactor == HDDFormFactor.two_five || formFactor == HDDFormFactor.three_five)
+            {
+                return Properties.SATA2_0 + Properties.SATA3_0;
+            }
+
+            return 0;
         }
     }
 
@@ -526,6 +588,143 @@ namespace Computer_Era.Game.Objects
             ManufacturingDate = man_date;
 
             Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Сокет: "; foreach (Sockets socket in Properties.Sockets) { info += socket + ", "; } info = info.Remove(info.Length - 2, 2); info += Environment.NewLine;
+            info += "Минимальная скорость вращения: " + Properties.MinRotationalSpeed + Environment.NewLine;
+            info += "Мaксимальная скорость вращения: " + Properties.MaxRotationalSpeed + Environment.NewLine;
+            info += "Воздушный поток: " + Properties.AirFlow + " CFM" + Environment.NewLine;
+            info += "Уровень шума: " + Properties.MinNoiseLevel + " - " + Properties.MaxNoiseLevel + Environment.NewLine;
+            info += "Регулирование оборотов: " + (Properties.SpeedController ? "Да" : "Нет") + Environment.NewLine;
+            info += "Размер: " + Properties.Size.Width + "x" + Properties.Size.Height + "x" + Properties.Size.Depth;
+            return info;
+        }
+
+        public bool CheckCompatibility(CPUProperties cpu)
+        {
+            foreach (Sockets type in Properties.Sockets)
+            {
+                if (type == cpu.Socket) { return true; }
+            }
+
+            return false;
+        }
+    }
+
+    // = HDD =========================================================================== //
+
+   public enum HDDFormFactor
+    {
+        three_five,
+        two_five
+    }
+
+    public enum HDDInterface
+    {
+        sata_20,
+        sata_30
+    }
+
+    public class HDDProperties
+    {
+        public HDDFormFactor FormFactor { get; set; }
+        public int Volume { get; set; }                      //В килобайтах
+        public int WriteSpeed { get; set; }                 //В килобайтах в секунду
+        public int ReadSpeed { get; set; }                  //В килобайтах в секунду
+        public int BufferCapacity { get; set; }
+        public HDDInterface Interface { get; set; }
+        public int MaximumTemperature { get; set; }         //В градусах по цельсию
+    }
+
+    public class HDD : Item
+    {
+        public HDDProperties Properties { get; set; } = new HDDProperties();
+
+        public HDD(int uid, string name, string type, int price, DateTime man_date, HDDProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Форм фактор: " + (Properties.FormFactor == HDDFormFactor.three_five ? "3.5" : "2.5") + Environment.NewLine;
+            info += "Объем: " + Properties.Volume + " Кбит" + Environment.NewLine;
+            info += "Скорость записи: " + Properties.WriteSpeed + " Кбит/c" + Environment.NewLine;
+            info += "Скорость чтения: " + Properties.ReadSpeed + " Кбит/c" + Environment.NewLine;
+            info += "Интерфейс: " + (Properties.Interface == HDDInterface.sata_20 ? "SATA 2.0" : "SATA 3.0") + Environment.NewLine;
+            info += "Максимальная рабочая температура: " + Properties.MaximumTemperature + " °C";
+            return info;
+        }
+    }
+
+    // = MONITOR ======================================================================= //
+
+    public class MonitorResolution
+    {
+        public int Width { get; set; }
+        public int Height { get; set; }
+
+        public MonitorResolution(int width, int height)
+        {
+            Width = width;
+            Height = height;
+        }
+    }
+
+    public class MonitorProperties
+    {
+        public double Size { get; set; }
+        public MonitorResolution Resolution {get; set;}
+        public int MaxFrameRefreshRate { get; set; }                           //Максимальная частота обновления кадров (Гц)
+        public Collection<VideoInterface> VideoInterfaces { get; set; }
+    }
+
+    public class Monitor : Item
+    {
+        public MonitorProperties Properties { get; set; } = new MonitorProperties();
+
+        public Monitor(int uid, string name, string type, int price, DateTime man_date, MonitorProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            info += "Размер: " + Properties.Size + "\"" + Environment.NewLine;
+            info += "Разрешение: " + Properties.Resolution.Width + "x" + Properties.Resolution.Height + Environment.NewLine;
+            info += "Максимальная частот обновления кадров: " + Properties.MaxFrameRefreshRate + " Гц." + Environment.NewLine;
+            info += "Интерфейс подключения: "; foreach (VideoInterface vInterface in Properties.VideoInterfaces) { info += vInterface + ", "; } info = info.Remove(info.Length - 2, 2);
+            return info;
+        }
+
+        public bool IsCompatibility(Collection<VideoInterface> vInterfaces)
+        {
+            foreach (VideoInterface vInterface in vInterfaces)
+            {
+                foreach (VideoInterface mvInterface in Properties.VideoInterfaces)
+                {
+                    if (vInterface == mvInterface) { return true; }
+                }
+            }
+
+            return false;
         }
     }
 }

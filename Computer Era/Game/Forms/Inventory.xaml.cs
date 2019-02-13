@@ -47,8 +47,14 @@ namespace Computer_Era.Game.Forms
             for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
             { items_source.Add(new ListBoxComponent(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")), items.RAMs[i].ToString())); }
 
-            for (int i = 0; i <= items.RAMs.Count - 1; i++) //CPUCoolers
+            for (int i = 0; i <= items.CPUCoolers.Count - 1; i++) //CPUCoolers
             { items_source.Add(new ListBoxComponent(items.CPUCoolers[i], new BitmapImage(new Uri("pack://application:,,,/Resources/computer-fan.png")), items.CPUCoolers[i].ToString())); }
+
+            for (int i = 0; i <= items.HDDs.Count - 1; i++) //HDDs
+            { items_source.Add(new ListBoxComponent(items.HDDs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/stone-tablet.png")), items.HDDs[i].ToString())); }
+
+            for (int i = 0; i <= items.Monitors.Count - 1; i++) //Monitors
+            { items_source.Add(new ListBoxComponent(items.Monitors[i], new BitmapImage(new Uri("pack://application:,,,/Resources/tv.png")), items.Monitors[i].ToString())); }
 
             InventoryList.ItemsSource = items_source;
         }
