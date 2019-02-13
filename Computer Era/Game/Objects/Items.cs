@@ -39,46 +39,38 @@ namespace Computer_Era.Game.Objects
                     int price = Convert.ToInt32(data_reader["price"]);
                     DateTime manufacturing_date = Convert.ToDateTime(data_reader["manufacturing_date"]);
 
-                    string json;
-                    switch (type)
+                    string json = Convert.ToString(data_reader["properties"]);
+                    switch (type) //Что-то с этим придумать и пределать
                     {
                         case "case":
-                            json = Convert.ToString(data_reader["properties"]);
                             CaseProperties case_properties = JsonConvert.DeserializeObject<CaseProperties>(json);
                             Cases.Add(new Case(id, name, type, price, manufacturing_date, case_properties));
                             break;
                         case "motherboard":
-                            json = Convert.ToString(data_reader["properties"]);
                             MotherboardProperties motherboard_properties = JsonConvert.DeserializeObject<MotherboardProperties>(json);
                             Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, motherboard_properties));
                             break;
                         case "ram":
-                            json = Convert.ToString(data_reader["properties"]);
                             RAMProperties ram_properties = JsonConvert.DeserializeObject<RAMProperties>(json);
                             RAMs.Add(new RAM(id, name, type, price, manufacturing_date, ram_properties));
                             break;
                         case "psu":
-                            json = Convert.ToString(data_reader["properties"]);
                             PowerSupplyUnitProperties psu_properties = JsonConvert.DeserializeObject<PowerSupplyUnitProperties>(json);
                             PowerSupplyUnits.Add(new PowerSupplyUnit(id, name, type, price, manufacturing_date, psu_properties));
                             break;
                         case "cpu":
-                            json = Convert.ToString(data_reader["properties"]);
                             CPUProperties cpu_properties = JsonConvert.DeserializeObject<CPUProperties>(json);
                             CPUs.Add(new CPU(id, name, type, price, manufacturing_date, cpu_properties));
                             break;
                         case "cpu-cooler":
-                            json = Convert.ToString(data_reader["properties"]);
                             CPUCoolerProperties cpu_cooler_properties = JsonConvert.DeserializeObject<CPUCoolerProperties>(json);
                             CPUCoolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, cpu_cooler_properties));
                             break;
                         case "hdd":
-                            json = Convert.ToString(data_reader["properties"]);
                             HDDProperties hdd_properties = JsonConvert.DeserializeObject<HDDProperties>(json);
                             HDDs.Add(new HDD(id, name, type, price, manufacturing_date, hdd_properties));
                             break;
                         case "monitor":
-                            json = Convert.ToString(data_reader["properties"]);
                             MonitorProperties monitor_properties = JsonConvert.DeserializeObject<MonitorProperties>(json);
                             Monitors.Add(new Monitor(id, name, type, price, manufacturing_date, monitor_properties));
                             break;

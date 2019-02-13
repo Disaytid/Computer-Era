@@ -3,28 +3,22 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Computer_Era.Game.Forms
 {
     /// <summary>
     /// Логика взаимодействия для HardwareInstallation.xaml
     /// </summary>
+    /// 
+
     public partial class HardwareInstallation : UserControl
     {
-        Computers Computers;
-        Items Items;
-        Money Money;
+        readonly Computers Computers;
+        readonly Items Items;
+        readonly Money Money;
 
         public HardwareInstallation(Items items, Computers computers, Money money)
         {
@@ -96,6 +90,48 @@ namespace Computer_Era.Game.Forms
             }
         }
 
+        //ВАЛИДАЦИЯ
+
+        static void ProblemReport(string message)
+        {
+            MessageBox.Show(message);
+        }
+
+        private enum Operators
+        {
+            More,           //Больше
+            Less,           //Меньше
+            Equally,        //Равно
+            NotEqual,       //Не равно
+            MoreOrEqual,    //Больше или равно
+            LessOrEqual,    //Меньше или равно
+        }
+
+        private readonly Dictionary<Operators, Func<int, int, bool>> Operations = new Dictionary<Operators, Func<int, int, bool>>
+        {
+                { Operators.More, (x, y) => x > y },
+                { Operators.Less, (x, y) => x < y },
+                { Operators.Equally, (x, y) => x == y },
+                { Operators.NotEqual, (x, y) => x != y },
+                { Operators.MoreOrEqual, (x, y) => x >= y },
+                { Operators.LessOrEqual, (x, y) => x <= y },
+        };
+
+        private bool IsEquality(int x, int y, Operators @operator, string problem_report)
+        {
+            if (!Operations.ContainsKey(@operator)) throw new ArgumentException(string.Format("Operation {0} is invalid", @operator), "op");
+
+            bool isValid = true;
+            if (!Operations[@operator](x, y)) { isValid = false; ProblemReport(problem_report); }
+            return isValid;
+        }
+        static bool IsСompatibleSocket(Motherboard motherboard, CPU cpu, string problem_report)
+        {
+            bool isValid = true;
+            if (!(motherboard.Properties.Socket == cpu.Properties.Socket)) { isValid = false; ProblemReport(problem_report); }
+            return isValid;
+        }
+
         private int GetCount(Collection<ListBoxObject> collection, string type)
         {
             if (collection.Count > 0)
@@ -106,12 +142,27 @@ namespace Computer_Era.Game.Forms
             }
         }
 
+        private object GetSingleItem(Collection<ListBoxObject> objects, string type)
+        {
+            return objects.Single(i => i.Item.GetTypeValue() == type).IObject;
+        }
+
         private Collection<HDD> GetCollectionHDD(Collection<ListBoxObject> collection)
         {
             Collection<HDD> local_collection = new Collection<HDD>();
             
             foreach(ListBoxObject lbo in collection.Where(i => i.Item.GetTypeValue() == "hdd")) { local_collection.Add(lbo.IObject as HDD); }
             return local_collection;
+        }
+
+        private void InstallСomponent<T>(Collection<ListBoxObject> components, T obj, Button button)
+        {
+            components.Add(new ListBoxObject(obj, obj.ToString()));
+
+            ComputerСomponents.Items.Refresh();
+
+            button.Content = "Установлено";
+            button.IsEnabled = false;
         }
 
         private void AddItemButton_Click(object sender, RoutedEventArgs e)
@@ -172,52 +223,22 @@ namespace Computer_Era.Game.Forms
                     }
                 } else if (button.Tag is PowerSupplyUnit) {
                     PowerSupplyUnit psu = (button.Tag as PowerSupplyUnit);
-                    if (GetCount(items, psu.GetTypeValue()) == 0)
+                    if (IsEquality(GetCount(items, psu.GetTypeValue()), 0, Operators.Equally, "У вас уже есть блок питания в этой конфигурации!") &&
+                        IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, к чему подключать собрались?"))
                     {
-                        if (GetCount(items, "motherboard") == 1)
-                        {
                             if (GetCount(items, "case") == 0 || psu.CheckCompatibility((items.Single(i => i.Item.GetTypeValue() == "case").IObject as Case).Properties))
                             {
-                                items.Add(new ListBoxObject(psu, psu, psu.ToString()));
-
-                                ComputerСomponents.Items.Refresh();
-
-                                button.Content = "Установлено";
-                                button.IsEnabled = false;
-                            }
-                            else
-                            {
+                                InstallСomponent<PowerSupplyUnit>(items, psu, button);
+                            } else {
                                 MessageBox.Show("Блок питания не станет в этот корпус!");
                             }
-                        } else {
-                            MessageBox.Show("У вас нет материнской платы, к чему подключать собрались?");
-                        }
-                    } else {
-                        MessageBox.Show("У вас уже есть блок питания в этой конфигурации!");
                     }
                 } else if (button.Tag is CPU) {
                     CPU cpu = (button.Tag as CPU);
-                    if (GetCount(items, cpu.GetTypeValue()) == 0)
-                    {
-                        if (GetCount(items, "motherboard") == 1)
-                        {
-                            if (cpu.Properties.Socket == (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.Socket)
-                            {
-                                items.Add(new ListBoxObject(cpu, cpu, cpu.ToString()));
-
-                                ComputerСomponents.Items.Refresh();
-
-                                button.Content = "Установлено";
-                                button.IsEnabled = false;
-                            } else {
-                                MessageBox.Show("Впихнуть невпихуемое? На сокет посмотри!");
-                            }
-                        } else {
-                            MessageBox.Show("У вас нет материнской платы, и куда вы собрались ставить процессор?");
-                        }
-                    } else {
-                        MessageBox.Show("У вас уже есть процессор в этой конфигурации!");
-                    }
+                    if (IsEquality(GetCount(items, cpu.GetTypeValue()), 0, Operators.Equally, "У вас уже есть процессор в этой конфигурации!") &&
+                        IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, и куда вы собрались ставить процессор?") &&
+                        IsСompatibleSocket((GetSingleItem(items, "motherboard") as Motherboard), cpu, "Впихнуть невпихуемое? На сокет посмотри!"))
+                    { InstallСomponent<CPU>(items, cpu, button); }
                 } else if (button.Tag is RAM) {
                     RAM ram = (button.Tag as RAM);
                     if (GetCount(items, "motherboard") == 1)
@@ -350,7 +371,7 @@ namespace Computer_Era.Game.Forms
         private void TextBlock_Loaded(object sender, RoutedEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
-            textBlock.Text = Convert.ToString(Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course) + " " + Money.PlayerCurrency[0].Abbreviation;
+            textBlock.Text = (Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course).ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

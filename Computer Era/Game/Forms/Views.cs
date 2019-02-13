@@ -42,5 +42,12 @@ namespace Computer_Era.Game.Forms
             IObject = obj;
             Tag = tag;
         }
+
+        public ListBoxObject(object obj, string tag)
+        {
+            Item = obj as Item;
+            IObject = obj;
+            Tag = tag;
+        }
     }
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Computer_Era"
         xmlns:res="clr-namespace:Computer_Era.Properties"
         mc:Ignorable="d"
-        Title="Computer Era" Height="350" Width="525" Background="White" SizeChanged="window_SizeChanged">
+        Title="Computer Era" Height="480" Width="640" Background="White" SizeChanged="window_SizeChanged">
 
     <Window.Resources>
         <Style TargetType="MenuItem" x:Key="MenuItem">
