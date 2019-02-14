@@ -9,9 +9,23 @@ using Newtonsoft.Json;
 
 namespace Computer_Era.Game.Objects
 {
+    enum ItemTypes
+    {
+        @case,
+        motherboard,
+        ram,
+        psu,
+        cpu,
+        cpu_cooler,
+        hdd,
+        monitor,
+    }
     public class Items
     {
         SQLiteConnection Connection;
+
+
+
         public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
         public Collection<RAM> RAMs = new Collection<RAM>();
@@ -40,45 +54,35 @@ namespace Computer_Era.Game.Objects
                     DateTime manufacturing_date = Convert.ToDateTime(data_reader["manufacturing_date"]);
 
                     string json = Convert.ToString(data_reader["properties"]);
-                    switch (type) //Что-то с этим придумать и пределать
+                    ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
+
+                    if (itemType == ItemTypes.@case)
                     {
-                        case "case":
-                            CaseProperties case_properties = JsonConvert.DeserializeObject<CaseProperties>(json);
-                            Cases.Add(new Case(id, name, type, price, manufacturing_date, case_properties));
-                            break;
-                        case "motherboard":
-                            MotherboardProperties motherboard_properties = JsonConvert.DeserializeObject<MotherboardProperties>(json);
-                            Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, motherboard_properties));
-                            break;
-                        case "ram":
-                            RAMProperties ram_properties = JsonConvert.DeserializeObject<RAMProperties>(json);
-                            RAMs.Add(new RAM(id, name, type, price, manufacturing_date, ram_properties));
-                            break;
-                        case "psu":
-                            PowerSupplyUnitProperties psu_properties = JsonConvert.DeserializeObject<PowerSupplyUnitProperties>(json);
-                            PowerSupplyUnits.Add(new PowerSupplyUnit(id, name, type, price, manufacturing_date, psu_properties));
-                            break;
-                        case "cpu":
-                            CPUProperties cpu_properties = JsonConvert.DeserializeObject<CPUProperties>(json);
-                            CPUs.Add(new CPU(id, name, type, price, manufacturing_date, cpu_properties));
-                            break;
-                        case "cpu-cooler":
-                            CPUCoolerProperties cpu_cooler_properties = JsonConvert.DeserializeObject<CPUCoolerProperties>(json);
-                            CPUCoolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, cpu_cooler_properties));
-                            break;
-                        case "hdd":
-                            HDDProperties hdd_properties = JsonConvert.DeserializeObject<HDDProperties>(json);
-                            HDDs.Add(new HDD(id, name, type, price, manufacturing_date, hdd_properties));
-                            break;
-                        case "monitor":
-                            MonitorProperties monitor_properties = JsonConvert.DeserializeObject<MonitorProperties>(json);
-                            Monitors.Add(new Monitor(id, name, type, price, manufacturing_date, monitor_properties));
-                            break;
-                        default:
-                            break;
+                        Cases.Add(new Case(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
+                    }
+                    else if (itemType == ItemTypes.motherboard) {
+                        Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, AddItem<MotherboardProperties>(json)));
+                    } else if (itemType == ItemTypes.ram) {
+                        RAMs.Add(new RAM(id, name, type, price, manufacturing_date, AddItem<RAMProperties>(json)));
+                    } else if (itemType == ItemTypes.psu) {
+                        PowerSupplyUnits.Add(new PowerSupplyUnit(id, name, type, price, manufacturing_date, AddItem<PowerSupplyUnitProperties>(json)));
+                    } else if (itemType == ItemTypes.cpu) {
+                        CPUs.Add(new CPU(id, name, type, price, manufacturing_date, AddItem<CPUProperties>(json)));
+                    } else if (itemType == ItemTypes.cpu_cooler) {
+                        CPUCoolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, AddItem<CPUCoolerProperties>(json)));
+                    } else if (itemType == ItemTypes.hdd) {
+                        HDDs.Add(new HDD(id, name, type, price, manufacturing_date, AddItem<HDDProperties>(json)));
+                    } else if (itemType == ItemTypes.monitor) {
+                        Monitors.Add(new Monitor(id, name, type, price, manufacturing_date, AddItem<MonitorProperties>(json)));
                     }
                 }
             }
+        }
+
+        private T AddItem<T>(string json)
+        {
+            T properties = JsonConvert.DeserializeObject<T>(json);
+            return properties;
         }
     }
 
@@ -95,9 +99,19 @@ namespace Computer_Era.Game.Objects
             Depth = depth;
         }
     }
-
     public class Item
     {
+        private readonly Dictionary<ItemTypes, string> ItemTypes = new Dictionary<ItemTypes, string>
+        {
+            { Objects.ItemTypes.@case, "Корпус" },
+            { Objects.ItemTypes.motherboard, "Материнская плата" },
+            { Objects.ItemTypes.ram, "Оперативная память" },
+            { Objects.ItemTypes.psu, "Блок питания" },
+            { Objects.ItemTypes.cpu, "Процессор" },
+            { Objects.ItemTypes.cpu_cooler, "Кулер на процессор" },
+            { Objects.ItemTypes.hdd, "Жесткий диск" },
+            { Objects.ItemTypes.monitor, "Монитор" },
+        };
         public int UId { get; set; }
         public ImageSource Image { get; set; }
         public string Name { get; set; }
@@ -109,27 +123,9 @@ namespace Computer_Era.Game.Objects
         {
             get
             {
-                switch (type)
-                {
-                    case "case":
-                        return "Корпус";
-                    case "motherboard":
-                        return "Материнская плата";
-                    case "ram":
-                        return "Оперативная память";
-                    case "psu":
-                        return "Блок питания";
-                    case "cpu":
-                        return "Процессор";
-                    case "cpu-cooler":
-                        return "Кулер на процессор";
-                    case "hdd":
-                        return "Жесткий диск";
-                    case "monitor":
-                        return "Монитор";
-                    default:
-                        return type;
-                }
+                ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
+                if (!ItemTypes.ContainsKey(itemType)) throw new ArgumentException(string.Format("Operation {0} is invalid", itemType), "op");
+                return (string)ItemTypes[itemType];
             }
             set { this.type = value; }
         }
@@ -717,6 +713,21 @@ namespace Computer_Era.Game.Objects
             }
 
             return false;
+        }
+
+        public Collection<VideoInterface> Compatibility(Collection<VideoInterface> vInterfaces)
+        {
+            Collection<VideoInterface> videoInterfaces = new Collection<VideoInterface>();
+
+            foreach (VideoInterface vInterface in vInterfaces)
+            {
+                foreach (VideoInterface mvInterface in Properties.VideoInterfaces)
+                {
+                    if (vInterface == mvInterface) { videoInterfaces.Add(mvInterface); }
+                }
+            }
+
+            return videoInterfaces;
         }
     }
 }

@@ -125,12 +125,125 @@ namespace Computer_Era.Game.Forms
             if (!Operations[@operator](x, y)) { isValid = false; ProblemReport(problem_report); }
             return isValid;
         }
-        static bool IsСompatibleSocket(Motherboard motherboard, CPU cpu, string problem_report)
+
+        private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, Motherboard motherboard, string problem_report)
         {
-            bool isValid = true;
-            if (!(motherboard.Properties.Socket == cpu.Properties.Socket)) { isValid = false; ProblemReport(problem_report); }
+            bool isValid = false;
+            if (GetCount(collection, "case") == 0 || motherboard.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
+
+        private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, Case @case, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, "motherboard") == 0 || (GetSingleItem(collection, "motherboard") as Motherboard).CheckCompatibility(@case.Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsNullOrCompatibleCase(Collection<ListBoxObject> collection, PowerSupplyUnit psu, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, "case") == 0 || psu.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsNullOrCompatiblePSU(Collection<ListBoxObject> collection, Case @case, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, "psu") == 0 || (GetSingleItem(collection, "psu") as PowerSupplyUnit).CheckCompatibility(@case.Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        static bool IsСompatibleSocket(Motherboard motherboard, CPU cpu, string problem_report)
+        {
+            bool isValid = false;
+            if (motherboard.Properties.Socket == cpu.Properties.Socket) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsСompatibleRAMSlots(Collection<ListBoxObject> collection, RAM ram, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, ram.GetTypeValue()) < (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMSlots) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsСompatibleRAMType(Collection<ListBoxObject> collection, RAM ram, string problem_report)
+        {
+            bool isValid = false;
+            if (ram.Properties.RAMTypes == (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RamType) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsСompatibleCPU(Collection<ListBoxObject> collection, CPUCooler cpuCooler, string problem_report)
+        {
+            bool isValid = false;
+            if (cpuCooler.CheckCompatibility((GetSingleItem(collection, "cpu") as CPU).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsСapacityHDD(Collection<ListBoxObject> collection, Case @case, string problem_report)
+        {
+            bool isValid = false;
+            Collection<HDD> hdd_collection = new Collection<HDD>();
+            foreach (ListBoxObject lbo in collection.Where(i => i.Item.GetTypeValue() == "hdd")) { hdd_collection.Add(lbo.IObject as HDD); }
+            if (@case.CheckСapacity(hdd_collection)) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsEnteringRangeFrequency(RAM ram, Motherboard motherboard, string problem_report)
+        {
+            bool isValid = false;
+            if (motherboard.Properties.MinFrequency <= ram.Properties.ClockFrequency & ram.Properties.ClockFrequency <= motherboard.Properties.MaxFrequency) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsEnteringRangeVolume(Collection<ListBoxObject> collection, RAM ram, string problem_report)
+        {
+            bool isValid = false;
+            int volume = 0;
+
+            foreach (object obj in (collection.Where(i => i.Item.GetTypeValue() == "ram"))) { volume += (obj as RAM).Properties.Volume; }
+            if (ram.Properties.Volume + volume <= (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMVolume) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsFreeSlotsInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "motherboard") as Motherboard).GetCountCompatibleSlots(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsFreeVideoInterfaces(Collection<ListBoxObject> collection, Monitor monitor, string problem_report)
+        {
+            bool isValid = false;
+            if ((GetCount(collection, monitor.GetTypeValue()) < ((GetSingleItem(collection, "motherboard") as Motherboard).Properties.VideoInterfaces.Count)))
+            {
+                if (GetCount(collection, monitor.GetTypeValue()) > 0)
+                {
+                    for (int i = 0; i > (collection.Where(m => m.Item.GetTypeValue() == "monitor").Count()); i++)
+                    {
+                        Monitor mon = collection[i].IObject as Monitor;
+
+                        Collection<VideoInterface> mon_videoInterfaces = monitor.Compatibility(mon.Properties.VideoInterfaces);
+                        if (mon_videoInterfaces.Count() > 1)
+                        {
+                            if (monitor.IsCompatibility(mon_videoInterfaces)) { isValid = true; break; }
+                        }
+                    }
+                } else { isValid = monitor.IsCompatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties.VideoInterfaces); }
+            }
+            if (!isValid) { ProblemReport(problem_report); }
+            return isValid;
+        } 
 
         private int GetCount(Collection<ListBoxObject> collection, string type)
         {
@@ -145,14 +258,6 @@ namespace Computer_Era.Game.Forms
         private object GetSingleItem(Collection<ListBoxObject> objects, string type)
         {
             return objects.Single(i => i.Item.GetTypeValue() == type).IObject;
-        }
-
-        private Collection<HDD> GetCollectionHDD(Collection<ListBoxObject> collection)
-        {
-            Collection<HDD> local_collection = new Collection<HDD>();
-            
-            foreach(ListBoxObject lbo in collection.Where(i => i.Item.GetTypeValue() == "hdd")) { local_collection.Add(lbo.IObject as HDD); }
-            return local_collection;
         }
 
         private void InstallСomponent<T>(Collection<ListBoxObject> components, T obj, Button button)
@@ -177,62 +282,22 @@ namespace Computer_Era.Game.Forms
                 if (button.Tag is Case)
                 {
                     Case @case = (button.Tag as Case);
-                    if (GetCount(items, @case.GetTypeValue()) == 0)
-                    {
-                        if (GetCount(items, "motherboard") == 0 || (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).CheckCompatibility(@case.Properties))
-                        {
-                            if (@case.CheckСapacity(GetCollectionHDD(items)))
-                            {
-                                if (GetCount(items, "psu") == 0 || (items.Single(i => i.Item.GetTypeValue() == "psu").IObject as PowerSupplyUnit).CheckCompatibility(@case.Properties))
-                                {
-                                    items.Add(new ListBoxObject(@case, @case, @case.ToString()));
-
-                                    ComputerСomponents.Items.Refresh();
-
-                                    button.Content = "Установлено";
-                                    button.IsEnabled = false;
-                                } else {
-                                    MessageBox.Show("Блок питания не станет в этот корпус!");
-                                }
-                            } else {
-                                MessageBox.Show("Все диски сюда не влезут!");
-                            }
-                        } else {
-                            MessageBox.Show("Материнская плата не станет в этот корпус!");
-                        }
-                    } else {
-                        MessageBox.Show("У вас уже есть корпус в этой конфигурации!");
-                    }
+                    if (IsEquality(GetCount(items, @case.GetTypeValue()), 0, Operators.Equally,"У вас уже есть корпус в этой конфигурации!") &&
+                        IsNullOrCompatibleMotherboard(items, @case, "Материнская плата не станет в этот корпус!") &&
+                        IsСapacityHDD(items, @case, "Все диски сюда не влезут!") &&
+                        IsNullOrCompatiblePSU(items, @case, "Блок питания не станет в этот корпус!"))
+                    { InstallСomponent<Case>(items, @case, button); }
                 } else if (button.Tag is Motherboard) {
                     Motherboard motherboard = (button.Tag as Motherboard);
-                    if  (GetCount(items, motherboard.GetTypeValue()) == 0)
-                    {
-                        if (GetCount(items, "case") == 0 || motherboard.CheckCompatibility((items.Single(i => i.Item.GetTypeValue() == "case").IObject as Case).Properties))
-                        {
-                            items.Add(new ListBoxObject(motherboard, motherboard, motherboard.ToString()));
-
-                            ComputerСomponents.Items.Refresh();
-
-                            button.Content = "Установлено";
-                            button.IsEnabled = false;
-                        } else {
-                            MessageBox.Show("Материнская плата не станет в этот корпус!");
-                        }
-                    } else {
-                        MessageBox.Show("У вас уже есть материнская плата в этой конфигурации!");
-                    }
+                    if  (IsEquality(GetCount(items, motherboard.GetTypeValue()), 0, Operators.Equally, "У вас уже есть материнская плата в этой конфигурации!") &&
+                        IsNullOrCompatibleMotherboard(items, motherboard, "Материнская плата не станет в этот корпус!"))
+                    {   InstallСomponent<Motherboard>(items, motherboard, button); }
                 } else if (button.Tag is PowerSupplyUnit) {
                     PowerSupplyUnit psu = (button.Tag as PowerSupplyUnit);
                     if (IsEquality(GetCount(items, psu.GetTypeValue()), 0, Operators.Equally, "У вас уже есть блок питания в этой конфигурации!") &&
-                        IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, к чему подключать собрались?"))
-                    {
-                            if (GetCount(items, "case") == 0 || psu.CheckCompatibility((items.Single(i => i.Item.GetTypeValue() == "case").IObject as Case).Properties))
-                            {
-                                InstallСomponent<PowerSupplyUnit>(items, psu, button);
-                            } else {
-                                MessageBox.Show("Блок питания не станет в этот корпус!");
-                            }
-                    }
+                        IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, к чему подключать собрались?") &&
+                        IsNullOrCompatibleCase(items, psu, "Блок питания не станет в этот корпус!"))
+                    { InstallСomponent<PowerSupplyUnit>(items, psu, button);}
                 } else if (button.Tag is CPU) {
                     CPU cpu = (button.Tag as CPU);
                     if (IsEquality(GetCount(items, cpu.GetTypeValue()), 0, Operators.Equally, "У вас уже есть процессор в этой конфигурации!") &&
@@ -241,111 +306,29 @@ namespace Computer_Era.Game.Forms
                     { InstallСomponent<CPU>(items, cpu, button); }
                 } else if (button.Tag is RAM) {
                     RAM ram = (button.Tag as RAM);
-                    if (GetCount(items, "motherboard") == 1)
-                    {
-                        if (GetCount(items, ram.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.RAMSlots)
-                        {
-                            //Дописать проверку на частоту
-                            int volume = 0;
-
-                            foreach (object obj in (items.Where(i => i.Item.GetTypeValue() == "ram")))
-                            {
-                                volume += (obj as RAM).Properties.Volume;
-                            }
-
-                            if (ram.Properties.Volume + volume <= (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.RAMVolume)
-                            {
-                                if (ram.Properties.RAMTypes == (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.RamType)
-                                {
-                                    items.Add(new ListBoxObject(ram, ram, ram.ToString()));
-
-                                    ComputerСomponents.Items.Refresh();
-
-                                    button.Content = "Установлено";
-                                    button.IsEnabled = false;
-                                }  else {
-                                    MessageBox.Show("Ну не лезет же, тип памяти другой!");
-                                }
-                            } else {
-                                MessageBox.Show("По объему не подходит!");
-                            }
-                        } else {
-                            MessageBox.Show("Все слоты заняты!");
-                        }
-                    } else {
-                        MessageBox.Show("У вас нет материнской платы, и куда вы собрались вставлять память?");
-                    }
+                    if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, и куда вы собрались вставлять память?") &&
+                        IsСompatibleRAMSlots(items, ram, "Все слоты заняты!") &&
+                        IsEnteringRangeFrequency(ram, GetSingleItem(items, "motherboard") as Motherboard, "Материнской платой не поддерживаеться память с такой частатой.") &&
+                        IsEnteringRangeVolume(items, ram, "По объему не подходит!") &&
+                        IsСompatibleRAMType(items, ram, "Ну не лезет же, тип памяти другой!"))
+                    { InstallСomponent<RAM>(items, ram, button); }
                 } else if (button.Tag is CPUCooler) { //Дописать проверку на размер
                     CPUCooler cpuCooler = button.Tag as CPUCooler;
-                    if (GetCount(items, cpuCooler.GetTypeValue()) == 0)
-                    {
-                        if (GetCount(items, "cpu") == 1)
-                        {
-                            if (cpuCooler.CheckCompatibility((items.Single(i => i.Item.GetTypeValue() == "cpu").IObject as CPU).Properties))
-                            {
-                                items.Add(new ListBoxObject(cpuCooler, cpuCooler, cpuCooler.ToString()));
-
-                                ComputerСomponents.Items.Refresh();
-
-                                button.Content = "Установлено";
-                                button.IsEnabled = false;
-                            } else {
-                                MessageBox.Show("Это сюда не встанет!");
-                            }
-                        } else {
-                            MessageBox.Show("Куда же всунуть эту непонятную штуку? Правильно некуда! У вас нет процессора.");
-                        }
-                    } else  {
-                        MessageBox.Show("У вас уже есть куллер для процессора в этой конфигурации!");
-                    }
+                    if (IsEquality(GetCount(items, cpuCooler.GetTypeValue()), 0, Operators.Equally, "У вас уже есть куллер для процессора в этой конфигурации!") &&
+                        IsEquality(GetCount(items, "cpu"), 1, Operators.Equally, "Хмм... куда же всунуть эту непонятную штуку? Правильно некуда! У вас нет процессора.") &&
+                        IsСompatibleCPU(items, cpuCooler, "Это сюда не встанет!"))
+                    { InstallСomponent<CPUCooler>(items, cpuCooler, button); }
                 } else if (button.Tag is HDD) {
                     HDD hdd = button.Tag as HDD;
-
-                    if (GetCount(items, "motherboard") == 1)
-                    {
-                        if (GetCount(items, hdd.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "case").IObject as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))
-                        {
-                            if (GetCount(items, hdd.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).GetCountCompatibleSlots(hdd.Properties.FormFactor))
-                            {
-                                items.Add(new ListBoxObject(hdd, hdd, hdd.ToString()));
-
-                                ComputerСomponents.Items.Refresh();
-
-                                button.Content = "Установлено";
-                                button.IsEnabled = false;
-                            } else {
-                                MessageBox.Show("Ничего у вас не выйдет, нет свободных слотов!");
-                            }
-                        }  else {
-                            MessageBox.Show("Увы, но некуда поставить.");
-                        }
-                    } else {
-                        MessageBox.Show("У вас нет материнской платы, и куда вы собрались подключать диск?");
-                    }
+                    if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, и куда вы собрались подключать диск?") &&
+                        IsFreeSpaceInstallation(items, hdd, "Увы, но некуда поставить.") &&
+                        IsFreeSlotsInstallation(items, hdd, "Ничего у вас не выйдет, нет свободных слотов!"))
+                    { InstallСomponent<HDD>(items, hdd, button); }
                 } else if (button.Tag is Monitor) {
                     Monitor monitor = button.Tag as Monitor;
-
-                    if (GetCount(items, "motherboard") == 1)
-                    {
-                        if (GetCount(items, monitor.GetTypeValue()) < (items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.VideoInterfaces.Count)
-                        {
-                            if (GetCount(items, monitor.GetTypeValue()) == 0 & monitor.IsCompatibility((items.Single(i => i.Item.GetTypeValue() == "motherboard").IObject as Motherboard).Properties.VideoInterfaces))
-                            {
-                                items.Add(new ListBoxObject(monitor, monitor, monitor.ToString()));
-
-                                ComputerСomponents.Items.Refresh();
-
-                                button.Content = "Установлено";
-                                button.IsEnabled = false;
-                            } else {
-                                MessageBox.Show("Нет совместимы выходов, попробуйте добавить преходник в конфигурацию!");
-                            }
-                        } else {
-                            MessageBox.Show("Нет свободных гнезд для подключения.");
-                        }
-                    } else {
-                        MessageBox.Show("У вас нет материнской платы!");
-                    }
+                    if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы!") &&
+                        IsFreeVideoInterfaces(items, monitor, "Нет свободных гнезд для подключения."))
+                    { InstallСomponent<Monitor>(items, monitor, button); }
                 }
             }  
         }
