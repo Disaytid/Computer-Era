@@ -19,6 +19,8 @@ namespace Computer_Era.Game.Objects
         cpu_cooler,
         hdd,
         monitor,
+        video_card,
+        optical_drive,
     }
     public class Items
     {
@@ -34,6 +36,8 @@ namespace Computer_Era.Game.Objects
         public Collection<CPUCooler> CPUCoolers = new Collection<CPUCooler>();
         public Collection<HDD> HDDs = new Collection<HDD>();
         public Collection<Monitor> Monitors = new Collection<Monitor>();
+        public Collection<VideoСard> VideoСards = new Collection<VideoСard>();
+        public Collection<OpticalDrive> OpticalDrives = new Collection<OpticalDrive>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -74,6 +78,10 @@ namespace Computer_Era.Game.Objects
                         HDDs.Add(new HDD(id, name, type, price, manufacturing_date, AddItem<HDDProperties>(json)));
                     } else if (itemType == ItemTypes.monitor) {
                         Monitors.Add(new Monitor(id, name, type, price, manufacturing_date, AddItem<MonitorProperties>(json)));
+                    } else if (itemType == ItemTypes.video_card) {
+                        VideoСards.Add(new VideoСard(id, name, type, price, manufacturing_date, AddItem<VideoСardProperties>(json)));
+                    } else if (itemType == ItemTypes.optical_drive) {
+                        OpticalDrives.Add(new OpticalDrive(id, name, type, price, manufacturing_date, AddItem<OpticalDriveProperties>(json)));
                     }
                 }
             }
@@ -111,6 +119,8 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.cpu_cooler, "Кулер на процессор" },
             { Objects.ItemTypes.hdd, "Жесткий диск" },
             { Objects.ItemTypes.monitor, "Монитор" },
+            { Objects.ItemTypes.video_card, "Видеокарта" },
+            { Objects.ItemTypes.optical_drive, "Оптический привод" },
         };
         public int UId { get; set; }
         public ImageSource Image { get; set; }
@@ -288,7 +298,9 @@ namespace Computer_Era.Game.Objects
     {
         VGA,
         DVI,
-        HDMI
+        HDMI,
+        DisplayPort,
+        DVI_D
     }
 
     public class MotherboardProperties
@@ -613,7 +625,8 @@ namespace Computer_Era.Game.Objects
     public enum HDDInterface
     {
         sata_20,
-        sata_30
+        sata_30,
+        IDE
     }
 
     public class HDDProperties
@@ -653,16 +666,32 @@ namespace Computer_Era.Game.Objects
             info += "Максимальная рабочая температура: " + Properties.MaximumTemperature + " °C";
             return info;
         }
+
+        public int Compatibility(MotherboardProperties motherboard)
+        {
+            if (Properties.Interface == HDDInterface.sata_20 || Properties.Interface == HDDInterface.sata_30)
+            {
+                return motherboard.SATA2_0 + motherboard.SATA3_0;
+            }
+            else if (Properties.Interface == HDDInterface.IDE)
+            {
+                return motherboard.IDE;
+            }
+            else
+            {
+                return 0;
+            }
+        }
     }
 
     // = MONITOR ======================================================================= //
 
-    public class MonitorResolution
+    public class Resolution
     {
         public int Width { get; set; }
         public int Height { get; set; }
 
-        public MonitorResolution(int width, int height)
+        public Resolution(int width, int height)
         {
             Width = width;
             Height = height;
@@ -672,7 +701,7 @@ namespace Computer_Era.Game.Objects
     public class MonitorProperties
     {
         public double Size { get; set; }
-        public MonitorResolution Resolution {get; set;}
+        public Resolution Resolution {get; set;}
         public int MaxFrameRefreshRate { get; set; }                           //Максимальная частота обновления кадров (Гц)
         public Collection<VideoInterface> VideoInterfaces { get; set; }
     }
@@ -728,6 +757,110 @@ namespace Computer_Era.Game.Objects
             }
 
             return videoInterfaces;
+        }
+    }
+
+    // = VIDEO CARD ===================================================================== //
+
+    public enum Interface
+    {
+        PCI_E16x3_0
+    }
+
+    public enum TypeVideoMemory
+    {
+        GDDR5
+    }
+    public class VideoСardProperties
+    {
+        public string GraphicsProcessor { get; set; }
+        public Interface Interface { get; set; }
+        public Resolution MaxResolution { get; set; }
+        public int GPUFrequency { get; set; } //МГц
+        public int VideoMemory { get; set; } //Кбит
+        public TypeVideoMemory TypeVideoMemory { get; set; }
+        public int VideoMemoryFrequency { get; set; } //МГц
+        public Collection<VideoInterface> VideoInterfaces { get; set; }
+    }
+
+    public class VideoСard : Item
+    {
+        public VideoСardProperties Properties { get; set; } = new VideoСardProperties();
+
+        public VideoСard(int uid, string name, string type, int price, DateTime man_date, VideoСardProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+
+        public bool IsCompatibility(MotherboardProperties motherboard)
+        {
+            if (Properties.Interface == Interface.PCI_E16x3_0 && motherboard.PCI_Ex16 >= 1 && motherboard.PCIE3_0 == true)
+            {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        public int Compatibility(MotherboardProperties motherboard)
+        {
+            if (Properties.Interface == Interface.PCI_E16x3_0 && motherboard.PCI_Ex16 >= 1 && motherboard.PCIE3_0 == true)
+            {
+                return motherboard.PCI_Ex16;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    // = OPTICAL DRIVE ================================================================== //
+
+
+    public enum OpticalDriveInterface
+    {
+        IDE,
+        SATA
+    }
+    public class OpticalDriveProperties
+    {
+        public OpticalDriveInterface Interface { get; set; }
+        public Size Size { get; set; }
+        public int[] MaxWritingSpeed { get; set; } //CD-R, CD-RW, DVD-R, DVD-R DL, DVD-RW, DVD+R, DVD+R DL, DVD+RW, DVD-RAM x
+        public int MaxReadSpeedCD { get; set; }     //x
+        public int MaxReadSpeedDVD { get; set; }    //x
+        public int ReadAccessTimeCD { get; set; }   //Время доступа в режиме чтения CD в милисикундах
+        public int ReadAccessTimeDVD { get; set; }  //Время доступа в режиме чтения DVD в милисикундах
+    }
+    public class OpticalDrive : Item
+    {
+        public OpticalDriveProperties Properties { get; set; } = new OpticalDriveProperties();
+        public OpticalDrive(int uid, string name, string type, int price, DateTime man_date, OpticalDriveProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+
+        public int Compatibility(MotherboardProperties motherboard)
+        {
+            if (Properties.Interface == OpticalDriveInterface.SATA)
+            {
+                return motherboard.SATA2_0 + motherboard.SATA3_0;
+            } else if (Properties.Interface == OpticalDriveInterface.IDE) {
+                return motherboard.IDE;
+            } else {
+                return 0;
+            }
         }
     }
 }

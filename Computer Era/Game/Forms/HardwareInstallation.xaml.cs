@@ -35,28 +35,34 @@ namespace Computer_Era.Game.Forms
             List<ListBoxObject> items_source = new List<ListBoxObject>();
 
             for (int i = 0; i <= items.Cases.Count - 1; i++) //CASES
-            { items_source.Add(new ListBoxObject(items.Cases[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Cases[i], items.Cases[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.Cases[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")))); }
 
             for (int i = 0; i <= items.Motherboards.Count - 1; i++) //MOTHERBOARDS
-            { items_source.Add(new ListBoxObject(items.Motherboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/circuitry.png")), items.Motherboards[i], items.Motherboards[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.Motherboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/circuitry.png")))); }
 
             for (int i = 0; i <= items.PowerSupplyUnits.Count - 1; i++) //PowerSupplyUnits
-            { items_source.Add(new ListBoxObject(items.PowerSupplyUnits[i], new BitmapImage(new Uri("pack://application:,,,/Resources/plug.png")), items.PowerSupplyUnits[i], items.PowerSupplyUnits[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.PowerSupplyUnits[i], new BitmapImage(new Uri("pack://application:,,,/Resources/plug.png")))); }
 
             for (int i = 0; i <= items.CPUs.Count - 1; i++) //CPUs
-            { items_source.Add(new ListBoxObject(items.CPUs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/processor.png")), items.CPUs[i], items.CPUs[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.CPUs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/processor.png")))); }
 
             for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
-            { items_source.Add(new ListBoxObject(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")), items.RAMs[i], items.RAMs[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")))); }
 
             for (int i = 0; i <= items.CPUCoolers.Count - 1; i++) //CPUCooler
-            { items_source.Add(new ListBoxObject(items.CPUCoolers[i], new BitmapImage(new Uri("pack://application:,,,/Resources/computer-fan.png")), items.CPUCoolers[i], items.CPUCoolers[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.CPUCoolers[i], new BitmapImage(new Uri("pack://application:,,,/Resources/computer-fan.png")))); }
 
             for (int i = 0; i <= items.HDDs.Count - 1; i++) //CPUCooler
-            { items_source.Add(new ListBoxObject(items.HDDs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/stone-tablet.png")), items.HDDs[i], items.HDDs[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.HDDs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/stone-tablet.png")))); }
+
+            for (int i = 0; i <= items.VideoСards.Count - 1; i++) //VideoСards
+            { items_source.Add(new ListBoxObject(items.VideoСards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/cyber-eye.png")))); }
 
             for (int i = 0; i <= items.Monitors.Count - 1; i++) //Monitors
-            { items_source.Add(new ListBoxObject(items.Monitors[i], new BitmapImage(new Uri("pack://application:,,,/Resources/tv.png")), items.Monitors[i], items.Monitors[i].ToString())); }
+            { items_source.Add(new ListBoxObject(items.Monitors[i], new BitmapImage(new Uri("pack://application:,,,/Resources/tv.png")))); }
+
+            for (int i = 0; i <= items.OpticalDrives.Count - 1; i++) //OpticalDrives
+            { items_source.Add(new ListBoxObject(items.OpticalDrives[i], new BitmapImage(new Uri("pack://application:,,,/Resources/compact-disc.png")))); }
 
             СomponentsList.ItemsSource = items_source;
         }
@@ -182,6 +188,32 @@ namespace Computer_Era.Game.Forms
             return isValid;
         }
 
+        private bool IsСompatibleInterface(Collection<ListBoxObject> collection, VideoСard videoСard, string problem_report)
+        {
+            bool isValid = false;
+
+            MotherboardProperties motherboard = (GetSingleItem(collection, "motherboard") as Motherboard).Properties;
+            if (GetCount(collection, "video_card") == 0)
+            {
+                if (videoСard.IsCompatibility(motherboard)) { isValid = true; }
+            } else {
+                Collection<VideoСard> videoСards = new Collection<VideoСard>();
+
+                for (int i = 0; i > (collection.Where(m => m.Item.GetTypeValue() == "video_card").Count()); i++)
+                {
+                    VideoСard cVideoСard = collection[i].IObject as VideoСard;
+
+                    int mon_videoInterfaces = cVideoСard.Compatibility(((GetSingleItem(collection, "motherboard") as Motherboard).Properties));
+                    if (mon_videoInterfaces > 1)
+                    {
+                        if (cVideoСard.IsCompatibility(motherboard)) { isValid = true; break; }
+                    }
+                }
+            }
+            if (!isValid) { ProblemReport(problem_report); }
+            return isValid;
+        }
+
         private bool IsСapacityHDD(Collection<ListBoxObject> collection, Case @case, string problem_report)
         {
             bool isValid = false;
@@ -211,18 +243,75 @@ namespace Computer_Era.Game.Forms
         private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 || GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, OpticalDrive opticalDrive, string problem_report)
+        {
+            bool isValid = false;
+            if (GetCount(collection, "case") == 1) { isValid = GetCount(collection, "optical_drive") < 2 ? true : false; } else { isValid = true; } //2 статическое значение слотов под приводы в систмном блоке, потом может преместиться в параметр
+            if (!isValid) { ProblemReport(problem_report); }
             return isValid;
         }
 
         private bool IsFreeSlotsInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "motherboard") as Motherboard).GetCountCompatibleSlots(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            int count_interfaces = 0;
+            for (int i = 0; i > (collection.Where(m => m.Item.GetTypeValue() == "optical_drive" || m.Item.GetTypeValue() == "hdd").Count()); i++)
+            {
+                if (collection[i].Item.Type == "optical_drive")
+                {
+                    OpticalDrive od = collection[i].IObject as OpticalDrive;
+                    if (hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30 && od.Properties.Interface == OpticalDriveInterface.SATA)
+                    { count_interfaces++; }
+                    else if (hdd.Properties.Interface == HDDInterface.IDE && od.Properties.Interface == OpticalDriveInterface.IDE)
+                    { count_interfaces++; }
+                }
+                else if (collection[i].Item.Type == "hdd")
+                {
+                    HDD lhdd = collection[i].IObject as HDD;
+                    if (hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30 && lhdd.Properties.Interface == HDDInterface.sata_20 || lhdd.Properties.Interface == HDDInterface.sata_30)
+                    { count_interfaces++; }
+                    else if (hdd.Properties.Interface == HDDInterface.IDE && lhdd.Properties.Interface == HDDInterface.IDE)
+                    { count_interfaces++; }
+                }
+            }
+            if (count_interfaces < hdd.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties)) { isValid = true; }
+            if (!isValid) { ProblemReport(problem_report); }
             return isValid;
         }
 
-        private bool IsFreeVideoInterfaces(Collection<ListBoxObject> collection, Monitor monitor, string problem_report)
+        private bool IsFreeSlotsInstallation(Collection<ListBoxObject> collection, OpticalDrive opticalDrive, string problem_report)
+        {
+            bool isValid = false;
+            int count_interfaces = 0;
+            for (int i = 0; i > (collection.Where(m => m.Item.GetTypeValue() == "optical_drive" || m.Item.GetTypeValue() == "hdd").Count()); i++)
+            {
+                if (collection[i].Item.Type == "optical_drive")
+                {
+                    OpticalDrive od = collection[i].IObject as OpticalDrive;
+                    if (opticalDrive.Properties.Interface == OpticalDriveInterface.SATA && od.Properties.Interface == OpticalDriveInterface.SATA)
+                    { count_interfaces++; }
+                    else if (opticalDrive.Properties.Interface == OpticalDriveInterface.IDE && od.Properties.Interface == OpticalDriveInterface.IDE)
+                    { count_interfaces++; }
+                }
+                else if (collection[i].Item.Type == "hdd")
+                {
+                    HDD hdd = collection[i].IObject as HDD;
+                    if (opticalDrive.Properties.Interface == OpticalDriveInterface.SATA && hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30)
+                    { count_interfaces++; }
+                    else if (opticalDrive.Properties.Interface == OpticalDriveInterface.IDE && hdd.Properties.Interface == HDDInterface.IDE)
+                    { count_interfaces++; }
+                }
+            }
+            if (count_interfaces < opticalDrive.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties)) { isValid = true; }
+            if (!isValid) { ProblemReport(problem_report); }
+            return isValid;
+        }
+
+        private bool IsFreeVideoInterfaces(Collection<ListBoxObject> collection, Monitor monitor, string problem_report) //Дописать с учетом видеокарт
         {
             bool isValid = false;
             if ((GetCount(collection, monitor.GetTypeValue()) < ((GetSingleItem(collection, "motherboard") as Motherboard).Properties.VideoInterfaces.Count)))
@@ -243,7 +332,7 @@ namespace Computer_Era.Game.Forms
             }
             if (!isValid) { ProblemReport(problem_report); }
             return isValid;
-        } 
+        }
 
         private int GetCount(Collection<ListBoxObject> collection, string type)
         {
@@ -262,7 +351,7 @@ namespace Computer_Era.Game.Forms
 
         private void InstallСomponent<T>(Collection<ListBoxObject> components, T obj, Button button)
         {
-            components.Add(new ListBoxObject(obj, obj.ToString()));
+            components.Add(new ListBoxObject(obj));
 
             ComputerСomponents.Items.Refresh();
 
@@ -329,6 +418,17 @@ namespace Computer_Era.Game.Forms
                     if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы!") &&
                         IsFreeVideoInterfaces(items, monitor, "Нет свободных гнезд для подключения."))
                     { InstallСomponent<Monitor>(items, monitor, button); }
+                } else if (button.Tag is VideoСard) {
+                    VideoСard videoCard = button.Tag as VideoСard;
+                    if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, видеокарту куда вставлять прикажете?") &&
+                        IsСompatibleInterface(items, videoCard, "Нет подходящего интерфейса!"))
+                    { InstallСomponent<VideoСard>(items, videoCard, button); }
+                } else if (button.Tag is OpticalDrive) {
+                    OpticalDrive opticalDrive = button.Tag as OpticalDrive;
+                    if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, куда прикажете привод подключить?!") &&
+                        IsFreeSpaceInstallation(items, opticalDrive, "Нет свободных мест для установки оптического привода.") &&
+                        IsFreeSlotsInstallation(items, opticalDrive, "Нет свободных интерфейсов для подключения оптического привода."))
+                    { InstallСomponent<OpticalDrive>(items, opticalDrive, button); }
                 }
             }  
         }
@@ -340,11 +440,15 @@ namespace Computer_Era.Game.Forms
             if (computer.Count == 1)
             {
                 Collection<ListBoxObject> items = new Collection<ListBoxObject>();
-                if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Case, computer[0].Case, computer[0].Case.ToString())); }
-                if (computer[0].Motherboard != null) { items.Add(new ListBoxObject(computer[0].Motherboard, computer[0].Motherboard, computer[0].Motherboard.ToString())); }
-                if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU, computer[0].CPU, computer[0].CPU.ToString())); }
-                if (computer[0].PSU != null) { items.Add(new ListBoxObject(computer[0].PSU, computer[0].PSU, computer[0].PSU.ToString())); }
-                if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram, ram, ram.ToString())); } }
+                if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Case)); }
+                if (computer[0].Motherboard != null) { items.Add(new ListBoxObject(computer[0].Motherboard)); }
+                if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU)); }
+                if (computer[0].PSU != null) { items.Add(new ListBoxObject(computer[0].PSU)); }
+                if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram)); } }
+                if (computer[0].HDDs != null) { foreach (HDD hdd in computer[0].HDDs) { items.Add(new ListBoxObject(hdd)); } }
+                if (computer[0].VideoСards != null) { foreach (VideoСard videoСard in computer[0].VideoСards) { items.Add(new ListBoxObject(videoСard)); } }
+                if (computer[0].OpticalDrives != null) { foreach (OpticalDrive opticalDrive in computer[0].OpticalDrives) { items.Add(new ListBoxObject(opticalDrive)); } }
+                if (computer[0].Monitors != null) { foreach (Monitor monitor in computer[0].Monitors) { items.Add(new ListBoxObject(monitor)); } }
 
                 ComputerСomponents.ItemsSource = items;
             }

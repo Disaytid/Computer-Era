@@ -27,15 +27,6 @@ namespace Computer_Era.Game.Forms
         public object IObject { get; set; }
         public string Tag { get; set; }
 
-
-        public ListBoxObject(Item item, BitmapImage image, object obj, string tag)
-        {
-            Item = item;
-            Item.Image = image;
-            IObject = obj;
-            Tag = tag;
-        }
-
         public ListBoxObject(Item item, object obj, string tag)
         {
             Item = item;
@@ -43,11 +34,19 @@ namespace Computer_Era.Game.Forms
             Tag = tag;
         }
 
-        public ListBoxObject(object obj, string tag)
+        public ListBoxObject(object obj, BitmapImage image)
+        {
+            Item = obj as Item;
+            Item.Image = image;
+            IObject = obj;
+            Tag = Item.ToString();
+        }
+
+        public ListBoxObject(object obj)
         {
             Item = obj as Item;
             IObject = obj;
-            Tag = tag;
+            Tag = Item.ToString();
         }
     }
 }

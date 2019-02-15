@@ -53,8 +53,14 @@ namespace Computer_Era.Game.Forms
             for (int i = 0; i <= items.HDDs.Count - 1; i++) //HDDs
             { items_source.Add(new ListBoxComponent(items.HDDs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/stone-tablet.png")), items.HDDs[i].ToString())); }
 
+            for (int i = 0; i <= items.VideoСards.Count - 1; i++) //VideoCards
+            { items_source.Add(new ListBoxComponent(items.VideoСards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/cyber-eye.png")), items.VideoСards[i].ToString())); }
+
             for (int i = 0; i <= items.Monitors.Count - 1; i++) //Monitors
             { items_source.Add(new ListBoxComponent(items.Monitors[i], new BitmapImage(new Uri("pack://application:,,,/Resources/tv.png")), items.Monitors[i].ToString())); }
+
+            for (int i = 0; i <= items.OpticalDrives.Count - 1; i++) //OpticalDrives
+            { items_source.Add(new ListBoxComponent(items.OpticalDrives[i], new BitmapImage(new Uri("pack://application:,,,/Resources/compact-disc.png")), items.VideoСards[i].ToString())); }
 
             InventoryList.ItemsSource = items_source;
         }

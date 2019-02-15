@@ -22,6 +22,10 @@ namespace Computer_Era.Game.Objects
         public PowerSupplyUnit PSU { get; set; }
         public CPU CPU { get; set; }
         public Collection<RAM> RAMs { get; set; }
+        public Collection<HDD> HDDs { get; set; }
+        public Collection<VideoСard> VideoСards { get; set; }
+        public Collection<OpticalDrive> OpticalDrives { get; set; }
+        public Collection<Monitor> Monitors { get; set; }
 
         public Computer(string name, Case @case)
         {
