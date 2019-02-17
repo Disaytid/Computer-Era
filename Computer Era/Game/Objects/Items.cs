@@ -21,12 +21,12 @@ namespace Computer_Era.Game.Objects
         monitor,
         video_card,
         optical_drive,
+        mouse,
+        keyboard,
     }
     public class Items
     {
         SQLiteConnection Connection;
-
-
 
         public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
@@ -38,6 +38,8 @@ namespace Computer_Era.Game.Objects
         public Collection<Monitor> Monitors = new Collection<Monitor>();
         public Collection<VideoСard> VideoСards = new Collection<VideoСard>();
         public Collection<OpticalDrive> OpticalDrives = new Collection<OpticalDrive>();
+        public Collection<Mouse> Mice = new Collection<Mouse>();
+        public Collection<Keyboard> Keyboards = new Collection<Keyboard>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -82,6 +84,10 @@ namespace Computer_Era.Game.Objects
                         VideoСards.Add(new VideoСard(id, name, type, price, manufacturing_date, AddItem<VideoСardProperties>(json)));
                     } else if (itemType == ItemTypes.optical_drive) {
                         OpticalDrives.Add(new OpticalDrive(id, name, type, price, manufacturing_date, AddItem<OpticalDriveProperties>(json)));
+                    } else if (itemType == ItemTypes.mouse) {
+                        Mice.Add(new Mouse(id, name, type, price, manufacturing_date, AddItem<MouseProperties>(json)));
+                    } else if (itemType == ItemTypes.keyboard) {
+                        Keyboards.Add(new Keyboard(id, name, type, price, manufacturing_date, AddItem<KeyboardProperties>(json)));
                     }
                 }
             }
@@ -121,6 +127,8 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.monitor, "Монитор" },
             { Objects.ItemTypes.video_card, "Видеокарта" },
             { Objects.ItemTypes.optical_drive, "Оптический привод" },
+            { Objects.ItemTypes.mouse, "Компьютерная мышь" },
+            { Objects.ItemTypes.keyboard, "Клавиатура" },
         };
         public int UId { get; set; }
         public ImageSource Image { get; set; }
@@ -858,6 +866,100 @@ namespace Computer_Era.Game.Objects
                 return motherboard.SATA2_0 + motherboard.SATA3_0;
             } else if (Properties.Interface == OpticalDriveInterface.IDE) {
                 return motherboard.IDE;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    // = MOUSE ========================================================================== //
+
+    public enum InputInterfaces
+    {
+        PSby2,
+        USB,
+    }
+    public class MouseProperties
+    {
+        public InputInterfaces Interface { get; set; }
+    }
+    public class Mouse : Item
+    {
+        public MouseProperties Properties { get; set; } = new MouseProperties();
+        public Mouse(int uid, string name, string type, int price, DateTime man_date, MouseProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+
+        public int Compatibility(MotherboardProperties motherboard)
+        {
+            if (Properties.Interface == InputInterfaces.USB)
+            {
+                return motherboard.USB2_0 + motherboard.USB3_0;
+            } else if (Properties.Interface == InputInterfaces.PSby2 && motherboard.PS2Mouse) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        public int Compatibility(MotherboardProperties motherboard, CaseProperties @case)
+        {
+            if (Properties.Interface == InputInterfaces.USB)
+            {
+                return motherboard.USB2_0 + motherboard.USB3_0 + @case.USB2_0 + @case.USB3_0;
+            } else if (Properties.Interface == InputInterfaces.PSby2 && motherboard.PS2Mouse)  {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+    }
+
+    // = KEYBOARD ======================================================================= //
+
+    public class KeyboardProperties
+    {
+        public InputInterfaces Interface { get; set; }
+    }
+    public class Keyboard : Item
+    {
+        public KeyboardProperties Properties { get; set; } = new KeyboardProperties();
+        public Keyboard(int uid, string name, string type, int price, DateTime man_date, KeyboardProperties properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+
+            Properties = properties;
+        }
+
+        public int Compatibility(MotherboardProperties motherboard)
+        {
+            if (Properties.Interface == InputInterfaces.USB)
+            {
+                return motherboard.USB2_0 + motherboard.USB3_0;
+            } else if (Properties.Interface == InputInterfaces.PSby2 && motherboard.PS2Keyboard) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+        public int Compatibility(MotherboardProperties motherboard, CaseProperties @case)
+        {
+            if (Properties.Interface == InputInterfaces.USB)
+            {
+                return motherboard.USB2_0 + motherboard.USB3_0 + @case.USB2_0 + @case.USB3_0;
+            } else if (Properties.Interface == InputInterfaces.PSby2 && motherboard.PS2Keyboard) {
+                return 1;
             } else {
                 return 0;
             }

@@ -220,6 +220,8 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\keyboard.png" />
+    <Resource Include="Resources\mouse.png" />
     <Resource Include="Resources\compact-disc.png" />
     <Resource Include="Resources\cyber-eye.png" />
     <Resource Include="Resources\tv.png" />

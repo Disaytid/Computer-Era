@@ -21,11 +21,13 @@ namespace Computer_Era.Game.Objects
         public Motherboard Motherboard { get; set; }
         public PowerSupplyUnit PSU { get; set; }
         public CPU CPU { get; set; }
-        public Collection<RAM> RAMs { get; set; }
-        public Collection<HDD> HDDs { get; set; }
-        public Collection<VideoСard> VideoСards { get; set; }
-        public Collection<OpticalDrive> OpticalDrives { get; set; }
-        public Collection<Monitor> Monitors { get; set; }
+        public Collection<RAM> RAMs { get; set; } = new Collection<RAM>();
+        public Collection<HDD> HDDs { get; set; } = new Collection<HDD>();
+        public Collection<VideoСard> VideoСards { get; set; } = new Collection<VideoСard>();
+        public Collection<OpticalDrive> OpticalDrives { get; set; } = new Collection<OpticalDrive>();
+        public Collection<Monitor> Monitors { get; set; } = new Collection<Monitor>();
+        public Collection<Mouse> Mice { get; set; } = new Collection<Mouse>();
+        public Collection<Keyboard> Keyboards { get; set; } = new Collection<Keyboard>();
 
         public Computer(string name, Case @case)
         {

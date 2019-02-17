@@ -62,6 +62,12 @@ namespace Computer_Era.Game.Forms
             for (int i = 0; i <= items.OpticalDrives.Count - 1; i++) //OpticalDrives
             { items_source.Add(new ListBoxComponent(items.OpticalDrives[i], new BitmapImage(new Uri("pack://application:,,,/Resources/compact-disc.png")), items.VideoСards[i].ToString())); }
 
+            for (int i = 0; i <= items.Mice.Count - 1; i++) //Mouses
+            { items_source.Add(new ListBoxComponent(items.Mice[i], new BitmapImage(new Uri("pack://application:,,,/Resources/mouse.png")), items.Mice[i].ToString())); }
+
+            for (int i = 0; i <= items.Keyboards.Count - 1; i++) //Keyboards
+            { items_source.Add(new ListBoxComponent(items.Keyboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/keyboard.png")), items.Keyboards[i].ToString())); }
+
             InventoryList.ItemsSource = items_source;
         }
 
