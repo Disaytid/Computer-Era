@@ -17,10 +17,11 @@ namespace Computer_Era.Game.Objects
     public class Computer //Для создания объекта "Computer" должны обязательно указываться корпус или материнская плата, без них объект бесполезен и равноценен пустому
     {
         public string Name { get; set; }
-        public C Case { get; set; }
+        public Case Case { get; set; }
         public Motherboard Motherboard { get; set; }
         public PowerSupplyUnit PSU { get; set; }
         public CPU CPU { get; set; }
+        public CPUCooler CPUCooler { get; set; }
         public Collection<RAM> RAMs { get; set; } = new Collection<RAM>();
         public Collection<HDD> HDDs { get; set; } = new Collection<HDD>();
         public Collection<VideoСard> VideoСards { get; set; } = new Collection<VideoСard>();
@@ -29,7 +30,7 @@ namespace Computer_Era.Game.Objects
         public Collection<Mouse> Mice { get; set; } = new Collection<Mouse>();
         public Collection<Keyboard> Keyboards { get; set; } = new Collection<Keyboard>();
 
-        public Computer(string name, C @case)
+        public Computer(string name, Case @case)
         {
             Name = name;
             Case = @case;
@@ -41,7 +42,7 @@ namespace Computer_Era.Game.Objects
             Motherboard = motherboard;
         }
 
-        public Computer(string name, C @case, Motherboard motherboard)
+        public Computer(string name, Case @case, Motherboard motherboard)
         {
             Name = name;
             Case = @case;

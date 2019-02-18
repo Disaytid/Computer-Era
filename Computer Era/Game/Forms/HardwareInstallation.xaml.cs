@@ -61,6 +61,15 @@ namespace Computer_Era.Game.Forms
                     if (computer.Case != null && computer.Case.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.Case); }
                     if (computer.Motherboard != null && computer.Motherboard.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.Motherboard); }
                     if (computer.PSU != null && computer.PSU.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.PSU); }
+                    foreach (RAM ram in computer.RAMs) { if (ram != null && ram.GetType() == typeof(C)) { if (items[i].Equals(ram)) { isInstalled = true; break; } } }
+                    if (computer.CPU != null && computer.CPU.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.CPU); }
+                    if (computer.CPUCooler != null && computer.CPUCooler.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.CPUCooler); }
+                    foreach (HDD hdd in computer.HDDs) { if (hdd != null && hdd.GetType() == typeof(C)) { if (items[i].Equals(hdd)) { isInstalled = true; break; } } }
+                    foreach (VideoСard videoСard in computer.VideoСards) { if (videoСard != null && videoСard.GetType() == typeof(C)) { if (items[i].Equals(videoСard)) { isInstalled = true; break; } } }
+                    foreach (Monitor monitor in computer.Monitors) { if (monitor != null && monitor.GetType() == typeof(C)) { if (items[i].Equals(monitor)) { isInstalled = true; break; } } }
+                    foreach (OpticalDrive opticalDrive in computer.OpticalDrives) { if (opticalDrive != null && opticalDrive.GetType() == typeof(C)) { if (items[i].Equals(opticalDrive)) { isInstalled = true; break; } } }
+                    foreach (Mouse mouse in computer.Mice) { if (mouse != null && mouse.GetType() == typeof(C)) { if (items[i].Equals(mouse)) { isInstalled = true; break; } } }
+                    foreach (Keyboard keyboard in computer.Keyboards) { if (keyboard != null && keyboard.GetType() == typeof(C)) { if (items[i].Equals(keyboard)) { isInstalled = true; break; } } }
                 }
 
                 items_source.Add(new ListBoxObject(items[i], image, !isInstalled));
@@ -73,8 +82,8 @@ namespace Computer_Era.Game.Forms
 
             AddItemsToItemsSource(items.Cases, items_source, ItemTypes.@case);
             AddItemsToItemsSource(items.Motherboards, items_source, ItemTypes.motherboard);
-            AddItemsToItemsSource(items.RAMs, items_source, ItemTypes.ram);
             AddItemsToItemsSource(items.PowerSupplyUnits, items_source, ItemTypes.psu);
+            AddItemsToItemsSource(items.RAMs, items_source, ItemTypes.ram);
             AddItemsToItemsSource(items.CPUs, items_source, ItemTypes.cpu);
             AddItemsToItemsSource(items.CPUCoolers, items_source, ItemTypes.cpu_cooler);
             AddItemsToItemsSource(items.HDDs, items_source, ItemTypes.hdd);
@@ -137,10 +146,10 @@ namespace Computer_Era.Game.Forms
         private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, Motherboard motherboard, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "case") == 0 || motherboard.CheckCompatibility((GetSingleItem(collection, "case") as C).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 || motherboard.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
-        private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, C @case, string problem_report)
+        private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, Case @case, string problem_report)
         {
             bool isValid = false;
             if (GetCount(collection, "motherboard") == 0 || (GetSingleItem(collection, "motherboard") as Motherboard).CheckCompatibility(@case.Properties)) { isValid = true; } else { ProblemReport(problem_report); }
@@ -149,10 +158,10 @@ namespace Computer_Era.Game.Forms
         private bool IsNullOrCompatibleCase(Collection<ListBoxObject> collection, PowerSupplyUnit psu, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "case") == 0 || psu.CheckCompatibility((GetSingleItem(collection, "case") as C).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 || psu.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
-        private bool IsNullOrCompatiblePSU(Collection<ListBoxObject> collection, C @case, string problem_report)
+        private bool IsNullOrCompatiblePSU(Collection<ListBoxObject> collection, Case @case, string problem_report)
         {
             bool isValid = false;
             if (GetCount(collection, "psu") == 0 || (GetSingleItem(collection, "psu") as PowerSupplyUnit).CheckCompatibility(@case.Properties)) { isValid = true; } else { ProblemReport(problem_report); }
@@ -204,7 +213,7 @@ namespace Computer_Era.Game.Forms
 
             if (!isValid) { ProblemReport(problem_report); } return isValid;
         }
-        private bool IsСapacityHDD(Collection<ListBoxObject> collection, C @case, string problem_report)
+        private bool IsСapacityHDD(Collection<ListBoxObject> collection, Case @case, string problem_report)
         {
             bool isValid = false;
             Collection<HDD> hdd_collection = new Collection<HDD>();
@@ -223,14 +232,14 @@ namespace Computer_Era.Game.Forms
             bool isValid = false;
             int volume = 0;
 
-            foreach (object obj in (collection.Where(i => i.Item.GetTypeValue() == "ram"))) { volume += (obj as RAM).Properties.Volume; }
+            foreach (object obj in (collection.Where(i => i.Item.GetTypeValue() == "ram"))) { volume += ((obj as ListBoxObject).IObject as RAM).Properties.Volume; }
             if (ram.Properties.Volume + volume <= (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMVolume) { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "case") == 0 || GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as C).GetCountCompatiblePlaces(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 || GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, OpticalDrive opticalDrive, string problem_report)
@@ -328,7 +337,7 @@ namespace Computer_Era.Game.Forms
 
             if (GetCount(collection, "case") == 1)
             {
-                if (count_interfaces < mouse.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties, (GetSingleItem(collection, "case") as C).Properties)) { isValid = true; }
+                if (count_interfaces < mouse.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties, (GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; }
             } else {
                 if (count_interfaces < mouse.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties)) { isValid = true; }
             }
@@ -356,7 +365,7 @@ namespace Computer_Era.Game.Forms
             }
             if (GetCount(collection, "case") == 1)
             {
-                if (count_interfaces < keyboard.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties, (GetSingleItem(collection, "case") as C).Properties)) { isValid = true; }
+                if (count_interfaces < keyboard.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties, (GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; }
             } else {
                 if (count_interfaces < keyboard.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties)) { isValid = true; }
             }
@@ -390,14 +399,14 @@ namespace Computer_Era.Game.Forms
                 Button button = sender as Button;
                 Collection<ListBoxObject> items = ComputerСomponents.ItemsSource as Collection<ListBoxObject>;
 
-                if (button.Tag is C)
+                if (button.Tag is Case)
                 {
-                    C @case = (button.Tag as C);
+                    Case @case = (button.Tag as Case);
                     if (IsEquality(GetCount(items, @case.GetTypeValue()), 0, Operators.Equally, "У вас уже есть корпус в этой конфигурации!") &&
                         IsNullOrCompatibleMotherboard(items, @case, "Материнская плата не станет в этот корпус!") &&
                         IsСapacityHDD(items, @case, "Все диски сюда не влезут!") &&
                         IsNullOrCompatiblePSU(items, @case, "Блок питания не станет в этот корпус!"))
-                    { InstallСomponent<C>(items, @case, button); }
+                    { InstallСomponent<Case>(items, @case, button); }
                 } else if (button.Tag is Motherboard) {
                     Motherboard motherboard = (button.Tag as Motherboard);
                     if (IsEquality(GetCount(items, motherboard.GetTypeValue()), 0, Operators.Equally, "У вас уже есть материнская плата в этой конфигурации!") &&
@@ -486,9 +495,9 @@ namespace Computer_Era.Game.Forms
                 foreach (object obj in ComputerСomponents.Items)
                 {
                     object iobj = (obj as ListBoxObject).IObject;
-                    if (iobj is C)
+                    if (iobj is Case)
                     {
-                        isChangedComputer = currentComputer[0].Case == iobj as C ? false : true;
+                        isChangedComputer = currentComputer[0].Case == iobj as Case ? false : true;
                     } else if (iobj is Motherboard) {
                         isChangedComputer = currentComputer[0].Motherboard == iobj as Motherboard ? false : true;
                     } else if (iobj is CPU) {
@@ -525,12 +534,12 @@ namespace Computer_Era.Game.Forms
 
                         if (!isChangedComputer)
                         {
-                            C @case = null;
+                            Case @case = null;
                             Motherboard motherboard = null;
                             foreach (object obj in ComputerСomponents.Items)
                             {
                                 object iobj = (obj as ListBoxObject).IObject;
-                                if (iobj is C) { @case = iobj as C; } else if (iobj is Motherboard) { motherboard = iobj as Motherboard; }
+                                if (iobj is Case) { @case = iobj as Case; } else if (iobj is Motherboard) { motherboard = iobj as Motherboard; }
                                 if (@case != null && motherboard != null) { break; }
                             }
 
@@ -567,29 +576,45 @@ namespace Computer_Era.Game.Forms
                             foreach (object obj in ComputerСomponents.Items)
                             {
                                 object iobj = (obj as ListBoxObject).IObject;
-                                if (iobj is C)
+                                if (iobj is Case)
                                 {
-                                    newComputer.Case = iobj as C;
+                                    newComputer.Case = iobj as Case;
                                 } else if (iobj is Motherboard) {
                                     newComputer.Motherboard = iobj as Motherboard;
                                 } else if (iobj is CPU) {
                                     newComputer.CPU = iobj as CPU;
+                                } else if (iobj is CPUCooler) {
+                                    newComputer.CPUCooler = iobj as CPUCooler;
                                 } else if (iobj is PowerSupplyUnit) {
                                     newComputer.PSU = iobj as PowerSupplyUnit;
                                 } else if (iobj is RAM) {
-                                    newComputer.RAMs.Add(iobj as RAM);
+                                    bool isNewRAM = true;
+                                    foreach (RAM ram in newComputer.RAMs) { if (iobj as RAM == ram) { isNewRAM = false; } }
+                                    if (isNewRAM) { newComputer.RAMs.Add(iobj as RAM); }
                                 } else if (iobj is HDD) {
-                                    newComputer.HDDs.Add(iobj as HDD);
+                                    bool isNewHDD = true;
+                                    foreach (HDD hdd in newComputer.HDDs) { if (iobj as HDD == hdd) { isNewHDD = false; } }
+                                    if (isNewHDD) { newComputer.HDDs.Add(iobj as HDD); }
                                 } else if (iobj is VideoСard) {
-                                    newComputer.VideoСards.Add(iobj as VideoСard);
+                                    bool isNewVideoCard = true;
+                                    foreach (VideoСard videoСard in newComputer.VideoСards) { if (iobj as VideoСard == videoСard) { isNewVideoCard = false; } }
+                                    if (isNewVideoCard) { newComputer.VideoСards.Add(iobj as VideoСard); }
                                 } else if (iobj is OpticalDrive) {
-                                    newComputer.OpticalDrives.Add(iobj as OpticalDrive);
+                                    bool isNewOpticalDrive = true;
+                                    foreach (OpticalDrive opticalDrive in newComputer.OpticalDrives) { if (iobj as OpticalDrive == opticalDrive) { isNewOpticalDrive = false; } }
+                                    if (isNewOpticalDrive) { newComputer.OpticalDrives.Add(iobj as OpticalDrive); }
                                 } else if (iobj is Monitor) {
-                                    newComputer.Monitors.Add(iobj as Monitor);
+                                    bool isNewMonitor = true;
+                                    foreach (Monitor monitor in newComputer.Monitors) { if (iobj as Monitor == monitor) { isNewMonitor = false; } }
+                                    if (isNewMonitor) { newComputer.Monitors.Add(iobj as Monitor); }
                                 } else if (iobj is Mouse) {
-                                    newComputer.Mice.Add(iobj as Mouse);
+                                    bool isNewMouse = true;
+                                    foreach (Mouse mouse in newComputer.Mice) { if (iobj as Mouse == mouse) { isNewMouse = false; } }
+                                    if (isNewMouse) { newComputer.Mice.Add(iobj as Mouse); }
                                 } else if (iobj is Keyboard) {
-                                    newComputer.Keyboards.Add(iobj as Keyboard);
+                                    bool isNewKeyboard = true;
+                                    foreach (Keyboard keyboard in newComputer.Keyboards) { if (iobj as Keyboard == keyboard) { isNewKeyboard = false; } }
+                                    if (isNewKeyboard) { newComputer.Keyboards.Add(iobj as Keyboard); }
                                 }
                             }
 
@@ -624,13 +649,14 @@ namespace Computer_Era.Game.Forms
                     Collection<ListBoxObject> items = new Collection<ListBoxObject>();
                     if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Case)); }
                     if (computer[0].Motherboard != null) { items.Add(new ListBoxObject(computer[0].Motherboard)); }
-                    if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU)); }
                     if (computer[0].PSU != null) { items.Add(new ListBoxObject(computer[0].PSU)); }
+                    if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU)); }
+                    if (computer[0].CPUCooler != null) { items.Add(new ListBoxObject(computer[0].CPUCooler)); }
                     if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram)); } }
                     if (computer[0].HDDs != null) { foreach (HDD hdd in computer[0].HDDs) { items.Add(new ListBoxObject(hdd)); } }
                     if (computer[0].VideoСards != null) { foreach (VideoСard videoСard in computer[0].VideoСards) { items.Add(new ListBoxObject(videoСard)); } }
-                    if (computer[0].OpticalDrives != null) { foreach (OpticalDrive opticalDrive in computer[0].OpticalDrives) { items.Add(new ListBoxObject(opticalDrive)); } }
                     if (computer[0].Monitors != null) { foreach (Monitor monitor in computer[0].Monitors) { items.Add(new ListBoxObject(monitor)); } }
+                    if (computer[0].OpticalDrives != null) { foreach (OpticalDrive opticalDrive in computer[0].OpticalDrives) { items.Add(new ListBoxObject(opticalDrive)); } }
                     if (computer[0].Mice != null) { foreach (Mouse mouse in computer[0].Mice) { items.Add(new ListBoxObject(mouse)); } }
                     if (computer[0].Keyboards != null) { foreach (Keyboard keyboard in computer[0].Keyboards) { items.Add(new ListBoxObject(keyboard)); } }
 

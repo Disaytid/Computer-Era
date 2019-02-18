@@ -28,7 +28,7 @@ namespace Computer_Era.Game.Objects
     {
         SQLiteConnection Connection;
 
-        public Collection<C> Cases = new Collection<C>();
+        public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
         public Collection<RAM> RAMs = new Collection<RAM>();
         public Collection<PowerSupplyUnit> PowerSupplyUnits = new Collection<PowerSupplyUnit>();
@@ -64,7 +64,7 @@ namespace Computer_Era.Game.Objects
 
                     if (itemType == ItemTypes.@case)
                     {
-                        Cases.Add(new C(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
+                        Cases.Add(new Case(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
                     }
                     else if (itemType == ItemTypes.motherboard) {
                         Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, AddItem<MotherboardProperties>(json)));
@@ -189,11 +189,11 @@ namespace Computer_Era.Game.Objects
         public bool MicrophoneJack; //Наличие гнезда для микрофона
     }
 
-    public class C : Item
+    public class Case : Item
     {
         public CaseProperties Properties = new CaseProperties();
 
-        public C(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
+        public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
         {
             UId = uid;
             Name = name;
@@ -421,7 +421,6 @@ namespace Computer_Era.Game.Objects
     }
 
     // = CPU ========================================================================== //
-
     public class CPUProperties
     {
         public Sockets Socket { get; set; }         //Сокет

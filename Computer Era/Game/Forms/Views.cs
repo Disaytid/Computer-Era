@@ -36,13 +36,13 @@ namespace Computer_Era.Game.Forms
             Tag = Item.ToString();
             IsEnabled = false;
         }
-        public ListBoxObject(object obj, BitmapImage image, bool isInstalled)
+        public ListBoxObject(object obj, BitmapImage image, bool isEnabled)
         {
             Item = obj as Item;
             Item.Image = image;
             IObject = obj;
             Tag = Item.ToString();
-            IsEnabled = isInstalled;
+            IsEnabled = isEnabled;
         }
 
         public ListBoxObject(object obj)
