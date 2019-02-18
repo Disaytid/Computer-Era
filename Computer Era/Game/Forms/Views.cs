@@ -10,10 +10,10 @@ namespace Computer_Era.Game.Forms
 {
     public class ListBoxComponent
     {
-        public Item Item { get; set; }
+        public BaseItem Item { get; set; }
         public string Tag { get; set; }
 
-        public ListBoxComponent(Item item, BitmapImage image, string tag)
+        public ListBoxComponent(BaseItem item, BitmapImage image, string tag)
         {
             Item = item;
             Item.Image = image;
@@ -23,14 +23,14 @@ namespace Computer_Era.Game.Forms
 
     public class ListBoxObject
     {
-        public Item Item { get; set; }
+        public BaseItem Item { get; set; }
         public object IObject { get; set; }
         public string Tag { get; set; }
         public bool IsEnabled { get; set; }
 
         public ListBoxObject(object obj, BitmapImage image)
         {
-            Item = obj as Item;
+            Item = obj as BaseItem;
             Item.Image = image;
             IObject = obj;
             Tag = Item.ToString();
@@ -38,7 +38,7 @@ namespace Computer_Era.Game.Forms
         }
         public ListBoxObject(object obj, BitmapImage image, bool isEnabled)
         {
-            Item = obj as Item;
+            Item = obj as BaseItem;
             Item.Image = image;
             IObject = obj;
             Tag = Item.ToString();
@@ -47,7 +47,7 @@ namespace Computer_Era.Game.Forms
 
         public ListBoxObject(object obj)
         {
-            Item = obj as Item;
+            Item = obj as BaseItem;
             IObject = obj;
             Tag = Item.ToString();
             IsEnabled = false;

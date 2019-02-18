@@ -32,6 +32,7 @@ namespace Computer_Era.Game.Forms
         {
             List<ListBoxComponent> items_source = new List<ListBoxComponent>();
 
+            
             for (int i=0; i <= items.Cases.Count - 1; i++) //CASES
             {items_source.Add(new ListBoxComponent(items.Cases[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Cases[i].ToString()));}
 

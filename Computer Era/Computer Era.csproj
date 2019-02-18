@@ -149,6 +149,7 @@
     <Compile Include="Game\Widgets\PlayerWidget.xaml.cs">
       <DependentUpon>PlayerWidget.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IItem.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

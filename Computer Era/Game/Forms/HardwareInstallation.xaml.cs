@@ -30,29 +30,10 @@ namespace Computer_Era.Game.Forms
             LoadComputers(computers);
         }
 
-        public readonly Dictionary<ItemTypes, string> DefaulItemIcon = new Dictionary<ItemTypes, string>
-        {
-            { Objects.ItemTypes.@case, "pack://application:,,,/Resources/coffin.png" },
-            { Objects.ItemTypes.motherboard, "pack://application:,,,/Resources/circuitry.png" },
-            { Objects.ItemTypes.psu, "pack://application:,,,/Resources/plug.png" },
-            { Objects.ItemTypes.ram, "pack://application:,,,/Resources/brain.png" },
-            { Objects.ItemTypes.cpu, "pack://application:,,,/Resources/processor.png" },
-            { Objects.ItemTypes.cpu_cooler, "pack://application:,,,/Resources/computer-fan.png" },
-            { Objects.ItemTypes.hdd, "pack://application:,,,/Resources/stone-tablet.png" },
-            { Objects.ItemTypes.video_card, "pack://application:,,,/Resources/cyber-eye.png" },
-            { Objects.ItemTypes.monitor, "pack://application:,,,/Resources/tv.png" },
-            { Objects.ItemTypes.optical_drive, "pack://application:,,,/Resources/compact-disc.png" },
-            { Objects.ItemTypes.mouse, "pack://application:,,,/Resources/mouse.png" },
-            { Objects.ItemTypes.keyboard, "pack://application:,,,/Resources/keyboard.png" },
-        };
-
         private void AddItemsToItemsSource<C>(Collection<C> items, List<ListBoxObject> items_source, ItemTypes type) //Добавление предметов в ItemsSource
         {
-            if (!DefaulItemIcon.ContainsKey(type)) throw new ArgumentException(string.Format("Operation {0} is invalid", type), "op");
-            string path = (string)DefaulItemIcon[type];
-            BitmapImage image = new BitmapImage(new Uri(path));
-            //<C> lItems = List(typeof(C))(Computers.PlayerComputers.Where(item => item.GetType() == typeof(C)).ToList());
-
+            BaseItem baseItem = new BaseItem();
+            BitmapImage image = new BitmapImage(new Uri(baseItem.GetIcon(type)));
 
             for (int i = 0; i <= items.Count - 1; i++) {
                 bool isInstalled = false;
@@ -246,8 +227,7 @@ namespace Computer_Era.Game.Forms
         {
             bool isValid = false;
             if (GetCount(collection, "case") == 1) { isValid = GetCount(collection, "optical_drive") < 2 ? true : false; } else { isValid = true; } //2 статическое значение слотов под приводы в систмном блоке, потом может преместиться в параметр
-            if (!isValid) { ProblemReport(problem_report); }
-            return isValid;
+            if (!isValid) { ProblemReport(problem_report); } return isValid;
         }
         private bool IsFreeSlotsInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
         {

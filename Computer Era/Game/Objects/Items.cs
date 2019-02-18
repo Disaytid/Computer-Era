@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
-using System.Windows;
 using System.Windows.Media;
 using Newtonsoft.Json;
 
@@ -113,8 +112,38 @@ namespace Computer_Era.Game.Objects
             Depth = depth;
         }
     }
-    public class Item
+
+    public class BaseItem
     {
+        public int UId { get; set; }
+        public ImageSource Image { get; set; }
+        public string Name { get; set; }
+
+        private string _type;
+        public int Price { get; set; }
+        public DateTime ManufacturingDate { get; set; }
+
+        public readonly Dictionary<ItemTypes, string> ItemIcon = new Dictionary<ItemTypes, string>
+        {
+            { Objects.ItemTypes.@case, "pack://application:,,,/Resources/coffin.png" },
+            { Objects.ItemTypes.motherboard, "pack://application:,,,/Resources/circuitry.png" },
+            { Objects.ItemTypes.psu, "pack://application:,,,/Resources/plug.png" },
+            { Objects.ItemTypes.ram, "pack://application:,,,/Resources/brain.png" },
+            { Objects.ItemTypes.cpu, "pack://application:,,,/Resources/processor.png" },
+            { Objects.ItemTypes.cpu_cooler, "pack://application:,,,/Resources/computer-fan.png" },
+            { Objects.ItemTypes.hdd, "pack://application:,,,/Resources/stone-tablet.png" },
+            { Objects.ItemTypes.video_card, "pack://application:,,,/Resources/cyber-eye.png" },
+            { Objects.ItemTypes.monitor, "pack://application:,,,/Resources/tv.png" },
+            { Objects.ItemTypes.optical_drive, "pack://application:,,,/Resources/compact-disc.png" },
+            { Objects.ItemTypes.mouse, "pack://application:,,,/Resources/mouse.png" },
+            { Objects.ItemTypes.keyboard, "pack://application:,,,/Resources/keyboard.png" },
+        };
+        public string GetIcon(ItemTypes type)
+        {
+            if (!ItemIcon.ContainsKey(type)) throw new ArgumentException(string.Format("Operation {0} is invalid", type), "op");
+            return (string)ItemIcon[type]; ;
+        }
+
         private readonly Dictionary<ItemTypes, string> ItemTypes = new Dictionary<ItemTypes, string>
         {
             { Objects.ItemTypes.@case, "Корпус" },
@@ -130,25 +159,35 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.mouse, "Компьютерная мышь" },
             { Objects.ItemTypes.keyboard, "Клавиатура" },
         };
-        public int UId { get; set; }
-        public ImageSource Image { get; set; }
-        public string Name { get; set; }
-        private string type;
-        public int Price { get; set; }
-        public DateTime ManufacturingDate { get; set; }
-
         public string Type
         {
             get
             {
-                ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
+                ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), _type);
                 if (!ItemTypes.ContainsKey(itemType)) throw new ArgumentException(string.Format("Operation {0} is invalid", itemType), "op");
                 return (string)ItemTypes[itemType];
             }
-            set { this.type = value; }
+            set { _type = value; }
+        }
+        public string GetTypeValue() { return _type; }
+    }
+    public class Item<P> : BaseItem, IItem
+    {
+        public P Properties { get; set; }
+        public Item(int uid, string name, string type, int price, DateTime man_date, P properties)
+        {
+            UId = uid;
+            Name = name;
+            Type = type;
+            Price = price;
+            ManufacturingDate = man_date;
+            Properties = properties;
         }
 
-        public string GetTypeValue() { return type; }
+        public override string ToString()
+        {
+            return Name;
+        }
 
         public string getManufacturingYear()
         {
@@ -189,21 +228,9 @@ namespace Computer_Era.Game.Objects
         public bool MicrophoneJack; //Наличие гнезда для микрофона
     }
 
-    public class Case : Item
+    public class Case : Item<CaseProperties>
     {
-        public CaseProperties Properties = new CaseProperties();
-
-        public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
-
+        public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties) : base(uid, name, type, price, man_date, properties) { }
         public override string ToString()
         {
             string info = "Имя: " + Name + Environment.NewLine;
@@ -346,20 +373,9 @@ namespace Computer_Era.Game.Objects
         public int USB3_0;                                  //Количество USB гнезд 3.0
     }
 
-    public class Motherboard : Item
+    public class Motherboard : Item<MotherboardProperties>
     {
-        public MotherboardProperties Properties = new MotherboardProperties();
-
-        public Motherboard(int uid, string name, string type, int price, DateTime man_date, MotherboardProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public Motherboard(int uid, string name, string type, int price, DateTime man_date, MotherboardProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -433,20 +449,9 @@ namespace Computer_Era.Game.Objects
         public int MaximumTemperature { get; set; } //Максимальная рабочая температура (градусы по цельсию)
     }
 
-    public class CPU : Item
+    public class CPU : Item<CPUProperties>
     {
-        public CPUProperties Properties { get; set; } = new CPUProperties();
-
-        public CPU(int uid, string name, string type, int price, DateTime man_date, CPUProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public CPU(int uid, string name, string type, int price, DateTime man_date, CPUProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -470,20 +475,9 @@ namespace Computer_Era.Game.Objects
         public double SupplyVoltage { get; set; }   //Напряжение питания
     }
 
-    public class RAM : Item
+    public class RAM : Item<RAMProperties>
     {
-        public RAMProperties Properties { get; set; } = new RAMProperties();
-
-        public RAM(int uid, string name, string type, int price, DateTime man_date, RAMProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public RAM(int uid, string name, string type, int price, DateTime man_date, RAMProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -526,20 +520,14 @@ namespace Computer_Era.Game.Objects
         public bool ShortCircuitProtection { get; set; }        //Защита от короткого замыкания
     }
 
-    public class PowerSupplyUnit : Item
+    public class PowerSupplyUnit : Item<PowerSupplyUnitProperties>
     {
-        public PowerSupplyUnitProperties Properties { get; set; } = new PowerSupplyUnitProperties();
-
-        public PowerSupplyUnit(int uid, string name, string type, int price, DateTime man_date, PowerSupplyUnitProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public PowerSupplyUnit(int uid,
+                               string name,
+                               string type,
+                               int price,
+                               DateTime man_date,
+                               PowerSupplyUnitProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -582,20 +570,9 @@ namespace Computer_Era.Game.Objects
         public Size Size { get; set; }
     }
 
-    public class CPUCooler : Item
+    public class CPUCooler : Item<CPUCoolerProperties>
     {
-        public CPUCoolerProperties Properties { get; set;} = new CPUCoolerProperties();
-
-        public CPUCooler(int uid, string name, string type, int price, DateTime man_date, CPUCoolerProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public CPUCooler(int uid, string name, string type, int price, DateTime man_date, CPUCoolerProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -647,20 +624,9 @@ namespace Computer_Era.Game.Objects
         public int MaximumTemperature { get; set; }         //В градусах по цельсию
     }
 
-    public class HDD : Item
+    public class HDD : Item<HDDProperties>
     {
-        public HDDProperties Properties { get; set; } = new HDDProperties();
-
-        public HDD(int uid, string name, string type, int price, DateTime man_date, HDDProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public HDD(int uid, string name, string type, int price, DateTime man_date, HDDProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -713,20 +679,9 @@ namespace Computer_Era.Game.Objects
         public Collection<VideoInterface> VideoInterfaces { get; set; }
     }
 
-    public class Monitor : Item
+    public class Monitor : Item<MonitorProperties>
     {
-        public MonitorProperties Properties { get; set; } = new MonitorProperties();
-
-        public Monitor(int uid, string name, string type, int price, DateTime man_date, MonitorProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public Monitor(int uid, string name, string type, int price, DateTime man_date, MonitorProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public override string ToString()
         {
@@ -790,20 +745,9 @@ namespace Computer_Era.Game.Objects
         public Collection<VideoInterface> VideoInterfaces { get; set; }
     }
 
-    public class VideoСard : Item
+    public class VideoСard : Item<VideoСardProperties>
     {
-        public VideoСardProperties Properties { get; set; } = new VideoСardProperties();
-
-        public VideoСard(int uid, string name, string type, int price, DateTime man_date, VideoСardProperties properties)
-        {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
-        }
+        public VideoСard(int uid, string name, string type, int price, DateTime man_date, VideoСardProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public bool IsCompatibility(MotherboardProperties motherboard)
         {
@@ -814,7 +758,11 @@ namespace Computer_Era.Game.Objects
                 return false;
             }
         }
-
+        public override string ToString()
+        {
+            string info = "Имя: " + Name + Environment.NewLine;
+            return info;
+        }
         public int Compatibility(MotherboardProperties motherboard)
         {
             if (Properties.Interface == Interface.PCI_E16x3_0 && motherboard.PCI_Ex16 >= 1 && motherboard.PCIE3_0 == true)
@@ -844,20 +792,14 @@ namespace Computer_Era.Game.Objects
         public int ReadAccessTimeCD { get; set; }   //Время доступа в режиме чтения CD в милисикундах
         public int ReadAccessTimeDVD { get; set; }  //Время доступа в режиме чтения DVD в милисикундах
     }
-    public class OpticalDrive : Item
+    public class OpticalDrive : Item<OpticalDriveProperties>
     {
-        public OpticalDriveProperties Properties { get; set; } = new OpticalDriveProperties();
-        public OpticalDrive(int uid, string name, string type, int price, DateTime man_date, OpticalDriveProperties properties)
+        public OpticalDrive(int uid, string name, string type, int price, DateTime man_date, OpticalDriveProperties properties) : base(uid, name, type, price, man_date, properties) { }
+        public override string ToString()
         {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
+            string info = "Имя: " + Name + Environment.NewLine;
+            return info;
         }
-
         public int Compatibility(MotherboardProperties motherboard)
         {
             if (Properties.Interface == OpticalDriveInterface.SATA)
@@ -882,20 +824,14 @@ namespace Computer_Era.Game.Objects
     {
         public InputInterfaces Interface { get; set; }
     }
-    public class Mouse : Item
+    public class Mouse : Item<MouseProperties>
     {
-        public MouseProperties Properties { get; set; } = new MouseProperties();
-        public Mouse(int uid, string name, string type, int price, DateTime man_date, MouseProperties properties)
+        public Mouse(int uid, string name, string type, int price, DateTime man_date, MouseProperties properties) : base(uid, name, type, price, man_date, properties) { }
+        public override string ToString()
         {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
+            string info = "Имя: " + Name + Environment.NewLine;
+            return info;
         }
-
         public int Compatibility(MotherboardProperties motherboard)
         {
             if (Properties.Interface == InputInterfaces.USB)
@@ -927,20 +863,15 @@ namespace Computer_Era.Game.Objects
     {
         public InputInterfaces Interface { get; set; }
     }
-    public class Keyboard : Item
+    public class Keyboard : Item<KeyboardProperties>
     {
-        public KeyboardProperties Properties { get; set; } = new KeyboardProperties();
-        public Keyboard(int uid, string name, string type, int price, DateTime man_date, KeyboardProperties properties)
+        public Keyboard(int uid, string name, string type, int price, DateTime man_date, KeyboardProperties properties) : base(uid, name, type, price, man_date, properties) { }
+
+        public override string ToString()
         {
-            UId = uid;
-            Name = name;
-            Type = type;
-            Price = price;
-            ManufacturingDate = man_date;
-
-            Properties = properties;
+            string info = "Имя: " + Name + Environment.NewLine;
+            return info;
         }
-
         public int Compatibility(MotherboardProperties motherboard)
         {
             if (Properties.Interface == InputInterfaces.USB)
