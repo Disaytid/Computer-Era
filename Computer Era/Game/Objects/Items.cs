@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Computer_Era.Game.Objects
 {
-    enum ItemTypes
+    public enum ItemTypes
     {
         @case,
         motherboard,
@@ -28,7 +28,7 @@ namespace Computer_Era.Game.Objects
     {
         SQLiteConnection Connection;
 
-        public Collection<Case> Cases = new Collection<Case>();
+        public Collection<C> Cases = new Collection<C>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
         public Collection<RAM> RAMs = new Collection<RAM>();
         public Collection<PowerSupplyUnit> PowerSupplyUnits = new Collection<PowerSupplyUnit>();
@@ -64,7 +64,7 @@ namespace Computer_Era.Game.Objects
 
                     if (itemType == ItemTypes.@case)
                     {
-                        Cases.Add(new Case(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
+                        Cases.Add(new C(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
                     }
                     else if (itemType == ItemTypes.motherboard) {
                         Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, AddItem<MotherboardProperties>(json)));
@@ -189,11 +189,11 @@ namespace Computer_Era.Game.Objects
         public bool MicrophoneJack; //Наличие гнезда для микрофона
     }
 
-    public class Case : Item
+    public class C : Item
     {
         public CaseProperties Properties = new CaseProperties();
 
-        public Case(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
+        public C(int uid, string name, string type, int price, DateTime man_date, CaseProperties properties)
         {
             UId = uid;
             Name = name;

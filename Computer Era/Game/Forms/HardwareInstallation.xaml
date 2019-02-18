@@ -80,7 +80,7 @@
                                         <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.Price}" Loaded="TextBlock_Loaded" />
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                                        <Button x:Name="AddItemButton" Content="Добавить" Margin="10" Tag="{Binding Path=IObject}" Click="AddItemButton_Click"/>
+                                        <Button x:Name="AddItemButton" Content="Добавить" Margin="10" Tag="{Binding Path=IObject}" IsEnabled="{Binding IsEnabled}" Click="AddItemButton_Click"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left">
                                         <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Item.Type}" FontSize="14" />

@@ -26,13 +26,7 @@ namespace Computer_Era.Game.Forms
         public Item Item { get; set; }
         public object IObject { get; set; }
         public string Tag { get; set; }
-
-        public ListBoxObject(Item item, object obj, string tag)
-        {
-            Item = item;
-            IObject = obj;
-            Tag = tag;
-        }
+        public bool IsEnabled { get; set; }
 
         public ListBoxObject(object obj, BitmapImage image)
         {
@@ -40,6 +34,15 @@ namespace Computer_Era.Game.Forms
             Item.Image = image;
             IObject = obj;
             Tag = Item.ToString();
+            IsEnabled = false;
+        }
+        public ListBoxObject(object obj, BitmapImage image, bool isInstalled)
+        {
+            Item = obj as Item;
+            Item.Image = image;
+            IObject = obj;
+            Tag = Item.ToString();
+            IsEnabled = isInstalled;
         }
 
         public ListBoxObject(object obj)
@@ -47,6 +50,7 @@ namespace Computer_Era.Game.Forms
             Item = obj as Item;
             IObject = obj;
             Tag = Item.ToString();
+            IsEnabled = false;
         }
     }
 }
