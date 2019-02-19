@@ -132,7 +132,7 @@
     <Compile Include="Game\Forms\Purse.xaml.cs">
       <DependentUpon>Purse.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Game\Forms\Views.cs" />
+    <Compile Include="Game\Forms\ViewItems.cs" />
     <Compile Include="Game\GameEvents.cs" />
     <Compile Include="Game\GameMessages.cs" />
     <Compile Include="Game\Objects\Companies.cs" />

@@ -17,12 +17,15 @@
                     <DataTemplate>
                         <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=InventoryList, Mode=OneWay}" ToolTipService.ShowDuration="30000" ToolTip="{Binding Tag}">
                             <DockPanel>
-                                <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}" />
+                                <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}"/>
                                 <StackPanel DockPanel.Dock="Right" Width="128">
                                     <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.ManufacturingDate, StringFormat=yyyy г.}" />
-                                    <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.Price, StringFormat={}Стоимость: {0}}" />
+                                    <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Path=Item.Price}" Loaded="TextBlock_Loaded" />
                                 </StackPanel>
-                                <StackPanel DockPanel.Dock="Bottom">
+                                <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                    <Label x:Name="AddItemButton" Content="Установлено" Margin="10" Padding="5" Foreground="Red" BorderBrush="Red" BorderThickness="1" Tag="{Binding Path=IObject}" Visibility="{Binding LabelVisibility}"/>
+                                </StackPanel>
+                                <StackPanel DockPanel.Dock="Left">
                                     <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Item.Type}" FontSize="14" />
                                     <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Item.Name}" FontSize="24" />
                                 </StackPanel>

@@ -213,7 +213,7 @@ namespace Computer_Era
 
         private void MenuInventoryItem_Click(object sender, RoutedEventArgs e)
         {
-            Inventory inventory = new Inventory(items);
+            Inventory inventory = new Inventory(items, computers, money);
             NewWindow(inventory);
         }
         private void MenuMapItem_Click(object sender, RoutedEventArgs e)

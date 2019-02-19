@@ -28,51 +28,13 @@ namespace Computer_Era.Game.Forms
             Money = money;
             LoadItems(items);
             LoadComputers(computers);
-        }
-
-        private void AddItemsToItemsSource<C>(Collection<C> items, List<ListBoxObject> items_source, ItemTypes type) //Добавление предметов в ItemsSource
-        {
-            BaseItem baseItem = new BaseItem();
-            BitmapImage image = new BitmapImage(new Uri(baseItem.GetIcon(type)));
-
-            for (int i = 0; i <= items.Count - 1; i++) {
-                bool isInstalled = false;
-                foreach (Computer computer in Computers.PlayerComputers)
-                {
-                    if (computer.Case != null && computer.Case.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.Case); }
-                    if (computer.Motherboard != null && computer.Motherboard.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.Motherboard); }
-                    if (computer.PSU != null && computer.PSU.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.PSU); }
-                    foreach (RAM ram in computer.RAMs) { if (ram != null && ram.GetType() == typeof(C)) { if (items[i].Equals(ram)) { isInstalled = true; break; } } }
-                    if (computer.CPU != null && computer.CPU.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.CPU); }
-                    if (computer.CPUCooler != null && computer.CPUCooler.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.CPUCooler); }
-                    foreach (HDD hdd in computer.HDDs) { if (hdd != null && hdd.GetType() == typeof(C)) { if (items[i].Equals(hdd)) { isInstalled = true; break; } } }
-                    foreach (VideoСard videoСard in computer.VideoСards) { if (videoСard != null && videoСard.GetType() == typeof(C)) { if (items[i].Equals(videoСard)) { isInstalled = true; break; } } }
-                    foreach (Monitor monitor in computer.Monitors) { if (monitor != null && monitor.GetType() == typeof(C)) { if (items[i].Equals(monitor)) { isInstalled = true; break; } } }
-                    foreach (OpticalDrive opticalDrive in computer.OpticalDrives) { if (opticalDrive != null && opticalDrive.GetType() == typeof(C)) { if (items[i].Equals(opticalDrive)) { isInstalled = true; break; } } }
-                    foreach (Mouse mouse in computer.Mice) { if (mouse != null && mouse.GetType() == typeof(C)) { if (items[i].Equals(mouse)) { isInstalled = true; break; } } }
-                    foreach (Keyboard keyboard in computer.Keyboards) { if (keyboard != null && keyboard.GetType() == typeof(C)) { if (items[i].Equals(keyboard)) { isInstalled = true; break; } } }
-                }
-
-                items_source.Add(new ListBoxObject(items[i], image, !isInstalled));
-            }
-        }   
+        } 
 
         public void LoadItems(Items items) //Загрузка предметов в ListBox
         {
             List<ListBoxObject> items_source = new List<ListBoxObject>();
-
-            AddItemsToItemsSource(items.Cases, items_source, ItemTypes.@case);
-            AddItemsToItemsSource(items.Motherboards, items_source, ItemTypes.motherboard);
-            AddItemsToItemsSource(items.PowerSupplyUnits, items_source, ItemTypes.psu);
-            AddItemsToItemsSource(items.RAMs, items_source, ItemTypes.ram);
-            AddItemsToItemsSource(items.CPUs, items_source, ItemTypes.cpu);
-            AddItemsToItemsSource(items.CPUCoolers, items_source, ItemTypes.cpu_cooler);
-            AddItemsToItemsSource(items.HDDs, items_source, ItemTypes.hdd);
-            AddItemsToItemsSource(items.VideoСards, items_source, ItemTypes.video_card);
-            AddItemsToItemsSource(items.Monitors, items_source, ItemTypes.monitor);
-            AddItemsToItemsSource(items.OpticalDrives, items_source, ItemTypes.optical_drive);
-            AddItemsToItemsSource(items.Mice, items_source, ItemTypes.mouse);
-            AddItemsToItemsSource(items.Keyboards, items_source, ItemTypes.keyboard);
+            ViewItems viewItems = new ViewItems();
+            items_source = viewItems.GetItemsSource(items, items_source, Computers.PlayerComputers);
 
             СomponentsList.ItemsSource = items_source;
         }

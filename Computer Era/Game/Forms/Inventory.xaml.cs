@@ -19,57 +19,38 @@ namespace Computer_Era.Game.Forms
     public partial class Inventory : UserControl
     {
         int MaxSize;
+        Money Money;
 
-        public Inventory(Items items)
+        public Inventory(Items items, Computers computers, Money money)
         {
             InitializeComponent();
+            Money = money;
+
             MaxSize = 16;
-            Title.Text = "Кладовка (" + MaxSize + " ячеек)";
-            LoadItems(items);
+            LoadItems(items, computers);
         }
 
-        public void LoadItems(Items items)
+        public void LoadItems(Items items, Computers computers)
         {
-            List<ListBoxComponent> items_source = new List<ListBoxComponent>();
+            List<ListBoxObject> items_source = new List<ListBoxObject>();
+            ViewItems viewItems = new ViewItems();
+            items_source = viewItems.GetItemsSource(items, items_source, computers.PlayerComputers);
 
-            
-            for (int i=0; i <= items.Cases.Count - 1; i++) //CASES
-            {items_source.Add(new ListBoxComponent(items.Cases[i], new BitmapImage(new Uri("pack://application:,,,/Resources/coffin.png")), items.Cases[i].ToString()));}
+            int currenSize = 0;
 
-            for (int i = 0; i <= items.Motherboards.Count - 1; i++) //MOTHERBOARDS
-            {items_source.Add(new ListBoxComponent(items.Motherboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/circuitry.png")), items.Motherboards[i].ToString()));}
-
-            for (int i = 0; i <= items.PowerSupplyUnits.Count - 1; i++) //PowerSupplyUnits
-            { items_source.Add(new ListBoxComponent(items.PowerSupplyUnits[i], new BitmapImage(new Uri("pack://application:,,,/Resources/plug.png")), items.PowerSupplyUnits[i].ToString())); }
-
-            for (int i = 0; i <= items.CPUs.Count - 1; i++) //CPUs
-            { items_source.Add(new ListBoxComponent(items.CPUs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/processor.png")), items.CPUs[i].ToString())); }
-
-            for (int i = 0; i <= items.RAMs.Count - 1; i++) //RAMs
-            { items_source.Add(new ListBoxComponent(items.RAMs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/brain.png")), items.RAMs[i].ToString())); }
-
-            for (int i = 0; i <= items.CPUCoolers.Count - 1; i++) //CPUCoolers
-            { items_source.Add(new ListBoxComponent(items.CPUCoolers[i], new BitmapImage(new Uri("pack://application:,,,/Resources/computer-fan.png")), items.CPUCoolers[i].ToString())); }
-
-            for (int i = 0; i <= items.HDDs.Count - 1; i++) //HDDs
-            { items_source.Add(new ListBoxComponent(items.HDDs[i], new BitmapImage(new Uri("pack://application:,,,/Resources/stone-tablet.png")), items.HDDs[i].ToString())); }
-
-            for (int i = 0; i <= items.VideoСards.Count - 1; i++) //VideoCards
-            { items_source.Add(new ListBoxComponent(items.VideoСards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/cyber-eye.png")), items.VideoСards[i].ToString())); }
-
-            for (int i = 0; i <= items.Monitors.Count - 1; i++) //Monitors
-            { items_source.Add(new ListBoxComponent(items.Monitors[i], new BitmapImage(new Uri("pack://application:,,,/Resources/tv.png")), items.Monitors[i].ToString())); }
-
-            for (int i = 0; i <= items.OpticalDrives.Count - 1; i++) //OpticalDrives
-            { items_source.Add(new ListBoxComponent(items.OpticalDrives[i], new BitmapImage(new Uri("pack://application:,,,/Resources/compact-disc.png")), items.VideoСards[i].ToString())); }
-
-            for (int i = 0; i <= items.Mice.Count - 1; i++) //Mouses
-            { items_source.Add(new ListBoxComponent(items.Mice[i], new BitmapImage(new Uri("pack://application:,,,/Resources/mouse.png")), items.Mice[i].ToString())); }
-
-            for (int i = 0; i <= items.Keyboards.Count - 1; i++) //Keyboards
-            { items_source.Add(new ListBoxComponent(items.Keyboards[i], new BitmapImage(new Uri("pack://application:,,,/Resources/keyboard.png")), items.Keyboards[i].ToString())); }
+            foreach (ListBoxObject obj in items_source)
+            {
+                if (obj.LabelVisibility == Visibility.Visible) { currenSize++; }
+            }
+            Title.Text = "Кладовка (" + (items_source.Count - currenSize) + " из " + MaxSize + ")";
 
             InventoryList.ItemsSource = items_source;
+        }
+
+        private void TextBlock_Loaded(object sender, RoutedEventArgs e)
+        {
+            TextBlock textBlock = sender as TextBlock;
+            textBlock.Text = (Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course).ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
