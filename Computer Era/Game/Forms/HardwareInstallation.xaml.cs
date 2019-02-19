@@ -439,22 +439,22 @@ namespace Computer_Era.Game.Forms
                     object iobj = (obj as ListBoxObject).IObject;
                     if (iobj is Case)
                     {
-                        isChangedComputer = currentComputer[0].Case == iobj as Case ? false : true;
+                        isChangedComputer = currentComputer[0].Case == (iobj as Case) ? false : true;
                     } else if (iobj is Motherboard) {
-                        isChangedComputer = currentComputer[0].Motherboard == iobj as Motherboard ? false : true;
+                        isChangedComputer = currentComputer[0].Motherboard == (iobj as Motherboard) ? false : true;
                     } else if (iobj is CPU) {
-                        isChangedComputer = currentComputer[0].CPU == iobj as CPU ? false : true;
+                        isChangedComputer = currentComputer[0].CPU == (iobj as CPU) ? false : true;
                     } else if (iobj is PowerSupplyUnit) {
-                        isChangedComputer = currentComputer[0].PSU == iobj as PowerSupplyUnit ? false : true;
+                        isChangedComputer = currentComputer[0].PSU == (iobj as PowerSupplyUnit) ? false : true;
                     }  else if (iobj is RAM) {
                         isChangedComputer = true;
                         foreach (RAM ram in currentComputer[0].RAMs) { isChangedComputer = ram == (iobj as RAM) ? false : true; if (!isChangedComputer) { break; } }
                     } else if (iobj is HDD) {
                         isChangedComputer = true;
-                        foreach (HDD hdd in currentComputer[0].HDDs) { isChangedComputer = hdd == iobj as HDD ? false : true; if (!isChangedComputer) { break; } }
+                        foreach (HDD hdd in currentComputer[0].HDDs) { isChangedComputer = hdd == (iobj as HDD) ? false : true; if (!isChangedComputer) { break; } }
                     } else if (iobj is VideoСard) {
                         isChangedComputer = true;
-                        foreach (VideoСard videoСard in currentComputer[0].VideoСards) { isChangedComputer = videoСard == iobj as VideoСard ? false : true; if (!isChangedComputer) { break; } }
+                        foreach (VideoСard videoСard in currentComputer[0].VideoСards) { isChangedComputer = videoСard == (iobj as VideoСard) ? false : true; if (!isChangedComputer) { break; } }
                     } else if (iobj is OpticalDrive) {
                         isChangedComputer = true;
                         foreach (OpticalDrive opticalDrive in currentComputer[0].OpticalDrives) { isChangedComputer = opticalDrive == (iobj as OpticalDrive) ? false : true; if (!isChangedComputer) { break; } }
@@ -463,10 +463,10 @@ namespace Computer_Era.Game.Forms
                         foreach (Monitor monitor in currentComputer[0].Monitors) { isChangedComputer = monitor == (iobj as Monitor) ? false : true; if (!isChangedComputer) { break; } }
                     } else if (iobj is Mouse) {
                         isChangedComputer = true;
-                        foreach (Mouse mouse in currentComputer[0].Mice) { isChangedComputer = mouse == iobj as Mouse ? false : true; if (!isChangedComputer) { break; } }
+                        foreach (Mouse mouse in currentComputer[0].Mice) { isChangedComputer = mouse == (iobj as Mouse) ? false : true; if (!isChangedComputer) { break; } }
                     } else if (iobj is Keyboard) {
                         isChangedComputer = true;
-                        foreach (Keyboard keyboard in currentComputer[0].Keyboards) { isChangedComputer = keyboard == iobj as Keyboard ? false : true; if (!isChangedComputer) { break; } }
+                        foreach (Keyboard keyboard in currentComputer[0].Keyboards) { isChangedComputer = keyboard == (iobj as Keyboard) ? false : true; if (!isChangedComputer) { break; } }
                     }
 
                     if (isChangedComputer) { MessageBox.Show("Измененный компьютер!"); break; }
