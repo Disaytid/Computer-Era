@@ -99,6 +99,10 @@
     <Page Include="Game\Forms\Purse.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\Shop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Widgets\MoneyWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -131,6 +135,9 @@
     </Compile>
     <Compile Include="Game\Forms\Purse.xaml.cs">
       <DependentUpon>Purse.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Game\Forms\Shop.xaml.cs">
+      <DependentUpon>Shop.xaml</DependentUpon>
     </Compile>
     <Compile Include="Game\Forms\ViewItems.cs" />
     <Compile Include="Game\GameEvents.cs" />
@@ -221,6 +228,9 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\glitch-2717636_1920.jpg" />
+    <Resource Include="Resources\textured-1654624_1920.jpg" />
+    <Resource Include="Resources\geek.png" />
     <Resource Include="Resources\keyboard.png" />
     <Resource Include="Resources\mouse.png" />
     <Resource Include="Resources\compact-disc.png" />

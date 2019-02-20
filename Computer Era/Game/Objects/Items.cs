@@ -27,6 +27,19 @@ namespace Computer_Era.Game.Objects
     {
         SQLiteConnection Connection;
 
+        public Collection<Case> AllCases = new Collection<Case>();
+        public Collection<Motherboard> AllMotherboards = new Collection<Motherboard>();
+        public Collection<RAM> AllRAMs = new Collection<RAM>();
+        public Collection<PowerSupplyUnit> AllPowerSupplyUnits = new Collection<PowerSupplyUnit>();
+        public Collection<CPU> AllCPUs = new Collection<CPU>();
+        public Collection<CPUCooler> AllCPUCoolers = new Collection<CPUCooler>();
+        public Collection<HDD> AllHDDs = new Collection<HDD>();
+        public Collection<Monitor> AllMonitors = new Collection<Monitor>();
+        public Collection<VideoСard> AllVideoСards = new Collection<VideoСard>();
+        public Collection<OpticalDrive> AllOpticalDrives = new Collection<OpticalDrive>();
+        public Collection<Mouse> AllMice = new Collection<Mouse>();
+        public Collection<Keyboard> AllKeyboards = new Collection<Keyboard>();
+
         public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
         public Collection<RAM> RAMs = new Collection<RAM>();
@@ -46,7 +59,7 @@ namespace Computer_Era.Game.Objects
 
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {
-                command.CommandText = @"SELECT * from sv_inventorys WHERE save_id=" + save_id + ";";
+                command.CommandText = @"SELECT * FROM sv_inventorys WHERE save_id=" + save_id + ";";
                 command.CommandType = CommandType.Text;
                 SQLiteDataReader data_reader = command.ExecuteReader();
 
@@ -59,36 +72,64 @@ namespace Computer_Era.Game.Objects
                     DateTime manufacturing_date = Convert.ToDateTime(data_reader["manufacturing_date"]);
 
                     string json = Convert.ToString(data_reader["properties"]);
-                    ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
-
-                    if (itemType == ItemTypes.@case)
-                    {
-                        Cases.Add(new Case(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
-                    }
-                    else if (itemType == ItemTypes.motherboard) {
-                        Motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, AddItem<MotherboardProperties>(json)));
-                    } else if (itemType == ItemTypes.ram) {
-                        RAMs.Add(new RAM(id, name, type, price, manufacturing_date, AddItem<RAMProperties>(json)));
-                    } else if (itemType == ItemTypes.psu) {
-                        PowerSupplyUnits.Add(new PowerSupplyUnit(id, name, type, price, manufacturing_date, AddItem<PowerSupplyUnitProperties>(json)));
-                    } else if (itemType == ItemTypes.cpu) {
-                        CPUs.Add(new CPU(id, name, type, price, manufacturing_date, AddItem<CPUProperties>(json)));
-                    } else if (itemType == ItemTypes.cpu_cooler) {
-                        CPUCoolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, AddItem<CPUCoolerProperties>(json)));
-                    } else if (itemType == ItemTypes.hdd) {
-                        HDDs.Add(new HDD(id, name, type, price, manufacturing_date, AddItem<HDDProperties>(json)));
-                    } else if (itemType == ItemTypes.monitor) {
-                        Monitors.Add(new Monitor(id, name, type, price, manufacturing_date, AddItem<MonitorProperties>(json)));
-                    } else if (itemType == ItemTypes.video_card) {
-                        VideoСards.Add(new VideoСard(id, name, type, price, manufacturing_date, AddItem<VideoСardProperties>(json)));
-                    } else if (itemType == ItemTypes.optical_drive) {
-                        OpticalDrives.Add(new OpticalDrive(id, name, type, price, manufacturing_date, AddItem<OpticalDriveProperties>(json)));
-                    } else if (itemType == ItemTypes.mouse) {
-                        Mice.Add(new Mouse(id, name, type, price, manufacturing_date, AddItem<MouseProperties>(json)));
-                    } else if (itemType == ItemTypes.keyboard) {
-                        Keyboards.Add(new Keyboard(id, name, type, price, manufacturing_date, AddItem<KeyboardProperties>(json)));
-                    }
+                    AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
+                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoСards, OpticalDrives, Mice, Keyboards);
                 }
+            }
+
+            using (SQLiteCommand command = new SQLiteCommand(connection))
+            {
+                command.CommandText = @"SELECT * FROM items;";
+                command.CommandType = CommandType.Text;
+                SQLiteDataReader data_reader = command.ExecuteReader();
+
+                while (data_reader.Read())
+                {
+                    int id = Convert.ToInt32(data_reader["id"]);
+                    string name = Convert.ToString(data_reader["name"]);
+                    string type = Convert.ToString(data_reader["type"]);
+                    int price = Convert.ToInt32(data_reader["price"]);
+                    DateTime manufacturing_date = Convert.ToDateTime(data_reader["manufacturing_date"]);
+
+                    string json = Convert.ToString(data_reader["properties"]);
+                    AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
+                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoСards, AllOpticalDrives, AllMice, AllKeyboards);
+                }
+            }
+        }
+
+        private void AddItemsToSaveCollection(int id, string name, string type, int price, DateTime manufacturing_date, string json,
+                                              Collection<Case> cases, Collection<Motherboard> motherboards, Collection<RAM> rams, Collection<PowerSupplyUnit> powerSupplyUnits,
+                                              Collection<CPU> cpus, Collection<CPUCooler> cpu_coolers, Collection<HDD> hdds, Collection<Monitor> monitors, Collection<VideoСard> videoСards,
+                                              Collection<OpticalDrive> opticalDrives, Collection<Mouse> mice, Collection<Keyboard> keyboards)
+        {
+            ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
+
+            if (itemType == ItemTypes.@case)
+            {
+                cases.Add(new Case(id, name, type, price, manufacturing_date, AddItem<CaseProperties>(json)));
+            }  else if (itemType == ItemTypes.motherboard) {
+                motherboards.Add(new Motherboard(id, name, type, price, manufacturing_date, AddItem<MotherboardProperties>(json)));
+            } else if (itemType == ItemTypes.ram) {
+                rams.Add(new RAM(id, name, type, price, manufacturing_date, AddItem<RAMProperties>(json)));
+            }  else if (itemType == ItemTypes.psu) {
+                powerSupplyUnits.Add(new PowerSupplyUnit(id, name, type, price, manufacturing_date, AddItem<PowerSupplyUnitProperties>(json)));
+            } else if (itemType == ItemTypes.cpu) {
+                cpus.Add(new CPU(id, name, type, price, manufacturing_date, AddItem<CPUProperties>(json)));
+            } else if (itemType == ItemTypes.cpu_cooler) {
+                cpu_coolers.Add(new CPUCooler(id, name, type, price, manufacturing_date, AddItem<CPUCoolerProperties>(json)));
+            } else if (itemType == ItemTypes.hdd) {
+                hdds.Add(new HDD(id, name, type, price, manufacturing_date, AddItem<HDDProperties>(json)));
+            } else if (itemType == ItemTypes.monitor) {
+                monitors.Add(new Monitor(id, name, type, price, manufacturing_date, AddItem<MonitorProperties>(json)));
+            } else if (itemType == ItemTypes.video_card) {
+                videoСards.Add(new VideoСard(id, name, type, price, manufacturing_date, AddItem<VideoСardProperties>(json)));
+            } else if (itemType == ItemTypes.optical_drive) {
+                opticalDrives.Add(new OpticalDrive(id, name, type, price, manufacturing_date, AddItem<OpticalDriveProperties>(json)));
+            } else if (itemType == ItemTypes.mouse) {
+                mice.Add(new Mouse(id, name, type, price, manufacturing_date, AddItem<MouseProperties>(json)));
+            } else if (itemType == ItemTypes.keyboard) {
+                keyboards.Add(new Keyboard(id, name, type, price, manufacturing_date, AddItem<KeyboardProperties>(json)));
             }
         }
 
@@ -115,7 +156,7 @@ namespace Computer_Era.Game.Objects
 
     public class BaseItem
     {
-        public int UId { get; set; }
+        public int Uid { get; set; }
         public ImageSource Image { get; set; }
         public string Name { get; set; }
 
@@ -146,18 +187,18 @@ namespace Computer_Era.Game.Objects
 
         private readonly Dictionary<ItemTypes, string> ItemTypes = new Dictionary<ItemTypes, string>
         {
-            { Objects.ItemTypes.@case, "Корпус" },
-            { Objects.ItemTypes.motherboard, "Материнская плата" },
-            { Objects.ItemTypes.ram, "Оперативная память" },
-            { Objects.ItemTypes.psu, "Блок питания" },
-            { Objects.ItemTypes.cpu, "Процессор" },
-            { Objects.ItemTypes.cpu_cooler, "Кулер на процессор" },
-            { Objects.ItemTypes.hdd, "Жесткий диск" },
-            { Objects.ItemTypes.monitor, "Монитор" },
-            { Objects.ItemTypes.video_card, "Видеокарта" },
-            { Objects.ItemTypes.optical_drive, "Оптический привод" },
-            { Objects.ItemTypes.mouse, "Компьютерная мышь" },
-            { Objects.ItemTypes.keyboard, "Клавиатура" },
+            { Objects.ItemTypes.@case, Properties.Resources.Case },
+            { Objects.ItemTypes.motherboard, Properties.Resources.Motherboard },
+            { Objects.ItemTypes.ram, Properties.Resources.RAM },
+            { Objects.ItemTypes.psu, Properties.Resources.PSU },
+            { Objects.ItemTypes.cpu, Properties.Resources.CPU },
+            { Objects.ItemTypes.cpu_cooler, Properties.Resources.CPUCooler },
+            { Objects.ItemTypes.hdd, Properties.Resources.HDD },
+            { Objects.ItemTypes.monitor, Properties.Resources.Monitor },
+            { Objects.ItemTypes.video_card, Properties.Resources.VideoCard },
+            { Objects.ItemTypes.optical_drive, Properties.Resources.OpticalDrive },
+            { Objects.ItemTypes.mouse, Properties.Resources.Mouse },
+            { Objects.ItemTypes.keyboard, Properties.Resources.Keyboard },
         };
         public string Type
         {
@@ -176,7 +217,7 @@ namespace Computer_Era.Game.Objects
         public P Properties { get; set; }
         public Item(int uid, string name, string type, int price, DateTime man_date, P properties)
         {
-            UId = uid;
+            Uid = uid;
             Name = name;
             Type = type;
             Price = price;

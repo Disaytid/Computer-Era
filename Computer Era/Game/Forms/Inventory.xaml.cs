@@ -34,7 +34,7 @@ namespace Computer_Era.Game.Forms
         {
             List<ListBoxObject> items_source = new List<ListBoxObject>();
             ViewItems viewItems = new ViewItems();
-            items_source = viewItems.GetItemsSource(items, items_source, computers.PlayerComputers);
+            items_source = viewItems.GetSaveItemsSource(items, items_source, computers.PlayerComputers);
 
             int currenSize = 0;
 

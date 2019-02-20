@@ -240,6 +240,10 @@ namespace Computer_Era
                     LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random, messages);
                     NewWindow(l_ex);
                     break;
+                case "computer_parts_store":
+                    Shop shop = new Shop(money, items);
+                    NewWindow(shop);
+                    break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");
                     break;

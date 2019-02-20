@@ -34,7 +34,7 @@ namespace Computer_Era.Game.Forms
         {
             List<ListBoxObject> items_source = new List<ListBoxObject>();
             ViewItems viewItems = new ViewItems();
-            items_source = viewItems.GetItemsSource(items, items_source, Computers.PlayerComputers);
+            items_source = viewItems.GetSaveItemsSource(items, items_source, Computers.PlayerComputers);
 
             СomponentsList.ItemsSource = items_source;
         }
@@ -469,7 +469,7 @@ namespace Computer_Era.Game.Forms
                         foreach (Keyboard keyboard in currentComputer[0].Keyboards) { isChangedComputer = keyboard == (iobj as Keyboard) ? false : true; if (!isChangedComputer) { break; } }
                     }
 
-                    if (isChangedComputer) { MessageBox.Show("Измененный компьютер!"); break; }
+                    if (isChangedComputer) { break; }
                 }
             }
 

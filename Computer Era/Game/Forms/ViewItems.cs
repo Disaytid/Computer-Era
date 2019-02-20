@@ -39,7 +39,7 @@ namespace Computer_Era.Game.Forms
                 items_source.Add(new ListBoxObject(items[i], image, !isInstalled));
             }
         }
-        public List<ListBoxObject> GetItemsSource(Items collection, List<ListBoxObject> list, Collection<Computer> computers) //Загрузка предметов в ListBox
+        public List<ListBoxObject> GetSaveItemsSource(Items collection, List<ListBoxObject> list, Collection<Computer> computers) //Загрузка предметов в ListBox
         {
             List<ListBoxObject> items_source = list;
 
@@ -67,6 +67,15 @@ namespace Computer_Era.Game.Forms
         public bool IsEnabled { get; set; }
         public Visibility LabelVisibility { get; set; }
 
+        public ListBoxObject(object obj, BitmapImage image)
+        {
+            Item = obj as BaseItem;
+            Item.Image = image;
+            IObject = obj;
+            Tag = Item.ToString();
+            IsEnabled = true;
+            LabelVisibility = Visibility.Visible;
+        }
         public ListBoxObject(object obj, BitmapImage image, bool isEnabled)
         {
             Item = obj as BaseItem;

@@ -19,7 +19,7 @@ namespace Computer_Era.Properties {
     // с помощью такого средства, как ResGen или Visual Studio.
     // Чтобы добавить или удалить член, измените файл .ResX и снова запустите ResGen
     // с параметром /str или перестройте свой проект VS.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -70,6 +70,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на All.
+        /// </summary>
+        public static string All {
+            get {
+                return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Assembly name.
         /// </summary>
         public static string AssemblyName {
@@ -84,6 +93,15 @@ namespace Computer_Era.Properties {
         public static string AssemblyType {
             get {
                 return ResourceManager.GetString("AssemblyType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Case.
+        /// </summary>
+        public static string Case {
+            get {
+                return ResourceManager.GetString("Case", resourceCulture);
             }
         }
         
@@ -106,11 +124,47 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Central processing unit.
+        /// </summary>
+        public static string CPU {
+            get {
+                return ResourceManager.GetString("CPU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на CPU cooler.
+        /// </summary>
+        public static string CPUCooler {
+            get {
+                return ResourceManager.GetString("CPUCooler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Exit.
         /// </summary>
         public static string Exit {
             get {
                 return ResourceManager.GetString("Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Hard disk drive.
+        /// </summary>
+        public static string HDD {
+            get {
+                return ResourceManager.GetString("HDD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Keyboard.
+        /// </summary>
+        public static string Keyboard {
+            get {
+                return ResourceManager.GetString("Keyboard", resourceCulture);
             }
         }
         
@@ -124,11 +178,47 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Monitor.
+        /// </summary>
+        public static string Monitor {
+            get {
+                return ResourceManager.GetString("Monitor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Motherboard.
+        /// </summary>
+        public static string Motherboard {
+            get {
+                return ResourceManager.GetString("Motherboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Mouse.
+        /// </summary>
+        public static string Mouse {
+            get {
+                return ResourceManager.GetString("Mouse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на New Game.
         /// </summary>
         public static string NewGame {
             get {
                 return ResourceManager.GetString("NewGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Optical drive.
+        /// </summary>
+        public static string OpticalDrive {
+            get {
+                return ResourceManager.GetString("OpticalDrive", resourceCulture);
             }
         }
         
@@ -142,11 +232,38 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Power supply unit.
+        /// </summary>
+        public static string PSU {
+            get {
+                return ResourceManager.GetString("PSU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Random access memory.
+        /// </summary>
+        public static string RAM {
+            get {
+                return ResourceManager.GetString("RAM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Settings.
         /// </summary>
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Video card.
+        /// </summary>
+        public static string VideoCard {
+            get {
+                return ResourceManager.GetString("VideoCard", resourceCulture);
             }
         }
     }

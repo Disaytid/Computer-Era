@@ -1,0 +1,95 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Computer_Era.Game.Forms"
+             xmlns:res="clr-namespace:Computer_Era.Properties"
+             xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Computer_Era.Game.Forms.Shop"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <DockPanel VerticalAlignment="Top" Background="#E5747474" Height="32">
+            <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
+            <TextBlock x:Name="Title" Text='Магазин "Клепаем сами"' Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </DockPanel>
+        <Grid Margin="0,32,0,0">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Computer Era;component/Resources/textured-1654624_1920.jpg" Stretch="UniformToFill"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <DockPanel VerticalAlignment="Top" MaxHeight="200" Grid.Row="0" Background="#E5FFFFFF">
+                <Image Source="/Computer Era;component/Resources/geek.png" HorizontalAlignment="Left"/>
+                <StackPanel>
+                    <DockPanel Margin="10, 10, 10, 0">
+                        <Label Content="У вас в кармане: " FontSize="16"/>
+                        <Image x:Name="CoinIcon"/>
+                        <Label Name="CoinCount" Margin="5, 0, 0, 0"  FontSize="16"/>
+                    </DockPanel>
+                    <Border Margin="10, 0" Height="1" BorderThickness="0, 0, 0, 1" BorderBrush="DarkGray"/>
+                    <TextBlock x:Name="SellerText" Text='Добро пожаловать в магазин компьютерных комплектующих "Клепаем сами"! Хотели бы что-то прикупить?' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
+                </StackPanel>
+            </DockPanel>
+            <Grid Grid.Row="1" Background="#E5FFFFFF">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="60*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="40*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <DockPanel  Grid.Row="0" Margin="0, 0, 0, 10">
+                        <Label Content="Тип: "/>
+                        <ComboBox x:Name="SelectionType" SelectedIndex="0" SelectionChanged="SelectionType_SelectionChanged">
+                            <ComboBoxItem Content="{x:Static res:Resources.All}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.Case}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.Motherboard}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.PSU}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.CPU}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.CPUCooler}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.RAM}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.HDD}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.VideoCard}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.Monitor}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.OpticalDrive}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.Mouse}"/>
+                            <ComboBoxItem Content="{x:Static res:Resources.Keyboard}"/>
+                        </ComboBox>
+                    </DockPanel>
+                    <ListBox x:Name="ComputerСomponents" Grid.Row="1" Background="{x:Null}" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=ComputerСomponents, Mode=OneWay}" Tag="{Binding Tag}" MouseLeftButtonUp="Grid_MouseLeftButtonUp">
+                                    <DockPanel>
+                                        <Image Grid.Column="0" Height="64" Source="{Binding Item.Image}"/>
+                                        <StackPanel DockPanel.Dock="Right" Width="128">
+                                            <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Item.ManufacturingDate, StringFormat=yyyy г.}" />
+                                            <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Item.Price}" Loaded="TextBlock_Loaded" />
+                                        </StackPanel>
+                                        <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                            <Button x:Name="BuyButton" Content="Купить" Margin="10" Padding="5" Background="Blue" Foreground="White" BorderThickness="0" Tag="{Binding IObject}" Click="BuyButton_Click" />
+                                        </StackPanel>
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Item.Type}" FontSize="14" />
+                                            <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Item.Name}" FontSize="24" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+                <GridSplitter Grid.Column="1"  ShowsPreview="False" Width="3" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
+                <ScrollViewer Grid.Column="2">
+                    <TextBlock x:Name="Description" Margin="10, 0, 10, 10" FontSize="16" TextWrapping="Wrap"/>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
