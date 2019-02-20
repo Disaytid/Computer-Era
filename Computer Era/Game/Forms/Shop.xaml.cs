@@ -17,14 +17,16 @@ namespace Computer_Era.Game.Forms
     {
         Money Money;
         Items Items;
+        GameEvents GameEvents;
 
         int StorePercentage = 20; //Процент наценки магазином
-        public Shop(Money money, Items items)
+        public Shop(Money money, Items items, GameEvents events)
         {
             InitializeComponent();
 
             Money = money;
             Items = items;
+            GameEvents = events;
 
             string path = "Resources/currency/" + Money.PlayerCurrency[0].SystemName + ".png";
             Uri uri = new Uri("pack://application:,,,/" + path);
@@ -111,7 +113,7 @@ namespace Computer_Era.Game.Forms
 
                 if (price <= Money.PlayerCurrency[0].Count)
                 {
-                    Money.PlayerCurrency[0].Withdraw(price);
+                    Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, "Магазин \"Клепаем сами\"", GameEvents.GameTimer.DateAndTime, price);
                     CoinCount.Content = Money.PlayerCurrency[0].Count.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
 
                     if (button.Tag is Case)

@@ -45,7 +45,7 @@ namespace Computer_Era.Game.Forms
                         uri = new Uri("pack://application:,,,/Resources/currency/coin.png");
                     }
 
-                    items_source.Add(new PurseCurrency() { Image = new BitmapImage(uri), Name = currency[i].Name, Count = currency[i].Count.ToString() + " " + currency[i].Abbreviation });
+                    items_source.Add(new PurseCurrency() { Currency = currency[i], Image = new BitmapImage(uri), Name = currency[i].Name, Count = currency[i].Count.ToString() + " " + currency[i].Abbreviation });
                 }
             };
 
@@ -56,10 +56,25 @@ namespace Computer_Era.Game.Forms
         {
             this.Visibility = Visibility.Hidden;
         }
+
+        private void CurrencyList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (CurrencyList.SelectedItem != null)
+            {
+                PurseCurrency item = CurrencyList.SelectedItem as PurseCurrency;
+                HistoryList.Items.Clear();
+
+                foreach (Transaction transaction in item.Currency.TransactionHistory)
+                {
+                    HistoryList.Items.Add(transaction.DateTime.ToString("dd.MM.yy HH:mm") + " " + transaction.Initiator + " " + transaction.Name);
+                }
+            }
+        }
     }
 
     class PurseCurrency
     {  
+        public Currency Currency { get; set; }
         public ImageSource Image { get; set; }
         public string Name { get; set; }
         public string Count { get; set; }

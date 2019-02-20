@@ -21,7 +21,7 @@
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <DockPanel VerticalAlignment="Top" MaxHeight="200" Grid.Row="0" Background="#E5FFFFFF">
+            <DockPanel VerticalAlignment="Top" MaxHeight="200" Grid.Row="0" Background="#CCFFFFFF">
                 <Image Source="/Computer Era;component/Resources/geek.png" HorizontalAlignment="Left"/>
                 <StackPanel>
                     <DockPanel Margin="10, 10, 10, 0">
@@ -33,7 +33,7 @@
                     <TextBlock x:Name="SellerText" Text='Добро пожаловать в магазин компьютерных комплектующих "Клепаем сами"! Хотели бы что-то прикупить?' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
                 </StackPanel>
             </DockPanel>
-            <Grid Grid.Row="1" Background="#E5FFFFFF">
+            <Grid Grid.Row="1" Background="#CCFFFFFF">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="60*"/>
                     <ColumnDefinition Width="auto"/>
@@ -47,6 +47,12 @@
                     <DockPanel  Grid.Row="0" Margin="0, 0, 0, 10">
                         <Label Content="Тип: "/>
                         <ComboBox x:Name="SelectionType" SelectedIndex="0" SelectionChanged="SelectionType_SelectionChanged">
+                            <ComboBox.Background>
+                                <LinearGradientBrush EndPoint="0,1" StartPoint="0,0">
+                                    <GradientStop Color="#FFF0F0F0" Offset="0"/>
+                                    <GradientStop Color="#CCE5E5E5" Offset="1"/>
+                                </LinearGradientBrush>
+                            </ComboBox.Background>
                             <ComboBoxItem Content="{x:Static res:Resources.All}"/>
                             <ComboBoxItem Content="{x:Static res:Resources.Case}"/>
                             <ComboBoxItem Content="{x:Static res:Resources.Motherboard}"/>

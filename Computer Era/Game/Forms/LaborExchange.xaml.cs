@@ -278,7 +278,7 @@ namespace Computer_Era.Game.Forms
             }
             amount *= (Player.Job.Salary * PlayerCurency[0].Course);
 
-            PlayerCurency[0].TopUp(amount);
+            PlayerCurency[0].TopUp("Выплата зарплаты", Player.Job.CompanyName, GameEvents.GameTimer.DateAndTime, amount);
             Messages.NewMessage("Поступление средств", "Танцуйте! Вам пришла зарплата, если вы еще не забыли вы работаете на должности \"" + Player.Job.Name + "\". Выплаты составили " + amount + " " + PlayerCurency[0].Abbreviation, GameMessages.Icon.Money);
         }
 
@@ -313,10 +313,11 @@ namespace Computer_Era.Game.Forms
                 amount *= (Player.Job.Salary * PlayerCurency[0].Course);
             }
 
+            string Company = Player.Job.CompanyName;
             Player.Job = null;
             CurrentGameEvent = null;
 
-            PlayerCurency[0].TopUp(amount);
+            PlayerCurency[0].TopUp("Увольнение", Company, GameEvents.GameTimer.DateAndTime, amount);
             MessageBox.Show("Поздравляем вы уволились, вам выплачено " + amount + " " + PlayerCurency[0].Abbreviation);
         }
     }

@@ -11,20 +11,32 @@
             <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
             <TextBlock Name="Title" Text="Кошелек" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </DockPanel>
-        <StackPanel Background="White" Margin="0,32,0,0">
-            <ListBox Name="CurrencyList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=InventoryList, Mode=OneWay}">
-                            <DockPanel>
-                                <Image Grid.Column="0" Height="64" Source="{Binding Image}" />
-                                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Count}" FontSize="24" />
-                                <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Name, StringFormat={}( {0})}" FontSize="24"/>
-                            </DockPanel>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+        <Grid Margin="0,32,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="40*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0" Background="White">
+                <ListBox Name="CurrencyList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="CurrencyList_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=InventoryList, Mode=OneWay}">
+                                <DockPanel>
+                                    <Image Grid.Column="0" Height="64" Source="{Binding Image}" />
+                                    <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Count}" FontSize="24" />
+                                    <TextBlock VerticalAlignment="Center" Margin="10,0,0,0" Text="{Binding Name, StringFormat={}( {0})}" FontSize="24"/>
+                                </DockPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+            <Grid Grid.Column="2">
+                <ListBox Name="HistoryList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    
+                </ListBox>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

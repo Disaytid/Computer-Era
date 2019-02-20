@@ -218,7 +218,7 @@ namespace Computer_Era
         }
         private void MenuMapItem_Click(object sender, RoutedEventArgs e)
         {
-            Map map = new Map(this, events.GameTimer.Timer.Interval, Random, messages, money);
+            Map map = new Map(this, events.GameTimer.Timer.Interval, Random, messages, money, Player, events);
             NewWindow(map);
         }
         private void MenuPurseItem_Click(object sender, RoutedEventArgs e)
@@ -241,7 +241,7 @@ namespace Computer_Era
                     NewWindow(l_ex);
                     break;
                 case "computer_parts_store":
-                    Shop shop = new Shop(money, items);
+                    Shop shop = new Shop(money, items, events);
                     NewWindow(shop);
                     break;
                 default:

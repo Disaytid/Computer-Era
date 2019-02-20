@@ -30,10 +30,14 @@ namespace Computer_Era.Game.Forms
         readonly Random rnd;
         readonly GameMessages Messages;
         readonly Money Money;
+        readonly PlayerProfile PlayerProfile;
+        readonly GameEvents GameEvents;
 
-        public Map(object sender, TimeSpan timeSpan, Random random, GameMessages messages, Money money)
+        public Map(object sender, TimeSpan timeSpan, Random random, GameMessages messages, Money money, PlayerProfile playerProfile, GameEvents events)
         {
             InitializeComponent();
+            PlayerProfile = playerProfile;
+            GameEvents = events;
 
             main = sender;
             Timer.Tick += new EventHandler(TimerTick);
@@ -87,7 +91,7 @@ namespace Computer_Era.Game.Forms
                 if (rnd.Next(1, 101) <= 90)
                 {
                     int money = Convert.ToInt32((double)rnd.Next(1, 21) / (double)100 * Money.PlayerCurrency[0].Course);
-                    Money.PlayerCurrency[0].TopUp(money);
+                    Money.PlayerCurrency[0].TopUp("Нашли на дороге", PlayerProfile.Name, GameEvents.GameTimer.DateAndTime, money);
                     Messages.NewMessage("Поступление средств", "Оказываеться прогулки на воздухе полезны не только для здоровья но и для кармана. Вы нашли на дороге " + money + " " + Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money);
                 }
             }

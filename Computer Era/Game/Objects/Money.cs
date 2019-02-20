@@ -38,6 +38,29 @@ namespace Computer_Era.Game.Objects
         }
     }
 
+
+    public enum TransactionType
+    {
+        TopUp,
+        Withdraw
+    }
+    public class Transaction
+    {
+        public string Name { get; set; }
+        public string Initiator { get; set; }
+        public DateTime DateTime { get; set; } //Дата и время проведения транзакции
+        public double Sum { get; set; }
+        public TransactionType Type { get; set; }
+        public Transaction(string name, string initiator, DateTime dateTime, double sum, TransactionType type)
+        {
+            Name = name;
+            Initiator = initiator;
+            DateTime = dateTime;
+            Sum = sum;
+            Type = type;
+        }
+    }
+
     public class Currency
     {
         int Id { get; }
@@ -47,29 +70,32 @@ namespace Computer_Era.Game.Objects
         public DateTime DateAppearance { get; }
         public double Course { get; } //Написать обработчик
         private double count = 0;
+        public Collection<Transaction> TransactionHistory { get; } = new Collection<Transaction>();
 
         public double Count
         {
             get { return count;}
-            set { count = value; }
+            private set { count = value; }
         }
 
-        public bool Withdraw(double amount)
+        public bool Withdraw(string name, string initiator, DateTime dateTime, double amount)
         {
             if (amount <= count & amount > 0)
             {
                 count -= amount;
+                TransactionHistory.Add(new Transaction(name, initiator, dateTime, amount, TransactionType.Withdraw));
                 return true;
             } else {
                 return false;
             }
         }
 
-        public bool TopUp(double amount)
+        public bool TopUp(string name, string initiator, DateTime dateTime, double amount)
         {
             if (amount > 0)
             {
                 count += amount;
+                TransactionHistory.Add(new Transaction(name, initiator, dateTime, amount, TransactionType.TopUp));
                 return true;
             } else {
                 return false;
@@ -84,7 +110,7 @@ namespace Computer_Era.Game.Objects
             Abbreviation = abbreviation;
             DateAppearance = date_appearance;
             Course = course;
-            TopUp(count);
+            Count = count;
         }
     }
 }
