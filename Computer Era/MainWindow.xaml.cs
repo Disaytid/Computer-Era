@@ -211,43 +211,21 @@ namespace Computer_Era
             Program.Visibility = Visibility.Visible;
         }
 
-        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e)
-        {
-            Inventory inventory = new Inventory(items, computers, money);
-            NewWindow(inventory);
-        }
-        private void MenuMapItem_Click(object sender, RoutedEventArgs e)
-        {
-            Map map = new Map(this, events.GameTimer.Timer.Interval, Random, messages, money, Player, events);
-            NewWindow(map);
-        }
-        private void MenuPurseItem_Click(object sender, RoutedEventArgs e)
-        {
-            Purse pl_cur = new Purse(money.PlayerCurrency, events.GameTimer.DateAndTime);
-            NewWindow(pl_cur);
-        }
-        private void MenuHardwareItem_Click(object sender, RoutedEventArgs e)
-        {
-            HardwareInstallation hard_install = new HardwareInstallation(items, computers, money);
-            NewWindow(hard_install);
-        }
+        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Inventory(items, computers, money));
+        private void MenuMapItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Map(this, events.GameTimer.Timer.Interval, Random, messages, money, Player, events));
+        private void MenuPurseItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Purse(money.PlayerCurrency, events.GameTimer.DateAndTime));
+        private void MenuHardwareItem_Click(object sender, RoutedEventArgs e) => NewWindow(new HardwareInstallation(items, computers, money));
 
         public void ShowBuilding(string obj)
         {
             switch (obj)
             {
                 case "labor_exchange":
-                    LaborExchange l_ex = new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random, messages);
-                    NewWindow(l_ex);
-                    break;
+                    NewWindow(new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random, messages)); break;
                 case "computer_parts_store":
-                    Shop shop = new Shop(money, items, events);
-                    NewWindow(shop);
-                    break;
+                    NewWindow(new Shop(money, items, events)); break;
                 case "bank":
-                    Bank bank = new Bank(money, Services, events);
-                    NewWindow(bank);
-                    break;
+                    NewWindow(new Bank(money, Services, events)); break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");
                     break;
