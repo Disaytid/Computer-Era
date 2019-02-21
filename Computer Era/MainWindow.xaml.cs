@@ -34,6 +34,7 @@ namespace Computer_Era
         Professions professions;
         Companies companies;
         Computers computers;
+        Services Services;
 
         UserControl lastForm = null;
 
@@ -45,8 +46,6 @@ namespace Computer_Era
         {
             InitializeComponent();
             connection = dataBase.ConnectDB();
-
-
         }
 
         private void StartNewGame_Click(object sender, RoutedEventArgs e)
@@ -68,6 +67,7 @@ namespace Computer_Era
                 professions = new Professions(connection); //Загрузка списка профессий
                 companies = new Companies(connection); //Загрузка списка компаний
                 computers = new Computers(); //Компьютеры в сборе
+                Services = new Services(connection); //Услуги
 
                 // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
 
@@ -243,6 +243,10 @@ namespace Computer_Era
                 case "computer_parts_store":
                     Shop shop = new Shop(money, items, events);
                     NewWindow(shop);
+                    break;
+                case "bank":
+                    Bank bank = new Bank(money, Services, events);
+                    NewWindow(bank);
                     break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");

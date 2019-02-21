@@ -66,9 +66,22 @@ namespace Computer_Era.Game.Forms
 
                 foreach (Transaction transaction in item.Currency.TransactionHistory)
                 {
-                    HistoryList.Items.Add(transaction.DateTime.ToString("dd.MM.yy HH:mm") + " " + transaction.Initiator + " " + transaction.Name);
+                    HistoryList.Items.Add(transaction);
                 }
             }
+        }
+    }
+
+    public class DataConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return ((DateTime)value).ToString("dd.MM.yy \r\n HH:mm");
+         }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
         }
     }
 

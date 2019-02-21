@@ -6,6 +6,9 @@
              xmlns:local="clr-namespace:Computer_Era.Game.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <local:DataConverter x:Key="DataConverter"></local:DataConverter>
+    </UserControl.Resources>
     <Grid>
         <DockPanel VerticalAlignment="Top" Background="#E5747474" Height="32">
             <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
@@ -34,7 +37,37 @@
             </Grid>
             <Grid Grid.Column="2">
                 <ListBox Name="HistoryList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Grid.IsSharedSizeScope="True">
+                                <DockPanel>
+                                    <Label Content="{Binding DateTime, Converter={StaticResource DataConverter}}" Foreground="SaddleBrown" FontSize="14" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                                    <StackPanel>
+                                        <DockPanel>
+                                            <Label Content="{Binding Initiator}" FontSize="14" FontWeight="Bold"/>
+                                            <Label Content="{Binding Name}" FontSize="14"/>
+                                        </DockPanel>
+                                        <DockPanel>
+                                            <Label Content="{Binding Sum}" FontSize="14">
+                                                <Label.Resources>
+                                                    <Style TargetType="Label">
+                                                        <Style.Setters>
+                                                            <Setter Property="Foreground" Value="Red" />
+                                                        </Style.Setters>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Type}" Value="TopUp">
+                                                                <Setter Property="Foreground" Value="Green"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Resources>
+                                            </Label>
+                                        </DockPanel>
+                                    </StackPanel>
+                                </DockPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
                 </ListBox>
             </Grid>
         </Grid>

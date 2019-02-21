@@ -81,6 +81,10 @@
     <Page Include="Game\Dictionarys\Menu.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\Bank.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Forms\HardwareInstallation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +125,9 @@
     </Compile>
     <Compile Include="Game\DataBase.cs" />
     <Compile Include="Game\DataReader.cs" />
+    <Compile Include="Game\Forms\Bank.xaml.cs">
+      <DependentUpon>Bank.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Forms\HardwareInstallation.xaml.cs">
       <DependentUpon>HardwareInstallation.xaml</DependentUpon>
     </Compile>
@@ -149,6 +156,7 @@
     <Compile Include="Game\Objects\PlayerProfile.cs" />
     <Compile Include="Game\Objects\Professions.cs" />
     <Compile Include="Game\Objects\Program.cs" />
+    <Compile Include="Game\Objects\Services.cs" />
     <Compile Include="Game\Objects\Widgets.cs" />
     <Compile Include="Game\Widgets\MoneyWidget.xaml.cs">
       <DependentUpon>MoneyWidget.xaml</DependentUpon>
@@ -181,6 +189,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.ru-RU.resx" />
+    <None Include="ComputerEra.db3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Game\Leaflet\leaflet-src.esm.js.map" />
     <None Include="Game\Leaflet\leaflet-src.js.map" />
     <None Include="Game\Leaflet\leaflet.js.map" />
@@ -228,6 +239,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\troll.png" />
     <Resource Include="Resources\glitch-2717636_1920.jpg" />
     <Resource Include="Resources\textured-1654624_1920.jpg" />
     <Resource Include="Resources\geek.png" />
