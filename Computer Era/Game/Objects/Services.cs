@@ -69,31 +69,34 @@ namespace Computer_Era.Game.Objects
         public string Name { get; set; }
         public string Currency { get; set; }
         public int Coefficient { get; set; }
+        public double Amount { get; set; }
         public double MinSum { get; set; }
         public double MaxSum { get; set; }
         public Periodicity Periodicity { get; set; }
         public int PeriodicityValue { get; set; }
-        bool SpecialOffer { get; set; }
-        int PropertyPledged { get; set; } //Имущество под залог
+        public bool SpecialOffer { get; set; }
+        public int PropertyPledged { get; set; } //Имущество под залог
 
-        public Tariff(int uid, string name, string currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, bool spec_offer = false)
+        public Tariff(int uid, string name, string currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, bool spec_offer = false, double amount = 0)
         {
             UId = uid;
             Name = name;
             Currency = currency;
             Coefficient = coefficient;
+            Amount = amount;
             MinSum = min_sum;
             MaxSum = max_sum;
             Periodicity = periodicity;
             PeriodicityValue = periodicity_value;
             SpecialOffer = spec_offer;
         }
-        public Tariff(int uid, string name, string currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, int property_pledged, bool spec_offer = false)
+        public Tariff(int uid, string name, string currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, int property_pledged, bool spec_offer = false, double amount = 0)
         {
             UId = uid;
             Name = name;
             Currency = currency;
             Coefficient = coefficient;
+            Amount = amount;
             MinSum = min_sum;
             MaxSum = max_sum;
             Periodicity = periodicity;

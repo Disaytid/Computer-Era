@@ -25,7 +25,7 @@
                         <Label Name="CoinCount" Margin="5, 0, 0, 0"  FontSize="16"/>
                     </DockPanel>
                     <Border Margin="10, 0" Height="1" BorderThickness="0, 0, 0, 1" BorderBrush="DarkGray"/>
-                    <TextBlock x:Name="SellerText" Text='Свободная касса!' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
+                    <TextBlock x:Name="CashierText" Text='Свободная касса!' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
                 </StackPanel>
             </DockPanel>
             <Grid Grid.Row="1">
@@ -44,7 +44,13 @@
                         <Button x:Name="NewService" Content="Добавить новую услугу" Background="Green" Foreground="White" Margin="5" Click="NewService_Click"/>
                     </DockPanel>
                     <ListBox x:Name="ListServices" Grid.Row="1">
-                        
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel>
+                                    <Label Content="{Binding Name}"/>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
                 </Grid>
                 <StackPanel x:Name="ServiceForm" Grid.Column="2" Margin="10">
@@ -70,9 +76,9 @@
                     </DockPanel>
                     <DockPanel Margin="0, 0, 0, 10">
                         <Label Content="Сумма: "/>
-                        <TextBox/>
+                        <TextBox Name="Sum"/>
                     </DockPanel>
-                    <Button Content="Принять" Background="Green" Foreground="White" BorderThickness="0"/>
+                    <Button Name="Accept" Content="Принять" Background="Green" Foreground="White" BorderThickness="0" Click="Accept_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>
