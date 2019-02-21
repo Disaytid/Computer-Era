@@ -107,7 +107,8 @@ namespace Computer_Era.Game.Forms
 
                                 if (currency != null && (service.Type == TransactionType.TopUp && currency.Count >= sum) || (service.Type == TransactionType.Withdraw && sum >= 0))
                                 {
-                                    if (service.Type == TransactionType.TopUp) { currency.Withdraw( "Депозит", "Банк \"Возмездие\"", GameEvents.GameTimer.DateAndTime, sum); }
+                                    if (service.Type == TransactionType.TopUp) { currency.Withdraw( service.Name, "Банк \"Возмездие\"", GameEvents.GameTimer.DateAndTime, sum); }
+                                    if (service.Type == TransactionType.Withdraw) { currency.TopUp( service.Name, "Банк \"Возмездие\"", GameEvents.GameTimer.DateAndTime, sum); }
                                     Collection<Tariff> tariffs = new Collection<Tariff>();
                                     tariffs.Add(new Tariff(tariff.UId, tariff.Name, tariff.Currency, tariff.Coefficient, tariff.MinSum, tariff.MinSum, tariff.Periodicity, tariff.PeriodicityValue, tariff.SpecialOffer, sum));
                                     Services.PlayerServices.Add(new Service(service.UId, service.Name, service.Type, tariffs, service.TotalMaxDebt, service.TotalMaxContribution));
