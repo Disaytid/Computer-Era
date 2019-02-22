@@ -31,7 +31,11 @@ namespace Computer_Era.Game.Widgets
             Update();
             events.Events.Add(new GameEvent("player widget", events.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
         }
-
+        
+        private void Update(GameEvent @event)
+        {
+            Update();
+        }
         private void Update()
         {
             PlayerName.Content = Player.Name;

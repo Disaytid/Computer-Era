@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Computer_Era.Game.Forms"
+             xmlns:controllib="clr-namespace:ControlLib;assembly=NumericUpDown"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -66,7 +67,7 @@
                     </DockPanel>
                     <DockPanel Margin="0, 0, 0, 10">
                         <Label Content="Тарифный план: "/>
-                        <ComboBox x:Name="ServiceTariff">
+                        <ComboBox x:Name="ServiceTariff" SelectionChanged="ServiceTariff_SelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Label Content="{Binding Name}"></Label>
@@ -75,6 +76,10 @@
                         </ComboBox>
                     </DockPanel>
                     <DockPanel Margin="0, 0, 0, 10">
+                        <Label Content="Периодов: "/>
+                        <controllib:NumericUpDown Name="TariffPeriod" Width="Auto" BorderBrush="#FFABADB3"/>
+                    </DockPanel>
+                        <DockPanel Margin="0, 0, 0, 10">
                         <Label Content="Сумма: "/>
                         <TextBox Name="Sum"/>
                     </DockPanel>

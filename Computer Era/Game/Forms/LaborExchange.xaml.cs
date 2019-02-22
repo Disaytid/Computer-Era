@@ -266,7 +266,7 @@ namespace Computer_Era.Game.Forms
             }
         }
 
-        public void Payroll()
+        public void Payroll(GameEvent @event)
         {
             double amount;
             if (BeginningWork.Year != 1)

@@ -111,7 +111,7 @@ namespace Computer_Era.Game
             if (count_messages > 100) { ViewMessages.Content = "99+"; } else { ViewMessages.Content = count_messages; }
         }
 
-        private void HideBubble()
+        private void HideBubble(GameEvent @event)
         {
             Bubble.Children.Clear();
             Bubble.Visibility = Visibility.Collapsed;

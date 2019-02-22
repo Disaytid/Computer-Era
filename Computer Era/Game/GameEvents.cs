@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace Computer_Era.Game
 {
-    public delegate void MethodContainer();
+    public delegate void MethodContainer(GameEvent @event);
 
     public class GameEvents
     {
@@ -32,7 +32,7 @@ namespace Computer_Era.Game
         {
             if (DateTime.Compare(game_event.ResponseTime, GameTimer.DateAndTime) <= 0)
             {
-                game_event.Method();
+                game_event.Method(game_event);
 
                 if (game_event.Restart)
                 {

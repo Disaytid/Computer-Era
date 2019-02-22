@@ -33,6 +33,10 @@ namespace Computer_Era.Game.Widgets
             events.Events.Add(new GameEvent("money widget", events.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
         }
 
+        private void Update(GameEvent @event)
+        {
+            Update();
+        }
         private void Update()
         {
             CurrencyList.Children.Clear();

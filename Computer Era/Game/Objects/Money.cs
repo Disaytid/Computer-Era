@@ -38,7 +38,6 @@ namespace Computer_Era.Game.Objects
         }
     }
 
-
     public enum TransactionType
     {
         TopUp,

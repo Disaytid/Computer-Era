@@ -63,11 +63,11 @@ namespace Computer_Era
                 messages = new GameMessages(events, GameMessage, GameMessagePanel, MessageBubble);
 
                 items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
-                money = new Money(connection, 1); //Загрузка валют
+                money = new Money(connection, 1); //Загрузка валют (Обязательно должна загружаться раньше услуг (Services))
                 professions = new Professions(connection); //Загрузка списка профессий
                 companies = new Companies(connection); //Загрузка списка компаний
                 computers = new Computers(); //Компьютеры в сборе
-                Services = new Services(connection); //Услуги
+                Services = new Services(connection, money); //Услуги
 
                 // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
 
