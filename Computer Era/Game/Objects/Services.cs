@@ -109,6 +109,9 @@ namespace Computer_Era.Game.Objects
             MaxSum = max_sum;
             Periodicity = periodicity;
             PeriodicityValue = periodicity_value;
+            TermUnit = term_unit;
+            MinTerm = min_term;
+            MaxTerm = max_term;
             SpecialOffer = spec_offer;
         }
         public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, int property_pledged, bool spec_offer = false, double amount = 0)
@@ -122,6 +125,9 @@ namespace Computer_Era.Game.Objects
             MaxSum = max_sum;
             Periodicity = periodicity;
             PeriodicityValue = periodicity_value;
+            TermUnit = term_unit;
+            MinTerm = min_term;
+            MaxTerm = max_term;
             PropertyPledged = property_pledged;
             SpecialOffer = spec_offer;
         }

@@ -77,12 +77,13 @@
                     </DockPanel>
                     <DockPanel Margin="0, 0, 0, 10">
                         <Label Content="Периодов: "/>
-                        <controllib:NumericUpDown Name="TariffPeriod" Width="Auto" BorderBrush="#FFABADB3"/>
+                        <controllib:NumericUpDown Name="TariffPeriod" Width="Auto" BorderBrush="#FFABADB3" ValueChanged="TariffPeriod_ValueChanged"/>
                     </DockPanel>
-                        <DockPanel Margin="0, 0, 0, 10">
+                    <DockPanel Margin="0, 0, 0, 10">
                         <Label Content="Сумма: "/>
-                        <TextBox Name="Sum"/>
+                        <TextBox Name="Sum" TextChanged="Sum_TextChanged"/>
                     </DockPanel>
+                    <Label Name="SummaryInformation" Content="Итого: " Margin="0, 0, 0, 10"/>
                     <Button Name="Accept" Content="Принять" Background="Green" Foreground="White" BorderThickness="0" Click="Accept_Click"/>
                 </StackPanel>
             </Grid>

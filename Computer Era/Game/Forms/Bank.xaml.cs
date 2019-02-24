@@ -65,12 +65,7 @@ namespace Computer_Era.Game.Forms
                 ServiceType.SelectedIndex = 0;
                 ServiceTariff.ItemsSource = ((Service)ServiceType.SelectedItem).Tariffs;
                 if (ServiceTariff.Items.Count > 0)
-                {
-                    ServiceTariff.SelectedIndex = 0;
-                    TariffPeriod.MinValue = ((Tariff)ServiceTariff.SelectedItem).MinTerm;
-                    TariffPeriod.MaxValue = ((Tariff)ServiceTariff.SelectedItem).MaxTerm;
-                    TariffPeriod.Value = ((Tariff)ServiceTariff.SelectedItem).MinTerm;
-                }
+                { ServiceTariff.SelectedIndex = 0; }
             }
         }
 
@@ -79,26 +74,46 @@ namespace Computer_Era.Game.Forms
             if (ServiceType.SelectedItem != null)
             {
                 ServiceTariff.ItemsSource = ((Service)ServiceType.SelectedItem).Tariffs;
-                if (ServiceTariff.Items.Count > 0)
-                {
-                    ServiceTariff.SelectedIndex = 0;
-                    TariffPeriod.MinValue = ((Tariff)ServiceTariff.SelectedItem).MinTerm;
-                    TariffPeriod.MaxValue = ((Tariff)ServiceTariff.SelectedItem).MaxTerm;
-                    TariffPeriod.Value = ((Tariff)ServiceTariff.SelectedItem).MinTerm;
-                }
+                if (ServiceTariff.Items.Count > 0) { ServiceTariff.SelectedIndex = 0; }
             }
+            CalculationOfTheTotal();
         }
 
         private void ServiceTariff_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ServiceType.SelectedItem != null)
+            if (ServiceTariff.SelectedItem != null)
             {
-                TariffPeriod.MinValue = ((Tariff)ServiceTariff.SelectedItem).MinTerm;
-                TariffPeriod.MaxValue = ((Tariff)ServiceTariff.SelectedItem).MaxTerm;
-                TariffPeriod.Value = ((Tariff)ServiceTariff.SelectedItem).MinTerm;
+                Tariff tariff = (Tariff)ServiceTariff.SelectedItem;
+                TariffPeriod.MinValue = tariff.MinTerm;
+                TariffPeriod.MaxValue = tariff.MaxTerm;
             }
+            CalculationOfTheTotal();
         }
 
+        private void Sum_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CalculationOfTheTotal();
+        }
+
+        private void TariffPeriod_ValueChanged(object sender, ControlLib.ValueChangedEventArgs e)
+        {
+            CalculationOfTheTotal();
+        }
+
+        private void CalculationOfTheTotal()
+        {
+            if (ServiceTariff.SelectedItem != null && ServiceType.SelectedItem != null)
+            {
+                Service service = (Service)ServiceType.SelectedItem;
+                Tariff tariff = (Tariff)ServiceTariff.SelectedItem;
+                if (service.Type == TransactionType.TopUp)
+                {
+                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итого начисления составят: " + ((sum * tariff.Coefficient / 100) * TariffPeriod.Value); }
+                } else if (service.Type == TransactionType.Withdraw) {
+                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итоговая сумма выплат составит: " + (sum + ((sum * tariff.Coefficient / 100)) * TariffPeriod.Value); }
+                }
+            } else { SummaryInformation.Content = ""; }
+        }
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             if (ServiceType.SelectedItem == null) { CashierText.Text = "Уважаемый не балуйтесь, выберите уже тип услуги!"; return; }
