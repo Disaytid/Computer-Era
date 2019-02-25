@@ -186,4 +186,25 @@
   <data name="VideoCard" xml:space="preserve">
     <value>Видеокарта</value>
   </data>
+  <data name="BankName" xml:space="preserve">
+    <value>Банк "Возмездие"</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>День</value>
+  </data>
+  <data name="Hour" xml:space="preserve">
+    <value>Час</value>
+  </data>
+  <data name="Minute" xml:space="preserve">
+    <value>Минута</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Месяц</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Неделя</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Год</value>
+  </data>
 </root>

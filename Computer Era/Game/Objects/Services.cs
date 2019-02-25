@@ -34,6 +34,7 @@ namespace Computer_Era.Game.Objects
                     };
                     SQLiteDataReader data_reader2 = command2.ExecuteReader();
 
+                    //Возможно стоит написать проверку от халтуры на Withdraw, сейчас ничто не мешает создать тариф где по кредиту сбор будет меньше выданной банком суммы
                     while (data_reader2.Read()) //написать проверку Periodicity меньше или равно TermUnit или условие на уровне БД
                     {
                         int tariff_id = Convert.ToInt32(data_reader2["tariff_id"]);
@@ -133,12 +134,12 @@ namespace Computer_Era.Game.Objects
         {
             string str = Name + Environment.NewLine +
             "Валюта: " + Currency.Name + Environment.NewLine +
-            "Коэффициент: " + Coefficient + "%" + Environment.NewLine +
+            "Под: " + Coefficient + "%" + Environment.NewLine +
             "Сумма: ";
             if (MinSum == 0 & MaxSum == 0) { str += "не ограничена"; }
-            else if (MinSum == 0 & MaxSum > 0) { str += "до " + MaxSum + " " + Currency.Abbreviation; }
-            else if (MinSum > 0 & MaxSum == 0) { str += "от " + MinSum + " " + Currency.Abbreviation; }
-            else { str += "от " + MinSum + " " + Currency.Abbreviation + " до " + MaxSum + " " + Currency.Abbreviation;  }
+            else if (MinSum == 0 & MaxSum > 0) { str += "до " + MaxSum.ToString("N3") + " " + Currency.Abbreviation; }
+            else if (MinSum > 0 & MaxSum == 0) { str += "от " + MinSum.ToString("N3") + " " + Currency.Abbreviation; }
+            else { str += "от " + MinSum.ToString("N3") + " " + Currency.Abbreviation + " до " + MaxSum.ToString("N3") + " " + Currency.Abbreviation;  }
             return str;
         }
     }
@@ -149,12 +150,26 @@ namespace Computer_Era.Game.Objects
         public double Amount { get; set; }
         public int Term { get; set; }
         public DateTime StartDateOfService { get; set; }
-        public PlayerTariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, Service service, double amount, int term, bool spec_offer = false) 
+        public PlayerTariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, Service service, double amount, int term, DateTime start_date, bool spec_offer = false) 
                      : base(uid, name, currency, coefficient, min_sum, max_sum, periodicity, periodicity_value, term_unit, min_term, max_term, spec_offer)
         {
             Service = service;
             Amount = amount;
             Term = term;
+            StartDateOfService = start_date;
+        }
+
+        public override string ToString()
+        {
+            string str = Name + Environment.NewLine +
+            "Валюта: " + Currency.Name + Environment.NewLine +
+            "Под: " + Coefficient + "%" + Environment.NewLine;
+            if (Service.Type == TransactionType.TopUp)
+            { str += "Вложенно: " + Amount.ToString("N3") + " " + Currency.Abbreviation;
+            } else if (Service.Type == TransactionType.Withdraw) { str += "Получено: " + Amount.ToString("N3") + " " + Currency.Abbreviation; }
+            str += Environment.NewLine +
+            "Дата заключения услуги: " + StartDateOfService.ToString("dd.MM.yyyy HH:mm");
+            return str;
         }
     }
 

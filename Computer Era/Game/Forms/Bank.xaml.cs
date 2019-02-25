@@ -58,6 +58,7 @@ namespace Computer_Era.Game.Forms
 
         private void NewService_Click(object sender, RoutedEventArgs e)
         {
+            ServiceInfo.Visibility = Visibility.Collapsed;
             ServiceForm.Visibility = Visibility.Visible;
             ServiceType.ItemsSource = Services.AllServices;
             if (ServiceType.Items.Count > 0)
@@ -112,9 +113,9 @@ namespace Computer_Era.Game.Forms
                 Tariff tariff = (Tariff)ServiceTariff.SelectedItem;
                 if (service.Type == TransactionType.TopUp)
                 {
-                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итого начисления составят: " + ((sum * tariff.Coefficient / 100) * TariffPeriod.Value); }
+                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итого начисления составят: " + ((sum * tariff.Coefficient / 100) * TariffPeriod.Value).ToString("N3"); }
                 } else if (service.Type == TransactionType.Withdraw) {
-                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итоговая сумма выплат составит: " + (sum + ((sum * tariff.Coefficient / 100)) * TariffPeriod.Value); }
+                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итоговая сумма выплат составит: " + (sum + ((sum * tariff.Coefficient / 100)) * TariffPeriod.Value).ToString("N3"); }
                 }
             } else { SummaryInformation.Content = ""; }
         }
@@ -136,22 +137,33 @@ namespace Computer_Era.Game.Forms
                 {
                     if (service.TotalMaxContribution !=0 & service.TotalMaxContribution < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxContribution * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
-                    if (tariff.Currency.Withdraw(service.Name, Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, sum) == false) { CashierText.Text = "У вас нет столько денег, и зачем вы только тратите мое время?"; return; }
-
+                    if (tariff.Currency.Withdraw(service.Name, Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, sum) == false)
+                    { CashierText.Text = "У вас нет столько денег, и зачем вы только тратите мое время?"; return; }
                 }
                 if (service.Type == TransactionType.Withdraw)
                 {
                     if (service.TotalMaxDebt != 0 & service.TotalMaxDebt < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxDebt * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
-                    if (tariff.Currency.TopUp(service.Name, Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, sum) == false) { CashierText.Text = "Компьютер завис, сочувствую но мы не сможем перевести вам деньги"; return; }
+                    if (tariff.Currency.TopUp(service.Name, Properties.Resources.BankName,
+                                              GameEvents.GameTimer.DateAndTime, sum) == false) { CashierText.Text = "Компьютер завис, сочувствую но мы не сможем перевести вам деньги"; return; }
                 }
                 Collection<Tariff> tariffs = new Collection<Tariff>();
-                Services.PlayerTariffs.Add(new PlayerTariff(tariff.UId, tariff.Name, tariff.Currency, tariff.Coefficient, tariff.MinSum, tariff.MinSum, tariff.Periodicity, tariff.PeriodicityValue, tariff.TermUnit, tariff.MinTerm, tariff.MaxTerm, service, sum, Convert.ToInt32(TariffPeriod.Value), tariff.SpecialOffer));
+                Services.PlayerTariffs.Add(new PlayerTariff(tariff.UId, tariff.Name, tariff.Currency, tariff.Coefficient,
+                                                            tariff.MinSum, tariff.MinSum, tariff.Periodicity,
+                                                            tariff.PeriodicityValue, tariff.TermUnit, tariff.MinTerm,
+                                                            tariff.MaxTerm, service, sum,
+                                                            Convert.ToInt32(TariffPeriod.Value),
+                                                            GameEvents.GameTimer.DateAndTime, tariff.SpecialOffer));
 
-                GameEvents.Events.Add(new GameEvent(service.UId + ":" + tariff.UId + ":" + sum, GameEvents.GameTimer.DateAndTime, tariff.Periodicity, tariff.PeriodicityValue, ProcessingServices, true));
+                GameEvents.Events.Add(new GameEvent(service.UId + ":" + tariff.UId + ":" + sum,
+                                                    GameEvents.GameTimer.DateAndTime, tariff.Periodicity,
+                                                    tariff.PeriodicityValue, ProcessingServices, true));
                 LoadListServices();
                 CashierText.Text = "Ваш " + service.Name.ToLower() + " одобрен, ваш тарифный план: \"" + tariff.Name + "\".";
                 CoinCount.Content = Money.PlayerCurrency[0].Count.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+                ServiceForm.Visibility = Visibility.Collapsed;
+                if (ListServices.Items.Count > 0) { ListServices.SelectedIndex = 0; }
+                ServiceInfo.Visibility = Visibility.Visible;
             } else { CashierText.Text = "Хватит баловаться! Введите уже сумму и оформим " + service.Name.ToLower() + "!"; }
         }
 
@@ -167,11 +179,14 @@ namespace Computer_Era.Game.Forms
                     tariff.Currency.TopUp("Выплата по услуге \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, (tariff.Amount * tariff.Coefficient / 100));
                     if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) {
                         GameEvents.Events.Remove(@event);
-                        tariff.Currency.TopUp("Возврат средств в связи с истечением периода оказания услуги \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, (tariff.Amount * tariff.Coefficient / 100));
+                        Services.PlayerTariffs.Remove(tariff);
+                        tariff.Currency.TopUp("Возврат средств в связи с истечением периода оказания услуги \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, tariff.Amount);
                     }
                 } else if (tariff.Service.Type == TransactionType.Withdraw) {
-                    if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, (tariff.Amount * tariff.Coefficient / 100))) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
-                    if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEvents.Events.Remove(@event); }
+                    int per_s = GetNumberOfPeriods(tariff.Periodicity, tariff.PeriodicityValue, tariff.StartDateOfService, GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term));
+                    MessageBox.Show(per_s.ToString());
+                    if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s)) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
+                    if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEvents.Events.Remove(@event); Services.PlayerTariffs.Remove(tariff); }
                 }
             } else {
                 MessageBox.Show("Что-то пошло не так, тариф не найден!");
@@ -189,9 +204,35 @@ namespace Computer_Era.Game.Forms
             else { return dateTime; }
         }
 
+        private int GetNumberOfPeriods(Periodicity periodicity, int periodicity_value,  DateTime startDateTime, DateTime endDateTime)
+        {
+            if (periodicity == Periodicity.Year) { return (endDateTime.Year - startDateTime.Year) / periodicity_value; }
+            else if (periodicity == Periodicity.Month) { return ((endDateTime.Month - startDateTime.Month) + 12 * (endDateTime.Year - startDateTime.Year)) / periodicity_value; }
+            else if (periodicity == Periodicity.Week) { return (Convert.ToInt32((endDateTime - startDateTime).TotalDays) / 7) / periodicity_value; }
+            else if (periodicity == Periodicity.Day) { return Convert.ToInt32((endDateTime - startDateTime).TotalDays) / periodicity_value; }
+            else if (periodicity == Periodicity.Hour) { return Convert.ToInt32((endDateTime - startDateTime).TotalHours) / periodicity_value; }
+            else if (periodicity == Periodicity.Minute) { return Convert.ToInt32((endDateTime - startDateTime).TotalMinutes) / periodicity_value; }
+            else { return 0; }
+        }
+
+        private void CloseServiceForm_Click(object sender, RoutedEventArgs e)
+        {
+            ServiceForm.Visibility = Visibility.Collapsed;
+            if (ListServices.Items.Count > 0) { ListServices.SelectedIndex = 0; }
+            ServiceInfo.Visibility = Visibility.Visible;
+            CashierText.Text = "Свободная касса!";
+        }
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
+        }
+
+        private void ListServices_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (ListServices.SelectedItem != null)
+            {
+                TarifInfo.Text = ((PlayerTariff)ListServices.SelectedItem).ToString();
+            }
         }
     }
 }
