@@ -88,7 +88,7 @@ namespace Computer_Era.Game.Forms
         {
             if (transition == TransitionType.Walk)
             {
-                if (rnd.Next(1, 101) <= 90)
+                if (rnd.Next(1, 101) <= 10)
                 {
                     int money = Convert.ToInt32((double)rnd.Next(1, 21) / (double)100 * Money.PlayerCurrency[0].Course);
                     Money.PlayerCurrency[0].TopUp("Нашли на дороге", PlayerProfile.Name, GameEvents.GameTimer.DateAndTime, money);

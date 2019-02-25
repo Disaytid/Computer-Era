@@ -212,7 +212,7 @@ namespace Computer_Era.Game.Objects
         }
         public string GetTypeValue() { return _type; }
     }
-    public class Item<P> : BaseItem, IItem
+    public class Item<P> : BaseItem
     {
         public P Properties { get; set; }
         public Item(int uid, string name, string type, int price, DateTime man_date, P properties)

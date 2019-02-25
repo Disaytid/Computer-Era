@@ -9,7 +9,7 @@ namespace Computer_Era.Game.Objects
     public class Services
     {
         public Collection<Service> AllServices = new Collection<Service>();
-        public Collection<Service> PlayerServices = new Collection<Service>();
+        public Collection<PlayerTariff> PlayerTariffs = new Collection<PlayerTariff>();
         public Services(SQLiteConnection connection, Money money)
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
@@ -34,7 +34,7 @@ namespace Computer_Era.Game.Objects
                     };
                     SQLiteDataReader data_reader2 = command2.ExecuteReader();
 
-                    while (data_reader2.Read())
+                    while (data_reader2.Read()) //написать проверку Periodicity меньше или равно TermUnit или условие на уровне БД
                     {
                         int tariff_id = Convert.ToInt32(data_reader2["tariff_id"]);
                         string tariff_name = Convert.ToString(data_reader2["name"]);
@@ -87,7 +87,6 @@ namespace Computer_Era.Game.Objects
         public string Name { get; set; }
         public Currency Currency { get; set; }
         public int Coefficient { get; set; }
-        public double Amount { get; set; }
         public double MinSum { get; set; }
         public double MaxSum { get; set; }
         public Periodicity Periodicity { get; set; }
@@ -98,13 +97,12 @@ namespace Computer_Era.Game.Objects
         public bool SpecialOffer { get; set; }
         public int PropertyPledged { get; set; } //Имущество под залог
 
-        public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, bool spec_offer = false, double amount = 0)
+        public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, bool spec_offer = false)
         {
             UId = uid;
             Name = name;
             Currency = currency;
             Coefficient = coefficient;
-            Amount = amount;
             MinSum = min_sum;
             MaxSum = max_sum;
             Periodicity = periodicity;
@@ -114,13 +112,12 @@ namespace Computer_Era.Game.Objects
             MaxTerm = max_term;
             SpecialOffer = spec_offer;
         }
-        public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, int property_pledged, bool spec_offer = false, double amount = 0)
+        public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, int property_pledged, bool spec_offer = false)
         {
             UId = uid;
             Name = name;
             Currency = currency;
             Coefficient = coefficient;
-            Amount = amount;
             MinSum = min_sum;
             MaxSum = max_sum;
             Periodicity = periodicity;
@@ -130,6 +127,34 @@ namespace Computer_Era.Game.Objects
             MaxTerm = max_term;
             PropertyPledged = property_pledged;
             SpecialOffer = spec_offer;
+        }
+
+        public override string ToString()
+        {
+            string str = Name + Environment.NewLine +
+            "Валюта: " + Currency.Name + Environment.NewLine +
+            "Коэффициент: " + Coefficient + "%" + Environment.NewLine +
+            "Сумма: ";
+            if (MinSum == 0 & MaxSum == 0) { str += "не ограничена"; }
+            else if (MinSum == 0 & MaxSum > 0) { str += "до " + MaxSum + " " + Currency.Abbreviation; }
+            else if (MinSum > 0 & MaxSum == 0) { str += "от " + MinSum + " " + Currency.Abbreviation; }
+            else { str += "от " + MinSum + " " + Currency.Abbreviation + " до " + MaxSum + " " + Currency.Abbreviation;  }
+            return str;
+        }
+    }
+
+    public class PlayerTariff : Tariff
+    {
+        public Service Service { get; set; }
+        public double Amount { get; set; }
+        public int Term { get; set; }
+        public DateTime StartDateOfService { get; set; }
+        public PlayerTariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, Service service, double amount, int term, bool spec_offer = false) 
+                     : base(uid, name, currency, coefficient, min_sum, max_sum, periodicity, periodicity_value, term_unit, min_term, max_term, spec_offer)
+        {
+            Service = service;
+            Amount = amount;
+            Term = term;
         }
     }
 

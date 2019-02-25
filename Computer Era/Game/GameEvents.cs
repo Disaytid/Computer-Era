@@ -111,6 +111,17 @@ namespace Computer_Era.Game
                 EventRun(game_event);
             }
         }
+
+        public string FromPeriodicityToLocalizedString(Periodicity periodicity)
+        {
+            if (periodicity == Periodicity.Year) { return Properties.Resources.Year; }
+            else if (periodicity == Periodicity.Month) { return Properties.Resources.Month; }
+            else if (periodicity == Periodicity.Week) { return Properties.Resources.Week; }
+            else if (periodicity == Periodicity.Day) { return Properties.Resources.Day; }
+            else if (periodicity == Periodicity.Hour) { return Properties.Resources.Hour; }
+            else if (periodicity == Periodicity.Minute) { return Properties.Resources.Minute; }
+            else { return periodicity.ToString(); }
+        }
     }
 
     public enum Periodicity
