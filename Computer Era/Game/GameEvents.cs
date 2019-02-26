@@ -36,32 +36,9 @@ namespace Computer_Era.Game
 
                 if (game_event.Restart)
                 {
-                    switch (game_event.InitialPeriodicity)
-                    {
-                        case Periodicity.Minute:
-                            game_event.ResponseTime = game_event.ResponseTime.AddMinutes(game_event.PeriodicityValue);
-                            break;
-                        case Periodicity.Hour:
-                            game_event.ResponseTime = game_event.ResponseTime.AddHours(game_event.PeriodicityValue);
-                            break;
-                        case Periodicity.Day:
-                            game_event.ResponseTime = game_event.ResponseTime.AddDays(game_event.PeriodicityValue);
-                            break;
-                        case Periodicity.Week:
-                            game_event.ResponseTime = game_event.ResponseTime.AddDays(game_event.PeriodicityValue * 7);
-                            break;
-                        case Periodicity.Month:
-                            game_event.ResponseTime = game_event.ResponseTime.AddMonths(game_event.PeriodicityValue);
-                            break;
-                        case Periodicity.Year:
-                            game_event.ResponseTime = game_event.ResponseTime.AddYears(game_event.PeriodicityValue);
-                            break;
-                        default:
-                            break;
-                    }
+                    game_event.ResponseTime = GetDateTimeFromPeriodicity(game_event.ResponseTime, game_event.InitialPeriodicity, game_event.PeriodicityValue);
                     game_event.Periodicity = game_event.InitialPeriodicity;
-                }
-                else {  Events.Remove(game_event); }
+                } else {  Events.Remove(game_event); }
             } else {
                 if (game_event.ResponseTime.Year == GameTimer.DateAndTime.Year)
                 {
@@ -89,6 +66,36 @@ namespace Computer_Era.Game
                 }
                 else { return; }
             }
+        }
+
+        public DateTime GetDateTimeFromPeriodicity(DateTime dateTime, Periodicity periodicity, int periodicity_value)
+        {
+            DateTime newDateTime;
+            switch (periodicity)
+            {
+                case Periodicity.Minute:
+                    newDateTime = dateTime.AddMinutes(periodicity_value);
+                    break;
+                case Periodicity.Hour:
+                    newDateTime = dateTime.AddHours(periodicity_value);
+                    break;
+                case Periodicity.Day:
+                    newDateTime = dateTime.AddDays(periodicity_value);
+                    break;
+                case Periodicity.Week:
+                    newDateTime = dateTime.AddDays(periodicity_value * 7);
+                    break;
+                case Periodicity.Month:
+                    newDateTime = dateTime.AddMonths(periodicity_value);
+                    break;
+                case Periodicity.Year:
+                    newDateTime = dateTime.AddYears(periodicity_value);
+                    break;
+                default:
+                    newDateTime = dateTime;
+                    break;
+            }
+            return newDateTime;
         }
 
         private void Minute()

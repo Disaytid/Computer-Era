@@ -15,35 +15,43 @@
             <Setter Property="FontSize" Value="24"/>
             <Setter Property="Template" Value="{DynamicResource GameMenuItem}"/>
         </Style>
+        <Style TargetType="Button" x:Key="MenuButton">
+            <Setter Property="Background" Value="#FFFFE6D5"/>
+            <Setter Property="Foreground" Value="#FF2B0000"/>
+            <Setter Property="BorderBrush" Value="#FF2B0000"/>
+            <Setter Property="MinHeight" Value="30"/>
+        </Style>
         <Color x:Key="Blue">Black</Color>
     </Window.Resources>
 
-    <Grid>
+    <Grid x:Name="BaseGrid">
+        <Grid.Background>
+            <ImageBrush Stretch="UniformToFill" ImageSource="Resources/computer-154207.png"/>
+        </Grid.Background>
         <!-- Главное меню -->
         <StackPanel Name="GameMenu" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Visible">
-            <TextBlock Text="Computer Era" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
-            <Button Content="{x:Static res:Resources.ContinueGame}" Margin="0, 0, 0, 5"/>
-            <Button Name="NewGame" Content="{x:Static res:Resources.NewGame}" Margin="0, 5, 0, 5" Click="NewGame_Click"/>
-            <Button Content="{x:Static res:Resources.Loading}" Margin="0, 5, 0, 5"/>
-            <Button Content="{x:Static res:Resources.Settings}" Margin="0, 5, 0, 5"/>
-            <Button Content="{x:Static res:Resources.AboutTheAuthor}" Margin="0, 5, 0, 5"/>
-            <Button Content="{x:Static res:Resources.Exit}" Margin="0, 5, 0, 0"/>
+            <Button Content="{x:Static res:Resources.ContinueGame}" Style="{StaticResource MenuButton}" Margin="0, 0, 0, 5"/>
+            <Button Name="NewGame" Content="{x:Static res:Resources.NewGame}" Style="{StaticResource MenuButton}" Margin="0, 5, 0, 5" Click="NewGame_Click"/>
+            <Button Content="{x:Static res:Resources.Loading}" Style="{StaticResource MenuButton}" Margin="0, 5, 0, 5"/>
+            <Button Content="{x:Static res:Resources.Settings}" Style="{StaticResource MenuButton}" Margin="0, 5, 0, 5"/>
+            <Button Content="{x:Static res:Resources.AboutTheAuthor}" Style="{StaticResource MenuButton}" Margin="0, 5, 0, 5"/>
+            <Button Content="{x:Static res:Resources.Exit}" Style="{StaticResource MenuButton}" Margin="0, 5, 0, 0"/>
         </StackPanel>
 
         <!-- Новая игра -->
-        <StackPanel Name="CreateNewGame" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Margin="0,4,0,0" Visibility="Hidden">
-            <TextBlock Text="{x:Static res:Resources.NewGame}" Margin="0,0,0,20" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
-            <DockPanel Margin="0,0,0,5">
-                <Label Content="{x:Static res:Resources.PlayerName}" ContentStringFormat="{}{0}: "/>
-                <TextBox x:Name="PlayerName"/>
+        <StackPanel Name="CreateNewGame" HorizontalAlignment="Center" VerticalAlignment="Center" Width="400" Margin="0,4,0,0" Visibility="Hidden" Background="#CCFFE6D5">
+            <TextBlock Text="{x:Static res:Resources.NewGame}" Margin="10,10,10,20" Foreground="#FF2B0000" TextAlignment="Center" FontSize="24" FontFamily="Times New Roman"/>
+            <DockPanel Margin="10,0,10,5">
+                <Label Content="{x:Static res:Resources.PlayerName}" ContentStringFormat="{}{0}: " Foreground="#FF2B0000" FontSize="16"/>
+                <TextBox x:Name="PlayerName" Padding="5,0,0,0" Background="#FFFFE6D5" Foreground="#FF2B0000" BorderBrush="#FF2B0000" VerticalContentAlignment="Center" FontSize="16"/>
             </DockPanel>
-            <DockPanel Margin="0,5,0,5">
-                <TextBlock Text="Возраст (от 18 до 80): "/>
-                <TextBox/>
+            <DockPanel Margin="10,5,10,5">
+                <Label Content="Возраст (от 18 до 80): " VerticalContentAlignment="Center" Foreground="#FF2B0000" FontSize="16"/>
+                <TextBox  Padding="5,0,0,0" VerticalContentAlignment="Center" Background="#FFFFE6D5" Foreground="#FF2B0000" BorderBrush="#FF2B0000" FontSize="16"/>
             </DockPanel>
-            <DockPanel Margin="0,5,0,5">
-                <Label Content="Сценарий: " VerticalContentAlignment="Center"/>
-                <ComboBox Name="ScenariosList">
+            <DockPanel Margin="10,5,10,5">
+                <Label Content="Сценарий: " VerticalContentAlignment="Center" Foreground="#FF2B0000" FontSize="16"/>
+                <ComboBox Name="ScenariosList" FontSize="16" Background="#FFFFE6D5" >
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <Label Content="{Binding Name}"/>
@@ -51,8 +59,8 @@
                     </ComboBox.ItemTemplate>
                 </ComboBox>
             </DockPanel>
-            <DockPanel Margin="0,5,0,0">
-                <Button Name="StartNewGame" Content="Начать" Click="StartNewGame_Click"/>
+            <DockPanel Margin="10,5,10,10">
+                <Button Name="StartNewGame" Content="Начать" MinHeight="30" Background="#FFFFE6D5" Foreground="#FF2B0000" BorderBrush="#FF2B0000" Click="StartNewGame_Click"/>
             </DockPanel>
         </StackPanel>
 

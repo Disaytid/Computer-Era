@@ -247,7 +247,7 @@ namespace Computer_Era.Game.Forms
                         GameEnvironment.Player.Job.DateEmployment = GameEnvironment.GameEvents.GameTimer.DateAndTime.AddDays(1);
 
                         BeginningWork = GameEnvironment.GameEvents.GameTimer.DateAndTime.AddDays(1);
-                        CurrentGameEvent = new GameEvent("job", BeginningWork, Periodicity.Month, 1, Payroll, true);
+                        CurrentGameEvent = new GameEvent("job", GameEnvironment.GameEvents.GetDateTimeFromPeriodicity(BeginningWork, Periodicity.Month, 1), Periodicity.Month, 1, Payroll, true);
                         GameEnvironment.GameEvents.Events.Add(CurrentGameEvent);
                         MessageBox.Show("Поздравляем вы устроильсь на вакансию: " + GameEnvironment.Player.Job.Name + " с окладом " + GameEnvironment.Player.Job.Salary * GameEnvironment.Money.PlayerCurrency[0].Course + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation);
                     }

@@ -152,8 +152,8 @@ namespace Computer_Era.Game.Forms
                                                             GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.SpecialOffer));
 
                 GameEnvironment.GameEvents.Events.Add(new GameEvent(service.UId + ":" + tariff.UId + ":" + sum,
-                                                    GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.Periodicity,
-                                                    tariff.PeriodicityValue, ProcessingServices, true));
+                                                    GameEnvironment.GameEvents.GetDateTimeFromPeriodicity(GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.Periodicity, tariff.PeriodicityValue),
+                                                    tariff.Periodicity, tariff.PeriodicityValue, ProcessingServices, true));
                 LoadListServices();
                 CashierText.Text = "Ваш " + service.Name.ToLower() + " одобрен, ваш тарифный план: \"" + tariff.Name + "\".";
                 CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
@@ -180,7 +180,6 @@ namespace Computer_Era.Game.Forms
                     }
                 } else if (tariff.Service.Type == TransactionType.Withdraw) {
                     int per_s = GetNumberOfPeriods(tariff.Periodicity, tariff.PeriodicityValue, tariff.StartDateOfService, GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term));
-                    MessageBox.Show(per_s.ToString());
                     if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s)) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
                     if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEnvironment.GameEvents.Events.Remove(@event); GameEnvironment.Services.PlayerTariffs.Remove(tariff); }
                 }

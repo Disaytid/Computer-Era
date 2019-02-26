@@ -81,6 +81,7 @@ namespace Computer_Era
 
             if (PlayerName.Text.Length > 0)
             {
+                BaseGrid.Background = new SolidColorBrush(Colors.Transparent);
                 GameEnvironment.Player = new PlayerProfile(PlayerName.Text);
                 this.Title = "Computer Era | Играет: " + PlayerName.Text;
                 MenuPlayerItem.Header = PlayerName.Text;
@@ -242,6 +243,8 @@ namespace Computer_Era
                     NewWindow(new Shop(GameEnvironment)); break;
                 case "bank":
                     NewWindow(new Bank(GameEnvironment)); break;
+                case "disc_stand":
+                    NewWindow(new DiscStand(GameEnvironment)); break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");
                     break;

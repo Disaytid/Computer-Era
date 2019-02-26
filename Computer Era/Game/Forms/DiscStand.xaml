@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="Computer_Era.Game.Forms.DiscStand"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Computer_Era.Game.Forms"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <DockPanel VerticalAlignment="Top" Background="#E5747474" Height="32">
+            <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
+            <TextBlock x:Name="Title" Text="Ларек с дисками" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </DockPanel>
+        <Grid Margin="0,32,0,0" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image Source="/Computer Era;component/Resources/geek-2.png" Grid.Column="0" HorizontalAlignment="Stretch"/>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0">
+                    <DockPanel Margin="10, 10, 10, 0">
+                        <Label Content="У вас в кармане: " FontSize="16"/>
+                        <Image x:Name="CoinIcon"/>
+                        <Label Name="CoinCount" Margin="5, 0, 0, 0"  FontSize="16"/>
+                    </DockPanel>
+                    <Border Margin="10, 0" Height="1" BorderThickness="0, 0, 0, 1" BorderBrush="DarkGray"/>
+                    <TextBlock x:Name="SellerText" Text='Добро пожаловать в магазин компьютерных комплектующих "Клепаем сами"! Хотели бы что-то прикупить?' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
+                </StackPanel>
+                <Grid Grid.Row="1">
+                    
+                </Grid>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>
