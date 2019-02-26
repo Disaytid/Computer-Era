@@ -36,7 +36,7 @@ namespace Computer_Era.Game
 
                 if (game_event.Restart)
                 {
-                    switch (game_event.Periodicity)
+                    switch (game_event.InitialPeriodicity)
                     {
                         case Periodicity.Minute:
                             game_event.ResponseTime = game_event.ResponseTime.AddMinutes(game_event.PeriodicityValue);
@@ -59,8 +59,35 @@ namespace Computer_Era.Game
                         default:
                             break;
                     }
+                    game_event.Periodicity = game_event.InitialPeriodicity;
                 }
                 else {  Events.Remove(game_event); }
+            } else {
+                if (game_event.ResponseTime.Year == GameTimer.DateAndTime.Year)
+                {
+                    if (game_event.Periodicity == Periodicity.Year) { game_event.Periodicity = Periodicity.Month; }
+                } else { return; }
+
+                if (game_event.ResponseTime.Month == GameTimer.DateAndTime.Month)
+                {
+                    if (game_event.Periodicity == Periodicity.Month) { game_event.Periodicity = Periodicity.Week; }
+                } else { return; }
+
+                if ((game_event.ResponseTime - GameTimer.DateAndTime).Days <= 7 & (game_event.ResponseTime - GameTimer.DateAndTime).Days >= 0)
+                {
+                    if (game_event.Periodicity == Periodicity.Week) { game_event.Periodicity = Periodicity.Day; }
+                } else { return; }
+
+                if (game_event.ResponseTime.Day == GameTimer.DateAndTime.Day)
+                {
+                    if (game_event.Periodicity == Periodicity.Day) { game_event.Periodicity = Periodicity.Hour; }
+                } else { return; }
+
+                if (game_event.ResponseTime.Hour == GameTimer.DateAndTime.Hour)
+                {
+                    if (game_event.Periodicity == Periodicity.Hour) { game_event.Periodicity = Periodicity.Minute; }
+                }
+                else { return; }
             }
         }
 
@@ -138,21 +165,21 @@ namespace Computer_Era.Game
     {
         public string Name;
         public DateTime ResponseTime;
+        public Periodicity InitialPeriodicity;
         public Periodicity Periodicity;
         public int PeriodicityValue;
         public MethodContainer Method;
         public bool Restart;
-        public bool Descending;
 
-        public GameEvent(string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart = false, bool descending = true)
+        public GameEvent(string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart = false)
         {
             Name = name;
             ResponseTime = response_time;
+            InitialPeriodicity = periodicity;
             Periodicity = periodicity;
             PeriodicityValue = periodicity_value;
             Method = method;
             Restart = restart;
-            Descending = descending;
         }
     }
 
