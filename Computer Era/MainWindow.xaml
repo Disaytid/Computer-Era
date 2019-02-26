@@ -41,6 +41,16 @@
                 <TextBlock Text="Возраст (от 18 до 80): "/>
                 <TextBox/>
             </DockPanel>
+            <DockPanel Margin="0,5,0,5">
+                <Label Content="Сценарий: " VerticalContentAlignment="Center"/>
+                <ComboBox Name="ScenariosList">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <Label Content="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </DockPanel>
             <DockPanel Margin="0,5,0,0">
                 <Button Name="StartNewGame" Content="Начать" Click="StartNewGame_Click"/>
             </DockPanel>

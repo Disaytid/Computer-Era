@@ -22,12 +22,13 @@ namespace Computer_Era.Game.Forms
     /// </summary>
     public partial class Purse : UserControl
     {
-
-        public Purse(Collection<Currency> player_currency, DateTime game_data)
+        readonly GameEnvironment GameEnvironment;
+        public Purse(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
+            GameEnvironment = gameEnvironment;
 
-            LoadICurrency(player_currency, game_data);
+            LoadICurrency(GameEnvironment.Money.PlayerCurrency, GameEnvironment.GameEvents.GameTimer.DateAndTime);
         }
 
         public void LoadICurrency(Collection<Currency> currency, DateTime game_data)

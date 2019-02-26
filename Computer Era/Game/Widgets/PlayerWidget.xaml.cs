@@ -21,15 +21,15 @@ namespace Computer_Era.Game.Widgets
     /// </summary>
     public partial class PlayerWidget : UserControl
     {
-        PlayerProfile Player;
+        GameEnvironment GameEnvironment;
 
-        public PlayerWidget(PlayerProfile player, GameEvents events)
+        public PlayerWidget(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
 
-            Player = player;
+            GameEnvironment = gameEnvironment;
             Update();
-            events.Events.Add(new GameEvent("player widget", events.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
+            GameEnvironment.GameEvents.Events.Add(new GameEvent("player widget", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
         }
         
         private void Update(GameEvent @event)
@@ -38,11 +38,11 @@ namespace Computer_Era.Game.Widgets
         }
         private void Update()
         {
-            PlayerName.Content = Player.Name;
+            PlayerName.Content = GameEnvironment.Player.Name;
 
-            if (Player.Job != null)
+            if (GameEnvironment.Player.Job != null)
             {
-                PlayerJob.Content = "Работа: " + Player.Job.Name;
+                PlayerJob.Content = "Работа: " + GameEnvironment.Player.Job.Name;
             } else {
                 PlayerJob.Content = "Работа: нет";
             }

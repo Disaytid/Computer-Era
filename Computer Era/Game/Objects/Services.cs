@@ -10,7 +10,7 @@ namespace Computer_Era.Game.Objects
     {
         public Collection<Service> AllServices = new Collection<Service>();
         public Collection<PlayerTariff> PlayerTariffs = new Collection<PlayerTariff>();
-        public Services(SQLiteConnection connection, Money money)
+        public Services(SQLiteConnection connection, GameEnviromentMoney money)
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {

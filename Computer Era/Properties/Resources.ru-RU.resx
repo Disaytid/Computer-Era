@@ -207,4 +207,13 @@
   <data name="Year" xml:space="preserve">
     <value>Год</value>
   </data>
+  <data name="MainScenarioPaymentInitiator" xml:space="preserve">
+    <value>Родители</value>
+  </data>
+  <data name="MainScenarioPaymentName" xml:space="preserve">
+    <value>Стартовый капитал</value>
+  </data>
+  <data name="MainScenario" xml:space="preserve">
+    <value>Основной</value>
+  </data>
 </root>

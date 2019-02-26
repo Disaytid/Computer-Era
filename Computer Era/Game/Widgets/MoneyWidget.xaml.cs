@@ -21,16 +21,16 @@ namespace Computer_Era.Game.Widgets
     /// </summary>
     public partial class MoneyWidget : UserControl
     {
-        Money Money;
+        GameEnvironment GameEnvironment;
 
-        public MoneyWidget(Money money, GameEvents events)
+        public MoneyWidget(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
 
-            Money = money;
+            GameEnvironment = gameEnvironment;
 
             Update();
-            events.Events.Add(new GameEvent("money widget", events.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
+            GameEnvironment.GameEvents.Events.Add(new GameEvent("money widget", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
         }
 
         private void Update(GameEvent @event)
@@ -41,7 +41,7 @@ namespace Computer_Era.Game.Widgets
         {
             CurrencyList.Children.Clear();
 
-            foreach (Currency currency in Money.PlayerCurrency)
+            foreach (Currency currency in GameEnvironment.Money.PlayerCurrency)
             {
                 string path = "Resources/currency/" + currency.SystemName + ".png";
                 Uri uri = new Uri("pack://application:,,,/" + path);

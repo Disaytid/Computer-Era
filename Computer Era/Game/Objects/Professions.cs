@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace Computer_Era.Game.Objects
 {
-    class Professions
+    public class Professions
     {
         public Collection<Profession> PlayerProfessions = new Collection<Profession>();
 

@@ -19,15 +19,15 @@ namespace Computer_Era.Game.Forms
     public partial class Inventory : UserControl
     {
         int MaxSize;
-        Money Money;
+        readonly GameEnvironment GameEnvironment;
 
-        public Inventory(Items items, Computers computers, Money money)
+        public Inventory(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
-            Money = money;
+            GameEnvironment = gameEnvironment;
 
             MaxSize = 16;
-            LoadItems(items, computers);
+            LoadItems(GameEnvironment.Items, GameEnvironment.Computers);
         }
 
         public void LoadItems(Items items, Computers computers)
@@ -50,7 +50,7 @@ namespace Computer_Era.Game.Forms
         private void TextBlock_Loaded(object sender, RoutedEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
-            textBlock.Text = (Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course).ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+            textBlock.Text = (Convert.ToInt32(textBlock.Text) * GameEnvironment.Money.PlayerCurrency[0].Course).ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

@@ -1,21 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.IO;
 using System.Windows.Threading;
-using Computer_Era.Game.Objects;
 
 namespace Computer_Era.Game.Forms
 {
@@ -27,24 +13,16 @@ namespace Computer_Era.Game.Forms
         readonly Object main;
         readonly DispatcherTimer Timer = new DispatcherTimer();
         string Obj;
-        readonly Random rnd;
-        readonly GameMessages Messages;
-        readonly Money Money;
-        readonly PlayerProfile PlayerProfile;
-        readonly GameEvents GameEvents;
+        readonly GameEnvironment GameEnvironment;
 
-        public Map(object sender, TimeSpan timeSpan, Random random, GameMessages messages, Money money, PlayerProfile playerProfile, GameEvents events)
+        public Map(object sender, GameEnvironment gameEnvironment)
         {
             InitializeComponent();
-            PlayerProfile = playerProfile;
-            GameEvents = events;
+            GameEnvironment = gameEnvironment;
 
             main = sender;
             Timer.Tick += new EventHandler(TimerTick);
-            Timer.Interval = timeSpan;
-            rnd = random;
-            Messages = messages;
-            Money = money;
+            Timer.Interval = GameEnvironment.GameEvents.GameTimer.Timer.Interval;
 
             MapReader mapReader = new MapReader(this);
             MapBrowser.ObjectForScripting = mapReader;
@@ -88,11 +66,11 @@ namespace Computer_Era.Game.Forms
         {
             if (transition == TransitionType.Walk)
             {
-                if (rnd.Next(1, 101) <= 10)
+                if (GameEnvironment.Random.Next(1, 101) <= 10)
                 {
-                    int money = Convert.ToInt32((double)rnd.Next(1, 21) / (double)100 * Money.PlayerCurrency[0].Course);
-                    Money.PlayerCurrency[0].TopUp("Нашли на дороге", PlayerProfile.Name, GameEvents.GameTimer.DateAndTime, money);
-                    Messages.NewMessage("Поступление средств", "Оказываеться прогулки на воздухе полезны не только для здоровья но и для кармана. Вы нашли на дороге " + money + " " + Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money);
+                    int money = Convert.ToInt32((double)GameEnvironment.Random.Next(1, 21) / (double)100 * GameEnvironment.Money.PlayerCurrency[0].Course);
+                    GameEnvironment.Money.PlayerCurrency[0].TopUp("Нашли на дороге", GameEnvironment.Player.Name, GameEnvironment.GameEvents.GameTimer.DateAndTime, money);
+                    GameEnvironment.Messages.NewMessage("Поступление средств", "Оказываеться прогулки на воздухе полезны не только для здоровья но и для кармана. Вы нашли на дороге " + money + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money);
                 }
             }
         }

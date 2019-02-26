@@ -142,9 +142,9 @@ namespace Computer_Era.Game
         public int PeriodicityValue;
         public MethodContainer Method;
         public bool Restart;
+        public bool Descending;
 
-
-        public GameEvent(string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart=false)
+        public GameEvent(string name, DateTime response_time, Periodicity periodicity, int periodicity_value, MethodContainer method, bool restart = false, bool descending = true)
         {
             Name = name;
             ResponseTime = response_time;
@@ -152,6 +152,7 @@ namespace Computer_Era.Game
             PeriodicityValue = periodicity_value;
             Method = method;
             Restart = restart;
+            Descending = descending;
         }
     }
 

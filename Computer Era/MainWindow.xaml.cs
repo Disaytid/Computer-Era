@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,6 +12,7 @@ using System.Windows.Threading;
 using Computer_Era.Game;
 using Computer_Era.Game.Forms;
 using Computer_Era.Game.Objects;
+using Computer_Era.Game.Scenarios;
 using Computer_Era.Game.Widgets;
 
 namespace Computer_Era
@@ -17,24 +20,31 @@ namespace Computer_Era
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    /// 
+
+    public class GameEnvironment
     {
+        public PlayerProfile Player;
+        public GameEvents GameEvents;
+        public GameMessages Messages;
+        public Items Items;
+        public GameEnviromentMoney Money;
+        public Professions Professions;
+        public Companies Companies;
+        public Computers Computers;
+        public Services Services;
+
         public Random Random = new Random(DateTime.Now.Millisecond);
+    }
+    public partial class MainWindow : Window
+    { 
         readonly DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
 
-        //Объекты (Game/Objects)
-        PlayerProfile Player;
-        GameEvents events;
-        GameMessages messages;
+        GameEnvironment GameEnvironment = new GameEnvironment();
+
         readonly List<Program> programs = new List<Program>();
         readonly Widgets Widgets = new Widgets();
-        Items items;
-        Money money;
-        Professions professions;
-        Companies companies;
-        Computers computers;
-        Services Services;
 
         UserControl lastForm = null;
 
@@ -46,33 +56,41 @@ namespace Computer_Era
         {
             InitializeComponent();
             connection = dataBase.ConnectDB();
+
+            var instances = from t in Assembly.GetExecutingAssembly().GetTypes()
+                            where t.GetInterfaces().Contains(typeof(IScenario))
+                                     && t.GetConstructor(Type.EmptyTypes) != null
+                            select Activator.CreateInstance(t) as IScenario;
+            ScenariosList.ItemsSource = instances;
+            if (ScenariosList.Items.Count > 0) { ScenariosList.SelectedIndex = 0; }
         }
 
         private void StartNewGame_Click(object sender, RoutedEventArgs e)
         {
+            GameEnvironment.Player = new PlayerProfile(PlayerName.Text);
+            GameEnvironment.GameEvents = new GameEvents();
+            GameEnvironment.Messages = new GameMessages(GameEnvironment.GameEvents, GameMessage, GameMessagePanel, MessageBubble); //Объявляеться не раньше GameEvents
+            GameEnvironment.Items = new Items(connection, 1);
+            GameEnvironment.Money = new GameEnviromentMoney(connection, 1); //Объявляеться до Services
+            GameEnvironment.Professions = new Professions(connection);
+            GameEnvironment.Companies = new Companies(connection);
+            GameEnvironment.Computers = new Computers();
+            GameEnvironment.Services = new Services(connection, GameEnvironment.Money); //Объявляеться не раньше Money
+
+            if (ScenariosList.SelectedItem != null) { ((IScenario)ScenariosList.SelectedItem).Start(this, GameEnvironment); } else { return; }
+
             if (PlayerName.Text.Length > 0)
             {
-                Player = new PlayerProfile(PlayerName.Text);
+                GameEnvironment.Player = new PlayerProfile(PlayerName.Text);
                 this.Title = "Computer Era | Играет: " + PlayerName.Text;
                 MenuPlayerItem.Header = PlayerName.Text;
 
-                // ================================================================================ //
-
-                events = new GameEvents(); //События и игровое время
-                events.GameTimer.Minute += this.TimerTick;
-                messages = new GameMessages(events, GameMessage, GameMessagePanel, MessageBubble);
-
-                items = new Items(connection, 1); //Загрузка предметов (подключение, id сэйва)
-                money = new Money(connection, 1); //Загрузка валют (Обязательно должна загружаться раньше услуг (Services))
-                professions = new Professions(connection); //Загрузка списка профессий
-                companies = new Companies(connection); //Загрузка списка компаний
-                computers = new Computers(); //Компьютеры в сборе
-                Services = new Services(connection, money); //Услуги
+                GameEnvironment.GameEvents.GameTimer.Minute += this.TimerTick;  
 
                 // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
 
-                Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(Player, events)));
-                Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(money, events)));
+                Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
+                Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
                 Widgets.Draw(WidgetPanel);
 
                 // ================================================================================ //
@@ -90,13 +108,11 @@ namespace Computer_Era
 
                 LoadSave();
                 DrawDesktop();
-                LabelTime.Text = events.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
-                events.GameTimer.Timer.Start();
-            }
-            else
-            {
+                LabelTime.Text = GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
+            } else {
                 MessageBox.Show("Пожалуйста введите имя =)", "Имя любимое мое, мое любимое", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+         
         }
 
         private void LoadSave()
@@ -189,7 +205,7 @@ namespace Computer_Era
 
         void TimerTick ()
         {
-            LabelTime.Text = events.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
+            LabelTime.Text = GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
         }
 
         private void NewGame_Click(object sender, RoutedEventArgs e)
@@ -211,21 +227,21 @@ namespace Computer_Era
             Program.Visibility = Visibility.Visible;
         }
 
-        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Inventory(items, computers, money));
-        private void MenuMapItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Map(this, events.GameTimer.Timer.Interval, Random, messages, money, Player, events));
-        private void MenuPurseItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Purse(money.PlayerCurrency, events.GameTimer.DateAndTime));
-        private void MenuHardwareItem_Click(object sender, RoutedEventArgs e) => NewWindow(new HardwareInstallation(items, computers, money));
+        private void MenuInventoryItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Inventory(GameEnvironment));
+        private void MenuMapItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Map(this, GameEnvironment));
+        private void MenuPurseItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Purse(GameEnvironment));
+        private void MenuHardwareItem_Click(object sender, RoutedEventArgs e) => NewWindow(new HardwareInstallation(GameEnvironment));
 
         public void ShowBuilding(string obj)
         {
             switch (obj)
             {
                 case "labor_exchange":
-                    NewWindow(new LaborExchange(Player, professions.PlayerProfessions, companies.GameCompany, money.PlayerCurrency, events, Random, messages)); break;
+                    NewWindow(new LaborExchange(GameEnvironment)); break;
                 case "computer_parts_store":
-                    NewWindow(new Shop(money, items, events)); break;
+                    NewWindow(new Shop(GameEnvironment)); break;
                 case "bank":
-                    NewWindow(new Bank(money, Services, events)); break;
+                    NewWindow(new Bank(GameEnvironment)); break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");
                     break;
@@ -234,25 +250,25 @@ namespace Computer_Era
 
         private void PauseItem_Click(object sender, RoutedEventArgs e)
         {
-            events.GameTimer.Timer.Stop();
+            GameEnvironment.GameEvents.GameTimer.Timer.Stop();
         }
 
         private void PlayItem_Click(object sender, RoutedEventArgs e)
         {
-            events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
-            events.GameTimer.Timer.Start();
+            GameEnvironment.GameEvents.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
+            GameEnvironment.GameEvents.GameTimer.Timer.Start();
         }
 
         private void FastPlayItem_Click(object sender, RoutedEventArgs e)
         {
-            events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
-            events.GameTimer.Timer.Start();
+            GameEnvironment.GameEvents.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 10);
+            GameEnvironment.GameEvents.GameTimer.Timer.Start();
         }
 
         private void VeryFastPlayItem_Click(object sender, RoutedEventArgs e)
         {
-            events.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
-            events.GameTimer.Timer.Start();
+            GameEnvironment.GameEvents.GameTimer.Timer.Interval = new TimeSpan(0, 0, 0, 0, 5);
+            GameEnvironment.GameEvents.GameTimer.Timer.Start();
         }
 
         private void GameMessage_Click(object sender, RoutedEventArgs e)

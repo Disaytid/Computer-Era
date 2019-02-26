@@ -93,28 +93,19 @@ namespace Computer_Era.Game.Forms
     public partial class LaborExchange : UserControl
     {
         readonly Collection<JobCard> JobCards = new Collection<JobCard>();
-        readonly PlayerProfile Player;
-        readonly GameEvents GameEvents;
-        readonly GameMessages Messages;
+        readonly GameEnvironment GameEnvironment;
 
         GameEvent CurrentGameEvent;
         DateTime BeginningWork;
-        readonly Collection<Currency> PlayerCurency;
-        readonly Random rnd;
 
-        public LaborExchange(PlayerProfile player, Collection<Profession> profession, Collection<Company> companies, Collection<Currency> curency, GameEvents events, Random random, GameMessages messages)
+        public LaborExchange(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
 
-            rnd = random;
-            Player = player;
-            if (player.Job != null) { Dismissal.IsEnabled = true; }
+            GameEnvironment = gameEnvironment;
 
-            GameEvents = events;
-            Messages = messages;
-            PlayerCurency = curency;
-
-            CreateJobCards(profession, companies, events.GameTimer.DateAndTime);
+            if (GameEnvironment.Player.Job != null) { Dismissal.IsEnabled = true; }
+            CreateJobCards(GameEnvironment.Professions.PlayerProfessions, GameEnvironment.Companies.GameCompany, GameEnvironment.GameEvents.GameTimer.DateAndTime);
         }
 
         private void CreateJobCards(Collection<Profession> profession, Collection<Company> companies, DateTime game_date)
@@ -125,7 +116,7 @@ namespace Computer_Era.Game.Forms
 
             for (int i = 0; i < profession.Count; i++)
             {
-                JobCards.Add(new JobCard(profession[i], current_companies, i, rnd));
+                JobCards.Add(new JobCard(profession[i], current_companies, i, GameEnvironment.Random));
             }
         }
 
@@ -204,7 +195,7 @@ namespace Computer_Era.Game.Forms
 
             TextBlock professionSalary = new TextBlock
             {
-                Text = "Оклад: " + JobCards[index].Salary * PlayerCurency[0].Course + " " + PlayerCurency[0].Abbreviation,
+                Text = "Оклад: " + JobCards[index].Salary * GameEnvironment.Money.PlayerCurrency[0].Course + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation,
                 FontSize = 18,
                 Foreground = new SolidColorBrush(Colors.Blue),
                 Margin = new Thickness(10, 5, 10, 5)
@@ -248,17 +239,17 @@ namespace Computer_Era.Game.Forms
         {
             if (e.ClickCount == 1)
             {
-                if (Player.Job == null)
+                if (GameEnvironment.Player.Job == null)
                 {
                     if (sender is StackPanel)
                     {
-                        Player.Job = JobCards[Convert.ToInt32((sender as StackPanel).Tag)];
-                        Player.Job.DateEmployment = GameEvents.GameTimer.DateAndTime.AddDays(1);
+                        GameEnvironment.Player.Job = JobCards[Convert.ToInt32((sender as StackPanel).Tag)];
+                        GameEnvironment.Player.Job.DateEmployment = GameEnvironment.GameEvents.GameTimer.DateAndTime.AddDays(1);
 
-                        BeginningWork = GameEvents.GameTimer.DateAndTime.AddDays(1);
+                        BeginningWork = GameEnvironment.GameEvents.GameTimer.DateAndTime.AddDays(1);
                         CurrentGameEvent = new GameEvent("job", BeginningWork, Periodicity.Month, 1, Payroll, true);
-                        GameEvents.Events.Add(CurrentGameEvent);
-                        MessageBox.Show("Поздравляем вы устроильсь на вакансию: " + Player.Job.Name + " с окладом " + Player.Job.Salary * PlayerCurency[0].Course + " " + PlayerCurency[0].Abbreviation);
+                        GameEnvironment.GameEvents.Events.Add(CurrentGameEvent);
+                        MessageBox.Show("Поздравляем вы устроильсь на вакансию: " + GameEnvironment.Player.Job.Name + " с окладом " + GameEnvironment.Player.Job.Salary * GameEnvironment.Money.PlayerCurrency[0].Course + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation);
                     }
                 } else {
                     MessageBox.Show("У вас уже есть работа, сначала увольтесь!");
@@ -276,10 +267,10 @@ namespace Computer_Era.Game.Forms
             } else {
                 amount = DateTime.DaysInMonth(CurrentGameEvent.ResponseTime.Year, CurrentGameEvent.ResponseTime.Month);
             }
-            amount *= (Player.Job.Salary * PlayerCurency[0].Course);
+            amount *= (GameEnvironment.Player.Job.Salary * GameEnvironment.Money.PlayerCurrency[0].Course);
 
-            PlayerCurency[0].TopUp("Выплата зарплаты", "Компания \"" + Player.Job.CompanyName + "\"", GameEvents.GameTimer.DateAndTime, amount);
-            Messages.NewMessage("Поступление средств", "Танцуйте! Вам пришла зарплата, если вы еще не забыли вы работаете на должности \"" + Player.Job.Name + "\". Выплаты составили " + amount + " " + PlayerCurency[0].Abbreviation, GameMessages.Icon.Money);
+            GameEnvironment.Money.PlayerCurrency[0].TopUp("Выплата зарплаты", "Компания \"" + GameEnvironment.Player.Job.CompanyName + "\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, amount);
+            GameEnvironment.Messages.NewMessage("Поступление средств", "Танцуйте! Вам пришла зарплата, если вы еще не забыли вы работаете на должности \"" + GameEnvironment.Player.Job.Name + "\". Выплаты составили " + amount + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation, GameMessages.Icon.Money);
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -294,31 +285,31 @@ namespace Computer_Era.Game.Forms
         { 
             Dismissal.IsEnabled = false;
 
-            foreach (GameEvent value in GameEvents.Events.Where(v => v.Name == "job"))
+            foreach (GameEvent value in GameEnvironment.GameEvents.Events.Where(v => v.Name == "job"))
             {
                 CurrentGameEvent = value;
                 break;
             }
 
-            GameEvents.Events.Remove(CurrentGameEvent);
+            GameEnvironment.GameEvents.Events.Remove(CurrentGameEvent);
 
             double amount = 0;
-            if (Player.Job.DateEmployment < GameEvents.GameTimer.DateAndTime) { 
-                if (Player.Job.DateEmployment.Month == GameEvents.GameTimer.DateAndTime.Month & Player.Job.DateEmployment.Year == GameEvents.GameTimer.DateAndTime.Year)
+            if (GameEnvironment.Player.Job.DateEmployment < GameEnvironment.GameEvents.GameTimer.DateAndTime) { 
+                if (GameEnvironment.Player.Job.DateEmployment.Month == GameEnvironment.GameEvents.GameTimer.DateAndTime.Month & GameEnvironment.Player.Job.DateEmployment.Year == GameEnvironment.GameEvents.GameTimer.DateAndTime.Year)
                 {
-                    amount = GameEvents.GameTimer.DateAndTime.Day - Player.Job.DateEmployment.Day;
+                    amount = GameEnvironment.GameEvents.GameTimer.DateAndTime.Day - GameEnvironment.Player.Job.DateEmployment.Day;
                 } else {
-                    amount = GameEvents.GameTimer.DateAndTime.Day;
+                    amount = GameEnvironment.GameEvents.GameTimer.DateAndTime.Day;
                 }   
-                amount *= (Player.Job.Salary * PlayerCurency[0].Course);
+                amount *= (GameEnvironment.Player.Job.Salary * GameEnvironment.Money.PlayerCurrency[0].Course);
             }
 
-            string Company = Player.Job.CompanyName;
-            Player.Job = null;
+            string Company = GameEnvironment.Player.Job.CompanyName;
+            GameEnvironment.Player.Job = null;
             CurrentGameEvent = null;
 
-            PlayerCurency[0].TopUp("Увольнение", "Компания \"" + Company + "\"", GameEvents.GameTimer.DateAndTime, amount);
-            MessageBox.Show("Поздравляем вы уволились, вам выплачено " + amount + " " + PlayerCurency[0].Abbreviation);
+            GameEnvironment.Money.PlayerCurrency[0].TopUp("Увольнение", "Компания \"" + Company + "\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, amount);
+            MessageBox.Show("Поздравляем вы уволились, вам выплачено " + amount + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation);
         }
     }
 }

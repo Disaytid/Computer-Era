@@ -16,25 +16,22 @@ namespace Computer_Era.Game.Forms
 
     public partial class HardwareInstallation : UserControl
     {
-        readonly Computers Computers;
-        readonly Items Items;
-        readonly Money Money;
+        readonly GameEnvironment GameEnvironment;
 
-        public HardwareInstallation(Items items, Computers computers, Money money)
+        public HardwareInstallation(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
-            Computers = computers;
-            Items = items;
-            Money = money;
-            LoadItems(items);
-            LoadComputers(computers);
+
+            GameEnvironment = gameEnvironment;
+            LoadItems(GameEnvironment.Items);
+            LoadComputers(GameEnvironment.Computers);
         } 
 
         public void LoadItems(Items items) //Загрузка предметов в ListBox
         {
             List<ListBoxObject> items_source = new List<ListBoxObject>();
             ViewItems viewItems = new ViewItems();
-            items_source = viewItems.GetSaveItemsSource(items, items_source, Computers.PlayerComputers);
+            items_source = viewItems.GetSaveItemsSource(items, items_source, GameEnvironment.Computers.PlayerComputers);
 
             СomponentsList.ItemsSource = items_source;
         }
@@ -428,7 +425,7 @@ namespace Computer_Era.Game.Forms
             if (!string.IsNullOrEmpty(name)) { foreach (String item in AssemblyList.Items) { if (item == name) { isName = true; break; } } } //Проверяет было ли имя добавлено в имена сборки
             if (!string.IsNullOrEmpty(oldName)) { foreach (String item in AssemblyList.Items) { if (item == oldName) { isOldName = true; break; } } } //Заменить на переменную присваемую в конце
 
-            List<Computer> currentComputer = Computers.PlayerComputers.Where(n => n.Name == name).ToList();
+            List<Computer> currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == name).ToList();
             bool isNewComputer = currentComputer.Count() == 1 ? false : true; //Добавить возможность модификации
             bool isChangedComputer = false;
 
@@ -569,7 +566,7 @@ namespace Computer_Era.Game.Forms
 
                             if (!isChangedComputer)
                             {
-                                Computers.PlayerComputers.Add(newComputer);
+                                GameEnvironment.Computers.PlayerComputers.Add(newComputer);
                                 MessageBox.Show("Добавлен компьютер");
                             } else {
                                 MessageBox.Show("Компьютер изменен!");
@@ -591,7 +588,7 @@ namespace Computer_Era.Game.Forms
 
             if (true) //!isNewComputer
             { 
-                List<Computer> computer = Computers.PlayerComputers.Where(n => n.Name == selectedName).ToList();
+                List<Computer> computer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == selectedName).ToList();
 
                 if (computer.Count == 1)
                 {
@@ -621,7 +618,7 @@ namespace Computer_Era.Game.Forms
         private void TextBlock_Loaded(object sender, RoutedEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
-            textBlock.Text = (Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course).ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+            textBlock.Text = (Convert.ToInt32(textBlock.Text) * GameEnvironment.Money.PlayerCurrency[0].Course).ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

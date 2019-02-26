@@ -161,6 +161,8 @@
     <Compile Include="Game\Objects\Program.cs" />
     <Compile Include="Game\Objects\Services.cs" />
     <Compile Include="Game\Objects\Widgets.cs" />
+    <Compile Include="Game\Scenarios\Main.cs" />
+    <Compile Include="Game\Scenarios\Scenarios.cs" />
     <Compile Include="Game\Widgets\MoneyWidget.xaml.cs">
       <DependentUpon>MoneyWidget.xaml</DependentUpon>
     </Compile>

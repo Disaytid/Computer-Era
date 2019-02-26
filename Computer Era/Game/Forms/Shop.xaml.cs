@@ -15,20 +15,15 @@ namespace Computer_Era.Game.Forms
     /// </summary>
     public partial class Shop : UserControl
     {
-        Money Money;
-        Items Items;
-        GameEvents GameEvents;
+        readonly GameEnvironment GameEnvironment;
 
         int StorePercentage = 20; //Процент наценки магазином
-        public Shop(Money money, Items items, GameEvents events)
+        public Shop(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
 
-            Money = money;
-            Items = items;
-            GameEvents = events;
-
-            string path = "Resources/currency/" + Money.PlayerCurrency[0].SystemName + ".png";
+            GameEnvironment = gameEnvironment;
+            string path = "Resources/currency/" + GameEnvironment.Money.PlayerCurrency[0].SystemName + ".png";
             Uri uri = new Uri("pack://application:,,,/" + path);
 
             if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
@@ -39,9 +34,9 @@ namespace Computer_Era.Game.Forms
             CoinIcon.Source = new BitmapImage(uri);
             CoinIcon.Width = 32;
             CoinIcon.Height = 32;
-            CoinCount.Content = Money.PlayerCurrency[0].Count.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+            CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
 
-            AddItem(items, Properties.Resources.All);
+            AddItem(GameEnvironment.Items, Properties.Resources.All);
         }
 
         private void AddItemsToItemsSource<C>(Collection<C> items, List<ListBoxObject> items_source, ItemTypes type) //Добавление предметов в ItemsSource
@@ -108,51 +103,51 @@ namespace Computer_Era.Game.Forms
 
             if (button.Tag is BaseItem)
             {
-                double price = (button.Tag as BaseItem).Price * Money.PlayerCurrency[0].Course;
+                double price = (button.Tag as BaseItem).Price * GameEnvironment.Money.PlayerCurrency[0].Course;
                 price += price / 100 * StorePercentage;
 
-                if (price <= Money.PlayerCurrency[0].Count)
+                if (price <= GameEnvironment.Money.PlayerCurrency[0].Count)
                 {
-                    Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, "Магазин \"Клепаем сами\"", GameEvents.GameTimer.DateAndTime, price);
-                    CoinCount.Content = Money.PlayerCurrency[0].Count.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+                    GameEnvironment.Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, "Магазин \"Клепаем сами\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, price);
+                    CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
 
                     if (button.Tag is Case)
                     {
                         Case @case = (button.Tag as Case);
-                        Items.Cases.Add(new Case(@case.Uid, @case.Name, @case.GetTypeValue(), @case.Price, @case.ManufacturingDate, @case.Properties));
+                        GameEnvironment.Items.Cases.Add(new Case(@case.Uid, @case.Name, @case.GetTypeValue(), @case.Price, @case.ManufacturingDate, @case.Properties));
                     } else if (button.Tag is Motherboard) {
                         Motherboard motherboard = (button.Tag as Motherboard);
-                        Items.Motherboards.Add(new Motherboard(motherboard.Uid, motherboard.Name, motherboard.GetTypeValue(), motherboard.Price, motherboard.ManufacturingDate, motherboard.Properties));
+                        GameEnvironment.Items.Motherboards.Add(new Motherboard(motherboard.Uid, motherboard.Name, motherboard.GetTypeValue(), motherboard.Price, motherboard.ManufacturingDate, motherboard.Properties));
                     } else if (button.Tag is PowerSupplyUnit) {
                         PowerSupplyUnit psu = (button.Tag as PowerSupplyUnit);
-                        Items.PowerSupplyUnits.Add(new PowerSupplyUnit(psu.Uid, psu.Name, psu.GetTypeValue(), psu.Price, psu.ManufacturingDate, psu.Properties));
+                        GameEnvironment.Items.PowerSupplyUnits.Add(new PowerSupplyUnit(psu.Uid, psu.Name, psu.GetTypeValue(), psu.Price, psu.ManufacturingDate, psu.Properties));
                     } else if (button.Tag is CPU) {
                         CPU cpu = (button.Tag as CPU);
-                        Items.CPUs.Add(new CPU(cpu.Uid, cpu.Name, cpu.GetTypeValue(), cpu.Price, cpu.ManufacturingDate, cpu.Properties));
+                        GameEnvironment.Items.CPUs.Add(new CPU(cpu.Uid, cpu.Name, cpu.GetTypeValue(), cpu.Price, cpu.ManufacturingDate, cpu.Properties));
                     } else if (button.Tag is RAM) {
                         RAM ram = (button.Tag as RAM);
-                        Items.RAMs.Add(new RAM(ram.Uid, ram.Name, ram.GetTypeValue(), ram.Price, ram.ManufacturingDate, ram.Properties));
+                        GameEnvironment.Items.RAMs.Add(new RAM(ram.Uid, ram.Name, ram.GetTypeValue(), ram.Price, ram.ManufacturingDate, ram.Properties));
                     } else if (button.Tag is CPUCooler) {
                         CPUCooler cpuCooler = button.Tag as CPUCooler;
-                        Items.CPUCoolers.Add(new CPUCooler(cpuCooler.Uid, cpuCooler.Name, cpuCooler.GetTypeValue(), cpuCooler.Price, cpuCooler.ManufacturingDate, cpuCooler.Properties));
+                        GameEnvironment.Items.CPUCoolers.Add(new CPUCooler(cpuCooler.Uid, cpuCooler.Name, cpuCooler.GetTypeValue(), cpuCooler.Price, cpuCooler.ManufacturingDate, cpuCooler.Properties));
                     } else if (button.Tag is HDD) {
                         HDD hdd = button.Tag as HDD;
-                        Items.HDDs.Add(new HDD(hdd.Uid, hdd.Name, hdd.GetTypeValue(), hdd.Price, hdd.ManufacturingDate, hdd.Properties));
+                        GameEnvironment.Items.HDDs.Add(new HDD(hdd.Uid, hdd.Name, hdd.GetTypeValue(), hdd.Price, hdd.ManufacturingDate, hdd.Properties));
                     } else if (button.Tag is Monitor) {
                         Monitor monitor = button.Tag as Monitor;
-                        Items.Monitors.Add(new Monitor(monitor.Uid, monitor.Name, monitor.GetTypeValue(), monitor.Price, monitor.ManufacturingDate, monitor.Properties));
+                        GameEnvironment.Items.Monitors.Add(new Monitor(monitor.Uid, monitor.Name, monitor.GetTypeValue(), monitor.Price, monitor.ManufacturingDate, monitor.Properties));
                     } else if (button.Tag is VideoСard) {
                         VideoСard videoCard = button.Tag as VideoСard;
-                        Items.VideoСards.Add(new VideoСard(videoCard.Uid, videoCard.Name, videoCard.GetTypeValue(), videoCard.Price, videoCard.ManufacturingDate, videoCard.Properties));
+                        GameEnvironment.Items.VideoСards.Add(new VideoСard(videoCard.Uid, videoCard.Name, videoCard.GetTypeValue(), videoCard.Price, videoCard.ManufacturingDate, videoCard.Properties));
                     } else if (button.Tag is OpticalDrive) {
                         OpticalDrive opticalDrive = button.Tag as OpticalDrive;
-                        Items.OpticalDrives.Add(new OpticalDrive(opticalDrive.Uid, opticalDrive.Name, opticalDrive.GetTypeValue(), opticalDrive.Price, opticalDrive.ManufacturingDate, opticalDrive.Properties));
+                        GameEnvironment.Items.OpticalDrives.Add(new OpticalDrive(opticalDrive.Uid, opticalDrive.Name, opticalDrive.GetTypeValue(), opticalDrive.Price, opticalDrive.ManufacturingDate, opticalDrive.Properties));
                     } else if (button.Tag is Mouse) {
                         Mouse mouse = button.Tag as Mouse;
-                        Items.Mice.Add(new Mouse(mouse.Uid, mouse.Name, mouse.GetTypeValue(), mouse.Price, mouse.ManufacturingDate, mouse.Properties));
+                        GameEnvironment.Items.Mice.Add(new Mouse(mouse.Uid, mouse.Name, mouse.GetTypeValue(), mouse.Price, mouse.ManufacturingDate, mouse.Properties));
                     } else if (button.Tag is Keyboard) {
                         Keyboard keyboard = button.Tag as Keyboard;
-                        Items.Keyboards.Add(new Keyboard(keyboard.Uid, keyboard.Name, keyboard.GetTypeValue(), keyboard.Price, keyboard.ManufacturingDate, keyboard.Properties));
+                        GameEnvironment.Items.Keyboards.Add(new Keyboard(keyboard.Uid, keyboard.Name, keyboard.GetTypeValue(), keyboard.Price, keyboard.ManufacturingDate, keyboard.Properties));
                     }
 
                     SellerText.Text = "Спасибо за покупку " + (button.Tag as BaseItem).Name + ", хороший выбор!";
@@ -165,9 +160,9 @@ namespace Computer_Era.Game.Forms
         private void TextBlock_Loaded(object sender, RoutedEventArgs e)
         {
             TextBlock textBlock = sender as TextBlock;
-            double price = Convert.ToInt32(textBlock.Text) * Money.PlayerCurrency[0].Course;
+            double price = Convert.ToInt32(textBlock.Text) * GameEnvironment.Money.PlayerCurrency[0].Course;
             price += price / 100 * StorePercentage;
-            textBlock.Text = price.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+            textBlock.Text = price.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
         }
         private void Grid_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
@@ -175,10 +170,10 @@ namespace Computer_Era.Game.Forms
         }
         private void SelectionType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (SelectionType.SelectedItem != null && Items != null)
+            if (SelectionType.SelectedItem != null && GameEnvironment != null)
             {
                 ComboBoxItem item = (ComboBoxItem)SelectionType.SelectedItem;
-                AddItem(Items, item.Content.ToString());
+                AddItem(GameEnvironment.Items, item.Content.ToString());
             }
         }
 

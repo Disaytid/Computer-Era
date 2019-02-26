@@ -207,4 +207,13 @@
   <data name="BankName" xml:space="preserve">
     <value>Bank "Retribution"</value>
   </data>
+  <data name="MainScenario" xml:space="preserve">
+    <value>Main</value>
+  </data>
+  <data name="MainScenarioPaymentInitiator" xml:space="preserve">
+    <value>Parents</value>
+  </data>
+  <data name="MainScenarioPaymentName" xml:space="preserve">
+    <value>Starting capital</value>
+  </data>
 </root>

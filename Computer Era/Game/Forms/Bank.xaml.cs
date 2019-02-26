@@ -22,19 +22,15 @@ namespace Computer_Era.Game.Forms
     /// </summary>
     public partial class Bank : UserControl
     {
-        Money Money;
-        GameEvents GameEvents;
-        Services Services;
+        readonly GameEnvironment GameEnvironment;
 
-        public Bank(Money money, Services services, GameEvents events)
+        public Bank(GameEnvironment gameEnviroment)
         {
             InitializeComponent();
 
-            Money = money;
-            Services = services;
-            GameEvents = events;
+            GameEnvironment = gameEnviroment;
 
-            string path = "Resources/currency/" + Money.PlayerCurrency[0].SystemName + ".png";
+            string path = "Resources/currency/" + GameEnvironment.Money.PlayerCurrency[0].SystemName + ".png";
             Uri uri = new Uri("pack://application:,,,/" + path);
 
             if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
@@ -45,14 +41,14 @@ namespace Computer_Era.Game.Forms
             CoinIcon.Source = new BitmapImage(uri);
             CoinIcon.Width = 32;
             CoinIcon.Height = 32;
-            CoinCount.Content = Money.PlayerCurrency[0].Count.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+            CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
 
             LoadListServices();
         }
 
         private void LoadListServices()
         {
-            ListServices.ItemsSource = Services.PlayerTariffs;
+            ListServices.ItemsSource = GameEnvironment.Services.PlayerTariffs;
             ListServices.Items.Refresh();
         }
 
@@ -60,7 +56,7 @@ namespace Computer_Era.Game.Forms
         {
             ServiceInfo.Visibility = Visibility.Collapsed;
             ServiceForm.Visibility = Visibility.Visible;
-            ServiceType.ItemsSource = Services.AllServices;
+            ServiceType.ItemsSource = GameEnvironment.Services.AllServices;
             if (ServiceType.Items.Count > 0)
             {
                 ServiceType.SelectedIndex = 0;
@@ -86,7 +82,7 @@ namespace Computer_Era.Game.Forms
             {
                 Tariff tariff = (Tariff)ServiceTariff.SelectedItem;
                 TariffDescription.Text = tariff.ToString(); TariffDescription.Visibility = Visibility.Visible;
-                LabelPeriod.Content = GameEvents.FromPeriodicityToLocalizedString(tariff.Periodicity) + ": ";
+                LabelPeriod.Content = GameEnvironment.GameEvents.FromPeriodicityToLocalizedString(tariff.Periodicity) + ": ";
                 TariffPeriod.MinValue = tariff.MinTerm;
                 TariffPeriod.MaxValue = tariff.MaxTerm;
             } else {
@@ -129,7 +125,7 @@ namespace Computer_Era.Game.Forms
             if (double.TryParse(Sum.Text, out double sum)) {
                 if (tariff.MinSum != 0 & sum < tariff.MinSum && tariff.MaxSum!=0 & sum > tariff.MaxSum) { CashierText.Text = "Разве не видно что вы не вкладываетесь в рамки тарифа?"; return; }
                 double sum_tarrifs = 0;
-                foreach (PlayerTariff p_tariff in Services.PlayerTariffs)
+                foreach (PlayerTariff p_tariff in GameEnvironment.Services.PlayerTariffs)
                 {
                     if (p_tariff.Service.UId == service.UId) { sum_tarrifs += p_tariff.Amount; break; }
                 }
@@ -137,7 +133,7 @@ namespace Computer_Era.Game.Forms
                 {
                     if (service.TotalMaxContribution !=0 & service.TotalMaxContribution < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxContribution * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
-                    if (tariff.Currency.Withdraw(service.Name, Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, sum) == false)
+                    if (tariff.Currency.Withdraw(service.Name, Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, sum) == false)
                     { CashierText.Text = "У вас нет столько денег, и зачем вы только тратите мое время?"; return; }
                 }
                 if (service.Type == TransactionType.Withdraw)
@@ -145,22 +141,22 @@ namespace Computer_Era.Game.Forms
                     if (service.TotalMaxDebt != 0 & service.TotalMaxDebt < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxDebt * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
                     if (tariff.Currency.TopUp(service.Name, Properties.Resources.BankName,
-                                              GameEvents.GameTimer.DateAndTime, sum) == false) { CashierText.Text = "Компьютер завис, сочувствую но мы не сможем перевести вам деньги"; return; }
+                                              GameEnvironment.GameEvents.GameTimer.DateAndTime, sum) == false) { CashierText.Text = "Компьютер завис, сочувствую но мы не сможем перевести вам деньги"; return; }
                 }
                 Collection<Tariff> tariffs = new Collection<Tariff>();
-                Services.PlayerTariffs.Add(new PlayerTariff(tariff.UId, tariff.Name, tariff.Currency, tariff.Coefficient,
+                GameEnvironment.Services.PlayerTariffs.Add(new PlayerTariff(tariff.UId, tariff.Name, tariff.Currency, tariff.Coefficient,
                                                             tariff.MinSum, tariff.MinSum, tariff.Periodicity,
                                                             tariff.PeriodicityValue, tariff.TermUnit, tariff.MinTerm,
                                                             tariff.MaxTerm, service, sum,
                                                             Convert.ToInt32(TariffPeriod.Value),
-                                                            GameEvents.GameTimer.DateAndTime, tariff.SpecialOffer));
+                                                            GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.SpecialOffer));
 
-                GameEvents.Events.Add(new GameEvent(service.UId + ":" + tariff.UId + ":" + sum,
-                                                    GameEvents.GameTimer.DateAndTime, tariff.Periodicity,
+                GameEnvironment.GameEvents.Events.Add(new GameEvent(service.UId + ":" + tariff.UId + ":" + sum,
+                                                    GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.Periodicity,
                                                     tariff.PeriodicityValue, ProcessingServices, true));
                 LoadListServices();
                 CashierText.Text = "Ваш " + service.Name.ToLower() + " одобрен, ваш тарифный план: \"" + tariff.Name + "\".";
-                CoinCount.Content = Money.PlayerCurrency[0].Count.ToString("N3") + " " + Money.PlayerCurrency[0].Abbreviation;
+                CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
                 ServiceForm.Visibility = Visibility.Collapsed;
                 if (ListServices.Items.Count > 0) { ListServices.SelectedIndex = 0; }
                 ServiceInfo.Visibility = Visibility.Visible;
@@ -170,23 +166,23 @@ namespace Computer_Era.Game.Forms
         private void ProcessingServices(GameEvent @event)
         {
             string[] keys = @event.Name.Split(new char[] { ':' });
-            List<PlayerTariff> tariffs = Services.PlayerTariffs.Where(t => t.Service.UId.ToString() == keys[0] & t.UId.ToString() == keys[1] & t.Amount.ToString() == keys[2]).ToList();
+            List<PlayerTariff> tariffs = GameEnvironment.Services.PlayerTariffs.Where(t => t.Service.UId.ToString() == keys[0] & t.UId.ToString() == keys[1] & t.Amount.ToString() == keys[2]).ToList();
             if (tariffs.Count == 1)
             {
                 PlayerTariff tariff = tariffs[0];
                 if (tariff.Service.Type == TransactionType.TopUp)
                 {
-                    tariff.Currency.TopUp("Выплата по услуге \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, (tariff.Amount * tariff.Coefficient / 100));
+                    tariff.Currency.TopUp("Выплата по услуге \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, (tariff.Amount * tariff.Coefficient / 100));
                     if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) {
-                        GameEvents.Events.Remove(@event);
-                        Services.PlayerTariffs.Remove(tariff);
-                        tariff.Currency.TopUp("Возврат средств в связи с истечением периода оказания услуги \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, tariff.Amount);
+                        GameEnvironment.GameEvents.Events.Remove(@event);
+                        GameEnvironment.Services.PlayerTariffs.Remove(tariff);
+                        tariff.Currency.TopUp("Возврат средств в связи с истечением периода оказания услуги \"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.Amount);
                     }
                 } else if (tariff.Service.Type == TransactionType.Withdraw) {
                     int per_s = GetNumberOfPeriods(tariff.Periodicity, tariff.PeriodicityValue, tariff.StartDateOfService, GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term));
                     MessageBox.Show(per_s.ToString());
-                    if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s)) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
-                    if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEvents.Events.Remove(@event); Services.PlayerTariffs.Remove(tariff); }
+                    if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s)) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
+                    if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEnvironment.GameEvents.Events.Remove(@event); GameEnvironment.Services.PlayerTariffs.Remove(tariff); }
                 }
             } else {
                 MessageBox.Show("Что-то пошло не так, тариф не найден!");

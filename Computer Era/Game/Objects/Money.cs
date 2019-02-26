@@ -10,11 +10,11 @@ using System.Windows;
 
 namespace Computer_Era.Game.Objects
 {
-    public class Money
+    public class GameEnviromentMoney
     {
         public Collection<Currency> PlayerCurrency = new Collection<Currency>();
 
-        public Money(SQLiteConnection connection, int save_id)
+        public GameEnviromentMoney(SQLiteConnection connection, int save_id)
         {
             using (SQLiteCommand command = new SQLiteCommand(connection))
             {

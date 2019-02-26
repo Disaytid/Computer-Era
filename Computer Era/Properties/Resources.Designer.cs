@@ -205,6 +205,33 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Main.
+        /// </summary>
+        public static string MainScenario {
+            get {
+                return ResourceManager.GetString("MainScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Parents.
+        /// </summary>
+        public static string MainScenarioPaymentInitiator {
+            get {
+                return ResourceManager.GetString("MainScenarioPaymentInitiator", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Starting capital.
+        /// </summary>
+        public static string MainScenarioPaymentName {
+            get {
+                return ResourceManager.GetString("MainScenarioPaymentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Minute.
         /// </summary>
         public static string Minute {
