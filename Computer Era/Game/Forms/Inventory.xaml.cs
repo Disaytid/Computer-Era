@@ -1,18 +1,10 @@
-﻿using Computer_Era.Game.Objects;
+﻿using Computer_Era.Game.Graphics;
+using Computer_Era.Game.Objects;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Computer_Era.Game.Forms
 {
@@ -35,6 +27,22 @@ namespace Computer_Era.Game.Forms
             List<ListBoxObject> items_source = new List<ListBoxObject>();
             ViewItems viewItems = new ViewItems();
             items_source = viewItems.GetSaveItemsSource(items, items_source, computers.PlayerComputers);
+
+            foreach (OpticalDisc opticalDisc in GameEnvironment.Items.OpticalDiscs)
+            {
+                string path = "Resources/discs/" + opticalDisc.Properties.CoverName + ".png";
+                Uri uri = new Uri("pack://application:,,,/" + path);
+
+                if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
+                {
+                    uri = new Uri(opticalDisc.GetIcon(ItemTypes.optical_disc));
+                }
+                BitmapImage image = new BitmapImage(uri);
+                GameGraphics gameGraphics = new GameGraphics();
+                BitmapImage icon = gameGraphics.GlueImages(image, new BitmapImage(new Uri("pack://application:,,,/Resources/discs/disc-case.png")));
+
+                items_source.Add(new ListBoxObject(opticalDisc, icon));
+            }
 
             int currenSize = 0;
 

@@ -216,4 +216,7 @@
   <data name="MainScenario" xml:space="preserve">
     <value>Основной</value>
   </data>
+  <data name="OpticalDisc" xml:space="preserve">
+    <value>Компакт-диск</value>
+  </data>
 </root>

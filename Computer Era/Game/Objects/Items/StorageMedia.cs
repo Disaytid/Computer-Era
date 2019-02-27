@@ -1,17 +1,36 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Computer_Era.Game.Objects
 {
-    public class OpticalDiskProperties
+    public enum OpticalDiscType
     {
-        
+        CD,
+        DVD
     }
-    public class OpticalDisk : Item<OpticalDiskProperties>
+    public class OpticalDiscProperties
     {
-        public OpticalDisk(int uid, string name, string type, int price, DateTime man_date, OpticalDiskProperties properties) : base(uid, name, type, price, man_date, properties) { }
+        public OpticalDiscType Type { get; set; }
+        public bool Rewritable { get; set;  }
+        public int Volume { get; set; }         //В киллобайтах
+        public int ReadSpeed { get; set; }      //В x где x = 150 кб/c (килобайт в секунду)
+        public int WriteSpeed { get; set; }     //В x где x = 150 кб/c (килобайт в секунду)
+        public string CoverName { get; set; }   //Название обложки
+        //public Collection<Program> Programs = new Collection<Program>(); 
+    }
+    public class OpticalDisc : Item<OpticalDiscProperties>
+    {
+        public OpticalDisc(int uid, string name, string type, int price, DateTime man_date, OpticalDiscProperties properties) : base(uid, name, type, price, man_date, properties) { }
+
+        public override string ToString()
+        {
+            string str = "Тип: " + Properties.Type + Environment.NewLine +
+            "Скорость чтения: x" + Properties.ReadSpeed;
+            return str;
+        }
     }
 }

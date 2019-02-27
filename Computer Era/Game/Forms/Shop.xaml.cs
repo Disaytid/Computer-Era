@@ -142,10 +142,7 @@ namespace Computer_Era.Game.Forms
                     } else if (button.Tag is OpticalDrive) {
                         OpticalDrive opticalDrive = button.Tag as OpticalDrive;
                         GameEnvironment.Items.OpticalDrives.Add(new OpticalDrive(opticalDrive.Uid, opticalDrive.Name, opticalDrive.GetTypeValue(), opticalDrive.Price, opticalDrive.ManufacturingDate, opticalDrive.Properties));
-                    } else if (button.Tag is Mouse) {
-                        Mouse mouse = button.Tag as Mouse;
-                        GameEnvironment.Items.Mice.Add(new Mouse(mouse.Uid, mouse.Name, mouse.GetTypeValue(), mouse.Price, mouse.ManufacturingDate, mouse.Properties));
-                    } else if (button.Tag is Keyboard) {
+                 } else if (button.Tag is Keyboard) {
                         Keyboard keyboard = button.Tag as Keyboard;
                         GameEnvironment.Items.Keyboards.Add(new Keyboard(keyboard.Uid, keyboard.Name, keyboard.GetTypeValue(), keyboard.Price, keyboard.ManufacturingDate, keyboard.Properties));
                     }
@@ -153,7 +150,10 @@ namespace Computer_Era.Game.Forms
                     SellerText.Text = "Спасибо за покупку " + (button.Tag as BaseItem).Name + ", хороший выбор!";
                 } else {
                     SellerText.Text = "Извини дружище, нет денег нет товара.";
-                }
+                }           } else if (button.Tag is Mouse) {
+                        Mouse mouse = button.Tag as Mouse;
+                        GameEnvironment.Items.Mice.Add(new Mouse(mouse.Uid, mouse.Name, mouse.GetTypeValue(), mouse.Price, mouse.ManufacturingDate, mouse.Properties));
+            
             }
         }
 

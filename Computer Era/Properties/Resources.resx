@@ -216,4 +216,7 @@
   <data name="MainScenarioPaymentName" xml:space="preserve">
     <value>Starting capital</value>
   </data>
+  <data name="OpticalDisc" xml:space="preserve">
+    <value>Optical Disc</value>
+  </data>
 </root>

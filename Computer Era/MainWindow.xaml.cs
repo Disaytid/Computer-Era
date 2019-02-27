@@ -43,7 +43,7 @@ namespace Computer_Era
 
         GameEnvironment GameEnvironment = new GameEnvironment();
 
-        readonly List<Program> programs = new List<Program>();
+        readonly List<InstalledProgram> programs = new List<InstalledProgram>();
         readonly Widgets Widgets = new Widgets();
 
         UserControl lastForm = null;
@@ -129,14 +129,15 @@ namespace Computer_Era
                 while (data_reader.Read())
                 {
                     int id = Convert.ToInt32(data_reader["id"]);
-                    string name = Convert.ToString(data_reader["name"]);
+                    string name = Convert.ToString(data_reader["name"]);     
+                    int price = Convert.ToInt32(data_reader["price"]);
                     string control_name = Convert.ToString(data_reader["control_name"]);
-                    string description = Convert.ToString(data_reader["description"]);
-                    string icon_name = Convert.ToString(data_reader["icon_name"]);
                     int row = Convert.ToInt32(data_reader["row"]);
                     int column = Convert.ToInt32(data_reader["column"]);
+                    DateTime manufacturing_date = Convert.ToDateTime(data_reader["manufacturing_date"]);
 
-                    programs.Add(new Program(id, name, control_name, description, icon_name, row, column));
+                    string json = Convert.ToString(data_reader["properties"]);
+                    programs.Add(new InstalledProgram(id, name, "program", price, manufacturing_date, GameEnvironment.Items.AddItem<ProgramProperties>(json), control_name, row, column));
                 }
             }
         }
@@ -173,7 +174,7 @@ namespace Computer_Era
                 //Написать проверку размеров сетки
                 ImageBrush brush = new ImageBrush
                 {
-                    ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.IconName + ".png")),
+                    ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.Properties.IconName + ".png")),
                     Stretch = Stretch.UniformToFill
                 };
 

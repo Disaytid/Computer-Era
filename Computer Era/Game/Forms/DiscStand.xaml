@@ -9,7 +9,7 @@
     <Grid>
         <DockPanel VerticalAlignment="Top" Background="#E5747474" Height="32">
             <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
-            <TextBlock x:Name="Title" Text="Ларек с дисками" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="Title" Text="Киоск с дисками" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </DockPanel>
         <Grid Margin="0,32,0,0" Background="White">
             <Grid.ColumnDefinitions>
@@ -29,10 +29,38 @@
                         <Label Name="CoinCount" Margin="5, 0, 0, 0"  FontSize="16"/>
                     </DockPanel>
                     <Border Margin="10, 0" Height="1" BorderThickness="0, 0, 0, 1" BorderBrush="DarkGray"/>
-                    <TextBlock x:Name="SellerText" Text='Добро пожаловать в магазин компьютерных комплектующих "Клепаем сами"! Хотели бы что-то прикупить?' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
+                    <TextBlock x:Name="SellerText" Text="Здравствуйте, диск купить не желаете?" FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
                 </StackPanel>
                 <Grid Grid.Row="1">
-                    
+                    <ListBox x:Name="DiscsList">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Grid.IsSharedSizeScope="True" Width="{Binding ActualWidth, ElementName=DiscsList, Mode=OneWay}" Tag="{Binding Tag}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid Grid.Column="0" HorizontalAlignment="Left">
+                                        <Image Source="{Binding Item.Image}" MaxWidth="150"/>
+                                        <Image MaxWidth="150" Source="/Computer Era;component/Resources/discs/disc-case.png"/>
+                                    </Grid>
+                                    <DockPanel Grid.Column="1">
+                                        <StackPanel DockPanel.Dock="Right" Width="128" VerticalAlignment="Center">
+                                            <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Item.ManufacturingDate, StringFormat=yyyy г.}" />
+                                            <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Item.Price}" Loaded="TextBlock_Loaded" />
+                                        </StackPanel>
+                                        <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                                            <Button x:Name="BuyButton" Content="Купить" Margin="10" Padding="5" Background="Blue" Foreground="White" BorderThickness="0" Tag="{Binding IObject}" Click="BuyButton_Click" />
+                                        </StackPanel>
+                                        <StackPanel DockPanel.Dock="Left">
+                                            <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding Item.Name}" FontSize="24" />
+                                            <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Tag}" TextWrapping="Wrap" FontSize="16" />
+                                        </StackPanel>
+                                    </DockPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </Grid>
             </Grid>
         </Grid>

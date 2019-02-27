@@ -6,23 +6,27 @@ using System.Threading.Tasks;
 
 namespace Computer_Era.Game.Objects
 {
-    class Program
+    public class ProgramProperties
     {
-        public int Id;
-        public string Name;
-        public string ControlName;
-        public string Description;
-        public string IconName;
-        public int Row;
-        public int Column;
+        public string IconName { get; set; }
+        public string Description { get; set; }
+        public string Author { get; set; }
+    }
 
-        public Program(int id, string name, string control_name, string description, string icon_name, int row, int column)
+    public class Program : Item<ProgramProperties>
+    {
+        public Program(int uid, string name, string type, int price, DateTime man_date, ProgramProperties properties) : base(uid, name, type, price, man_date, properties) { }
+    }
+
+    public class InstalledProgram : Program
+    {
+        public string ControlName { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
+
+        public InstalledProgram(int uid, string name, string type, int price, DateTime man_date, ProgramProperties properties, string control_name, int row, int column) : base(uid, name, type, price, man_date, properties)
         {
-            Id = id;
-            Name = name;
             ControlName = control_name;
-            Description = description;
-            IconName = icon_name;
             Row = row;
             Column = column;
         }

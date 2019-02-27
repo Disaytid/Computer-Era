@@ -22,6 +22,7 @@ namespace Computer_Era.Game.Objects
         optical_drive,
         mouse,
         keyboard,
+        optical_disc,
     }
     public class Items
     {
@@ -39,6 +40,7 @@ namespace Computer_Era.Game.Objects
         public Collection<OpticalDrive> AllOpticalDrives = new Collection<OpticalDrive>();
         public Collection<Mouse> AllMice = new Collection<Mouse>();
         public Collection<Keyboard> AllKeyboards = new Collection<Keyboard>();
+        public Collection<OpticalDisc> AllOpticalDiscs = new Collection<OpticalDisc>();
 
         public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
@@ -52,6 +54,7 @@ namespace Computer_Era.Game.Objects
         public Collection<OpticalDrive> OpticalDrives = new Collection<OpticalDrive>();
         public Collection<Mouse> Mice = new Collection<Mouse>();
         public Collection<Keyboard> Keyboards = new Collection<Keyboard>();
+        public Collection<OpticalDisc> OpticalDiscs = new Collection<OpticalDisc>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -73,7 +76,7 @@ namespace Computer_Era.Game.Objects
 
                     string json = Convert.ToString(data_reader["properties"]);
                     AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
-                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoСards, OpticalDrives, Mice, Keyboards);
+                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoСards, OpticalDrives, Mice, Keyboards, OpticalDiscs);
                 }
             }
 
@@ -93,7 +96,7 @@ namespace Computer_Era.Game.Objects
 
                     string json = Convert.ToString(data_reader["properties"]);
                     AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
-                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoСards, AllOpticalDrives, AllMice, AllKeyboards);
+                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoСards, AllOpticalDrives, AllMice, AllKeyboards, AllOpticalDiscs);
                 }
             }
         }
@@ -101,7 +104,7 @@ namespace Computer_Era.Game.Objects
         private void AddItemsToSaveCollection(int id, string name, string type, int price, DateTime manufacturing_date, string json,
                                               Collection<Case> cases, Collection<Motherboard> motherboards, Collection<RAM> rams, Collection<PowerSupplyUnit> powerSupplyUnits,
                                               Collection<CPU> cpus, Collection<CPUCooler> cpu_coolers, Collection<HDD> hdds, Collection<Monitor> monitors, Collection<VideoСard> videoСards,
-                                              Collection<OpticalDrive> opticalDrives, Collection<Mouse> mice, Collection<Keyboard> keyboards)
+                                              Collection<OpticalDrive> opticalDrives, Collection<Mouse> mice, Collection<Keyboard> keyboards, Collection<OpticalDisc> discs)
         {
             ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
 
@@ -130,10 +133,12 @@ namespace Computer_Era.Game.Objects
                 mice.Add(new Mouse(id, name, type, price, manufacturing_date, AddItem<MouseProperties>(json)));
             } else if (itemType == ItemTypes.keyboard) {
                 keyboards.Add(new Keyboard(id, name, type, price, manufacturing_date, AddItem<KeyboardProperties>(json)));
+            } else if (itemType == ItemTypes.optical_disc) {
+                discs.Add(new OpticalDisc(id, name, type, price, manufacturing_date, AddItem<OpticalDiscProperties>(json)));
             }
         }
 
-        private T AddItem<T>(string json)
+        public T AddItem<T>(string json)
         {
             T properties = JsonConvert.DeserializeObject<T>(json);
             return properties;
@@ -178,6 +183,7 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.optical_drive, "pack://application:,,,/Resources/compact-disc.png" },
             { Objects.ItemTypes.mouse, "pack://application:,,,/Resources/mouse.png" },
             { Objects.ItemTypes.keyboard, "pack://application:,,,/Resources/keyboard.png" },
+            { Objects.ItemTypes.optical_disc, "pack://application:,,,/Resources/compact-disc.png" },
         };
         public string GetIcon(ItemTypes type)
         {
@@ -199,6 +205,7 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.optical_drive, Properties.Resources.OpticalDrive },
             { Objects.ItemTypes.mouse, Properties.Resources.Mouse },
             { Objects.ItemTypes.keyboard, Properties.Resources.Keyboard },
+            { Objects.ItemTypes.optical_disc, Properties.Resources.OpticalDisc },
         };
         public string Type
         {

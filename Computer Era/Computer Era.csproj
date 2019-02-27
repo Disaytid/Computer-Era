@@ -167,6 +167,7 @@
     <Compile Include="Game\Forms\ViewItems.cs" />
     <Compile Include="Game\GameEvents.cs" />
     <Compile Include="Game\GameMessages.cs" />
+    <Compile Include="Game\Graphics\Graphics.cs" />
     <Compile Include="Game\Objects\Companies.cs" />
     <Compile Include="Game\Objects\Items\Computers.cs" />
     <Compile Include="Game\Objects\Items\Items.cs" />
@@ -259,6 +260,8 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\discs\disc-case.png" />
+    <Resource Include="Resources\discs\disc-cover_win-95.png" />
     <Resource Include="Resources\geek-2.png" />
     <Resource Include="Resources\computer-154207.png" />
     <Resource Include="Resources\troll.png" />

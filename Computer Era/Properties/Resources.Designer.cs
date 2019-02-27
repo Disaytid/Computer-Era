@@ -286,6 +286,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Optical Disc.
+        /// </summary>
+        public static string OpticalDisc {
+            get {
+                return ResourceManager.GetString("OpticalDisc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Optical drive.
         /// </summary>
         public static string OpticalDrive {
