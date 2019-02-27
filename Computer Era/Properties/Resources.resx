@@ -219,4 +219,10 @@
   <data name="OpticalDisc" xml:space="preserve">
     <value>Optical Disc</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
 </root>

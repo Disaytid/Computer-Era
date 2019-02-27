@@ -52,6 +52,18 @@ namespace Computer_Era.Game.Forms
             { AssemblyList.Items.Add(name); ComputerСomponents.ItemsSource = new Collection<ListBoxObject>(); }
         }
 
+        private void DefaultBuild_Click(object sender, RoutedEventArgs e)
+        {
+            List<Computer> currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == AssemblyList.Text).ToList();
+            if (currentComputer.Count == 1)
+            {
+                GameEnvironment.Computers.CurrentPlayerComputer = currentComputer[0];
+                MessageBox.Show("Сборка установлена как сборка по умолчанию!");
+            } else {
+                MessageBox.Show("Компьютер с таким именем не существует!");
+            }
+        }
+
         //ВАЛИДАЦИЯ
         static void ProblemReport(string message)
         {

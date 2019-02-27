@@ -92,6 +92,7 @@ namespace Computer_Era
 
                 Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
                 Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
+                Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
                 Widgets.Draw(WidgetPanel);
 
                 // ================================================================================ //

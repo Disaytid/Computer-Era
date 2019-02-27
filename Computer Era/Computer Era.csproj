@@ -125,6 +125,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Widgets\ComputerWidget.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Widgets\MoneyWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +187,9 @@
     <Compile Include="Game\Objects\Widgets.cs" />
     <Compile Include="Game\Scenarios\Main.cs" />
     <Compile Include="Game\Scenarios\Scenarios.cs" />
+    <Compile Include="Game\Widgets\ComputerWidget.xaml.cs">
+      <DependentUpon>ComputerWidget.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Widgets\MoneyWidget.xaml.cs">
       <DependentUpon>MoneyWidget.xaml</DependentUpon>
     </Compile>
@@ -264,7 +271,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\discs\disc-cover_empty.png" />
-    <Resource Include="Resources\shop-3689131_1920.jpg" />
     <Resource Include="Resources\discs\disc-cover_win-98.png" />
     <Resource Include="Resources\discs\cd-case-crack.png" />
     <Resource Include="Resources\discs\disc-case.png" />

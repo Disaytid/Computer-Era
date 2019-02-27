@@ -286,6 +286,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Optical Disc.
         /// </summary>
         public static string OpticalDisc {
@@ -363,6 +372,15 @@ namespace Computer_Era.Properties {
         public static string Year {
             get {
                 return ResourceManager.GetString("Year", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }

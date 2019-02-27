@@ -39,6 +39,11 @@
                                         <ImageBrush ImageSource="/Computer Era;component/Resources/trash-can.png"/>
                                     </Button.Background>
                                 </Button>
+                                <Button x:Name="DefaultBuild" Width="26" Margin="5, 0" FlowDirection="LeftToRight" BorderBrush="{x:Null}" Click="DefaultBuild_Click">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/Computer Era;component/Resources/pc.png"/>
+                                    </Button.Background>
+                                </Button>
                                 <Button x:Name="AddAssembly" Width="26" Margin="5, 0" FlowDirection="LeftToRight" BorderBrush="{x:Null}" Click="AddAssembly_Click">
                                     <Button.Background>
                                         <ImageBrush ImageSource="/Computer Era;component/Resources/add.png"/>

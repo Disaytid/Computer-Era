@@ -98,7 +98,7 @@ namespace Computer_Era.Game.Forms
 
                 if (price <= GameEnvironment.Money.PlayerCurrency[0].Count)
                 {
-                    GameEnvironment.Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, "Магазин \"Клепаем сами\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, price);
+                    GameEnvironment.Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, "Киоск с дисками", GameEnvironment.GameEvents.GameTimer.DateAndTime, price);
                     CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
 
                     if (button.Tag is OpticalDisc)
@@ -107,7 +107,7 @@ namespace Computer_Era.Game.Forms
                         GameEnvironment.Items.OpticalDiscs.Add(new OpticalDisc(opticalDisc.Uid, opticalDisc.Name, opticalDisc.GetTypeValue(), opticalDisc.Price, opticalDisc.ManufacturingDate, opticalDisc.Properties));
                     }
 
-                    SellerText.Text = "Спасибо за покупку " + (button.Tag as BaseItem).Name + ", держи свой компакт-диск!";
+                    SellerText.Text = "Спасибо за покупку " + (button.Tag as BaseItem).Name + ", держите свой компакт-диск!";
                 }
                 else
                 {
