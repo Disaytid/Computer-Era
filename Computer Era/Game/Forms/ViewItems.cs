@@ -76,6 +76,15 @@ namespace Computer_Era.Game.Forms
             IsEnabled = true;
             LabelVisibility = Visibility.Visible;
         }
+        public ListBoxObject(object obj, BitmapImage image, Visibility visibility)
+        {
+            Item = obj as BaseItem;
+            Item.Image = image;
+            IObject = obj;
+            Tag = Item.ToString();
+            IsEnabled = true;
+            LabelVisibility = visibility;
+        }
         public ListBoxObject(object obj, BitmapImage image, bool isEnabled)
         {
             Item = obj as BaseItem;

@@ -63,7 +63,7 @@ namespace Computer_Era.Game.Forms
 
                 if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
                 {
-                    uri = new Uri(baseItem.GetIcon(type));
+                    uri = new Uri("pack://application:,,,/Resources/discs/disc-cover_empty.png");
                 }
                 BitmapImage image = new BitmapImage(uri);
 

@@ -35,13 +35,13 @@ namespace Computer_Era.Game.Forms
 
                 if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
                 {
-                    uri = new Uri(opticalDisc.GetIcon(ItemTypes.optical_disc));
+                    uri = new Uri("pack://application:,,,/Resources/discs/disc-cover_empty.png");
                 }
                 BitmapImage image = new BitmapImage(uri);
                 GameGraphics gameGraphics = new GameGraphics();
                 BitmapImage icon = gameGraphics.GlueImages(image, new BitmapImage(new Uri("pack://application:,,,/Resources/discs/disc-case.png")));
 
-                items_source.Add(new ListBoxObject(opticalDisc, icon));
+                items_source.Add(new ListBoxObject(opticalDisc, icon, Visibility.Hidden));
             }
 
             int currenSize = 0;
