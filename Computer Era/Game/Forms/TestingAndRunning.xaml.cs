@@ -52,7 +52,7 @@ namespace Computer_Era.Game.Forms
                         }
                     }  
                 } else {
-                    MessageBox.Show("Корпус отсутствует, а у вас к сожалению нет навыка включения компьютера без кнопки на корпусе!");
+                    GameMessageBox.Show("Запуск компьютера", "Корпус отсутствует, а у вас к сожалению нет навыка включения компьютера без кнопки на корпусе!", GameMessageBox.MessageBoxType.Information);
                 }
             }
         }

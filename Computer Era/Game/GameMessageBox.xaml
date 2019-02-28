@@ -6,7 +6,7 @@
         xmlns:res="clr-namespace:Computer_Era.Properties"
         xmlns:local="clr-namespace:Computer_Era.Game"
         mc:Ignorable="d"
-        Height="200" Width="400" WindowStartupLocation="CenterOwner" WindowStyle="None" Background="#CCFFFFFF" AllowsTransparency="True">
+        MinHeight="160" MinWidth="420" MaxHeight="750" MaxWidth="750" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" ResizeMode="NoResize" Background="#CCFFFFFF" AllowsTransparency="True" WindowStyle="None" Topmost="True" MouseLeftButtonDown="Window_MouseLeftButtonDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -15,17 +15,20 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Height="40">
             <DockPanel Background="#E5747474">
-                <Label Name="Title"/>
+                <Label Name="Title" FontSize="14" Foreground="White" VerticalAlignment="Center"/>
             </DockPanel>
         </Grid>
-        <Grid Grid.Row="1">
-            <TextBlock x:Name="Text" TextWrapping="Wrap" Padding="10"/>
+        <Grid Grid.Row="1" Margin="10, 0">
+            <DockPanel>
+                <Image x:Name="Icon" VerticalAlignment="Top" MaxHeight="64"/>
+                <TextBlock x:Name="Text" TextWrapping="Wrap" Padding="10" FontSize="14"/>
+            </DockPanel>
         </Grid>
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="10, 0">
             <DockPanel LastChildFill="False" FlowDirection="RightToLeft" Margin="0, 10">
-                <Button x:Name="ButtonNo" Content="{x:Static res:Resources.No}" FontSize="16" Margin="5, 0" Padding="5" MinWidth="80"/>
-                <Button x:Name="ButtonYes" Content="{x:Static res:Resources.Yes}" FontSize="16" Margin="5, 0" Padding="5"  MinWidth="80"/>
-                <Button x:Name="ButtonOk" Content="{x:Static res:Resources.Ok}" FontSize="16" Margin="5, 0" Padding="5"  MinWidth="80"/>
+                <Button x:Name="ButtonNo" Content="{x:Static res:Resources.No}" FontSize="14" Margin="5, 0" Padding="5" MinWidth="80" Click="Button_Click" Background="#FFD0021B" Foreground="White" BorderBrush="{x:Null}" BorderThickness="0"/>
+                <Button x:Name="ButtonYes" Content="{x:Static res:Resources.Yes}" FontSize="14" Margin="5, 0" Padding="5"  MinWidth="80" Click="Button_Click" Background="#FF7ED321" BorderBrush="{x:Null}" Foreground="White" BorderThickness="0"/>
+                <Button x:Name="ButtonOk" Content="{x:Static res:Resources.Ok}" FontSize="14" Margin="5, 0" Padding="5"  MinWidth="80" Click="Button_Click" BorderThickness="0" BorderBrush="{x:Null}" Background="#FF4A90E2" Foreground="White"/>
             </DockPanel>
         </Grid>
     </Grid>

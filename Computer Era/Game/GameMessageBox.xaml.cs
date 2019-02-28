@@ -91,7 +91,7 @@ namespace Computer_Era.Game
             _messageBox = new GameMessageBox
             { Text = { Text = text }, Title = { Content = caption } };
             SetVisibilityOfButtons(button);
-            //SetImageOfMessageBox(image);
+            SetImageOfMessageBox(image);
             _messageBox.ShowDialog();
             return _result;
         }
@@ -112,6 +112,52 @@ namespace Computer_Era.Game
                 default:
                     break;
             }
+        }
+
+        private static void SetImageOfMessageBox(MessageBoxImage image)
+        {
+            switch (image)
+            {
+                case MessageBoxImage.Warning:
+                    _messageBox.SetImage("warning.png");
+                    break;
+                case MessageBoxImage.Question:
+                    _messageBox.SetImage("question.png");
+                    break;
+                case MessageBoxImage.Information:
+                    _messageBox.SetImage("information.png");
+                    break;
+                case MessageBoxImage.Error:
+                    _messageBox.SetImage("error.png");
+                    break;
+                default:
+                    _messageBox.Icon.Visibility = Visibility.Collapsed;
+                    break;
+            }
+        }
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender == ButtonOk)
+                _result = MessageBoxResult.OK;
+            else if (sender == ButtonYes)
+                _result = MessageBoxResult.Yes;
+            else if (sender == ButtonNo)
+                _result = MessageBoxResult.No;
+            else
+                _result = MessageBoxResult.None;
+            _messageBox.Close();
+            _messageBox = null;
+        }
+        private void SetImage(string imageName)
+        {
+            string uri = string.Format("/Resources/message-icons/{0}", imageName);
+            var uriSource = new Uri(uri, UriKind.RelativeOrAbsolute);
+            Icon.Source = new BitmapImage(uriSource);
+        }
+
+        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            this.DragMove();
         }
     }
 }

@@ -284,6 +284,10 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\message-icons\error.png" />
+    <Resource Include="Resources\message-icons\information.png" />
+    <Resource Include="Resources\message-icons\question.png" />
+    <Resource Include="Resources\message-icons\warning.png" />
     <Resource Include="Resources\button-finger.png" />
     <Resource Include="Resources\tinker.png" />
     <Resource Include="Resources\discs\disc-cover_empty.png" />
