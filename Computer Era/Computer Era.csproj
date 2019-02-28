@@ -125,6 +125,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\TestingAndRunning.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Game\GameMessageBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Widgets\ComputerWidget.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -171,8 +179,14 @@
     <Compile Include="Game\Forms\Shop.xaml.cs">
       <DependentUpon>Shop.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Forms\TestingAndRunning.xaml.cs">
+      <DependentUpon>TestingAndRunning.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Forms\ViewItems.cs" />
     <Compile Include="Game\GameEvents.cs" />
+    <Compile Include="Game\GameMessageBox.xaml.cs">
+      <DependentUpon>GameMessageBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\GameMessages.cs" />
     <Compile Include="Game\Graphics\Graphics.cs" />
     <Compile Include="Game\Objects\Companies.cs" />
@@ -270,6 +284,8 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\button-finger.png" />
+    <Resource Include="Resources\tinker.png" />
     <Resource Include="Resources\discs\disc-cover_empty.png" />
     <Resource Include="Resources\discs\disc-cover_win-98.png" />
     <Resource Include="Resources\discs\cd-case-crack.png" />

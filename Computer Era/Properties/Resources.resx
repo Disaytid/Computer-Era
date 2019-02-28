@@ -225,4 +225,31 @@
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
+  <data name="ErrorСodeNoCPU" xml:space="preserve">
+    <value>No central processing unit</value>
+  </data>
+  <data name="ErrorСodeNoCPUCooler" xml:space="preserve">
+    <value>No CPU cooler</value>
+  </data>
+  <data name="ErrorСodeNoHDD" xml:space="preserve">
+    <value>No hard disk drive</value>
+  </data>
+  <data name="ErrorСodeNoMotherboard" xml:space="preserve">
+    <value>No motherboard</value>
+  </data>
+  <data name="ErrorСodeNoPowerSupply" xml:space="preserve">
+    <value>No power supply unit</value>
+  </data>
+  <data name="ErrorСodeNoRAM" xml:space="preserve">
+    <value>No random access memory</value>
+  </data>
+  <data name="ErrorСodeNoVideoСard" xml:space="preserve">
+    <value>No video card</value>
+  </data>
+  <data name="ErrorСodeOk" xml:space="preserve">
+    <value>Ok</value>
+  </data>
+  <data name="Ok" xml:space="preserve">
+    <value>Ok</value>
+  </data>
 </root>

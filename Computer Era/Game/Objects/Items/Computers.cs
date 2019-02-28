@@ -48,6 +48,52 @@ namespace Computer_Era.Game.Objects
             Case = @case;
             Motherboard = motherboard;
         }
+
+        public enum ErrorСodes
+        {
+            Ok,
+            NoMotherboard,
+            NoPowerSupply,
+            NoCPU,
+            NoCPUCooler,
+            NoRAM,
+            NoHDD,
+            NoVideoСard,
+        }
+
+        private readonly Dictionary<ErrorСodes, string> LocalizedErrorCodes = new Dictionary<ErrorСodes, string>
+        {
+            { ErrorСodes.Ok, Properties.Resources.ErrorСodeOk },
+            { ErrorСodes.NoMotherboard, Properties.Resources.ErrorСodeNoMotherboard },
+            { ErrorСodes.NoPowerSupply, Properties.Resources.ErrorСodeNoPowerSupply },
+            { ErrorСodes.NoCPU, Properties.Resources.ErrorСodeNoCPU },
+            { ErrorСodes.NoCPUCooler, Properties.Resources.ErrorСodeNoCPUCooler },
+            { ErrorСodes.NoRAM, Properties.Resources.ErrorСodeNoRAM },
+            { ErrorСodes.NoHDD, Properties.Resources.ErrorСodeNoHDD },
+            { ErrorСodes.NoVideoСard, Properties.Resources.ErrorСodeNoVideoСard },
+        };
+
+        public string GetLocalizedErrorCode(ErrorСodes errorСode)
+        {
+            if (!LocalizedErrorCodes.ContainsKey(errorСode)) throw new ArgumentException(string.Format("Operation {0} is invalid", errorСode), "op");
+            return (string)LocalizedErrorCodes[errorСode];
+        }
+
+        public List<ErrorСodes> Diagnostics()
+        {
+            List<ErrorСodes> errorСodes = new List<ErrorСodes>();
+            if (Motherboard  == null) { errorСodes.Add(ErrorСodes.NoMotherboard); }
+            if (PSU == null) { errorСodes.Add(ErrorСodes.NoPowerSupply); }
+            if (CPU == null) { errorСodes.Add(ErrorСodes.NoCPU); }
+            if (CPUCooler == null) { errorСodes.Add(ErrorСodes.NoCPUCooler); }
+            if (RAMs.Count == 0) { errorСodes.Add(ErrorСodes.NoRAM); }
+            if (HDDs.Count == 0) { errorСodes.Add(ErrorСodes.NoHDD); }
+            if (Motherboard != null && !Motherboard.Properties.EmbeddedGraphics & VideoСards.Count == 0) { errorСodes.Add(ErrorСodes.NoVideoСard); }
+
+            if (errorСodes.Count == 0) { errorСodes.Add(ErrorСodes.Ok); }
+
+            return errorСodes;
+        }
     }
 
 }

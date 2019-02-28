@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Computer_Era"
         xmlns:res="clr-namespace:Computer_Era.Properties"
         mc:Ignorable="d"
-        Title="Computer Era" Height="480" Width="640" Background="White" SizeChanged="window_SizeChanged">
+        Title="Computer Era" Height="480" Width="640" Background="White" SizeChanged="window_SizeChanged" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style TargetType="MenuItem" x:Key="MenuItem">
@@ -97,6 +97,11 @@
                     <MenuItem Name="MenuMapItem" Header="Карта" Style="{StaticResource MenuItem}" Click="MenuMapItem_Click">
                         <MenuItem.Icon>
                             <Image Source ="pack://application:,,,/Resources/treasure-map.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Name="MenuTestingAndRunningItem" Header="Тестирование и запуск" Style="{StaticResource MenuItem}" Click="MenuTestingAndRunningItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source ="pack://application:,,,/Resources/tinker.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Name="MenuHardwareItem" Header="Установка комплектующих" Style="{StaticResource MenuItem}" Click="MenuHardwareItem_Click">

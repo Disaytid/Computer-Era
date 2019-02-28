@@ -160,6 +160,78 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на No central processing unit.
+        /// </summary>
+        public static string ErrorСodeNoCPU {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoCPU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No CPU cooler.
+        /// </summary>
+        public static string ErrorСodeNoCPUCooler {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoCPUCooler", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No hard disk drive.
+        /// </summary>
+        public static string ErrorСodeNoHDD {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoHDD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No motherboard.
+        /// </summary>
+        public static string ErrorСodeNoMotherboard {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoMotherboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No power supply unit.
+        /// </summary>
+        public static string ErrorСodeNoPowerSupply {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoPowerSupply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No random access memory.
+        /// </summary>
+        public static string ErrorСodeNoRAM {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoRAM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на No video card.
+        /// </summary>
+        public static string ErrorСodeNoVideoСard {
+            get {
+                return ResourceManager.GetString("ErrorСodeNoVideoСard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ok.
+        /// </summary>
+        public static string ErrorСodeOk {
+            get {
+                return ResourceManager.GetString("ErrorСodeOk", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Exit.
         /// </summary>
         public static string Exit {
@@ -291,6 +363,15 @@ namespace Computer_Era.Properties {
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ok.
+        /// </summary>
+        public static string Ok {
+            get {
+                return ResourceManager.GetString("Ok", resourceCulture);
             }
         }
         

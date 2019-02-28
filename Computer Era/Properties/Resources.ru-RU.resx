@@ -219,4 +219,34 @@
   <data name="OpticalDisc" xml:space="preserve">
     <value>Компакт-диск</value>
   </data>
+  <data name="No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Да</value>
+  </data>
+  <data name="ErrorСodeNoCPU" xml:space="preserve">
+    <value>Нет центрального процессора</value>
+  </data>
+  <data name="ErrorСodeNoCPUCooler" xml:space="preserve">
+    <value>Нет куллера на процесоре</value>
+  </data>
+  <data name="ErrorСodeNoHDD" xml:space="preserve">
+    <value>Нет жесткого диска</value>
+  </data>
+  <data name="ErrorСodeNoMotherboard" xml:space="preserve">
+    <value>Нет материнской платы</value>
+  </data>
+  <data name="ErrorСodeNoPowerSupply" xml:space="preserve">
+    <value>Нет блока питания</value>
+  </data>
+  <data name="ErrorСodeNoRAM" xml:space="preserve">
+    <value>Нет оперативной памяти</value>
+  </data>
+  <data name="ErrorСodeNoVideoСard" xml:space="preserve">
+    <value>Нет видеокарты</value>
+  </data>
+  <data name="ErrorСodeOk" xml:space="preserve">
+    <value>Ок</value>
+  </data>
 </root>

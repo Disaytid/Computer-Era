@@ -234,7 +234,7 @@ namespace Computer_Era
         private void MenuMapItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Map(this, GameEnvironment));
         private void MenuPurseItem_Click(object sender, RoutedEventArgs e) => NewWindow(new Purse(GameEnvironment));
         private void MenuHardwareItem_Click(object sender, RoutedEventArgs e) => NewWindow(new HardwareInstallation(GameEnvironment));
-
+        private void MenuTestingAndRunningItem_Click(object sender, RoutedEventArgs e) => NewWindow(new TestingAndRunning(GameEnvironment));
         public void ShowBuilding(string obj)
         {
             switch (obj)

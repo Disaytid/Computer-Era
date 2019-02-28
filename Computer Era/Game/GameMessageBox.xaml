@@ -1,0 +1,32 @@
+﻿<Window x:Class="Computer_Era.Game.GameMessageBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:Computer_Era.Properties"
+        xmlns:local="clr-namespace:Computer_Era.Game"
+        mc:Ignorable="d"
+        Height="200" Width="400" WindowStartupLocation="CenterOwner" WindowStyle="None" Background="#CCFFFFFF" AllowsTransparency="True">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Height="40">
+            <DockPanel Background="#E5747474">
+                <Label Name="Title"/>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Row="1">
+            <TextBlock x:Name="Text" TextWrapping="Wrap" Padding="10"/>
+        </Grid>
+        <Grid Grid.Row="2">
+            <DockPanel LastChildFill="False" FlowDirection="RightToLeft" Margin="0, 10">
+                <Button x:Name="ButtonNo" Content="{x:Static res:Resources.No}" FontSize="16" Margin="5, 0" Padding="5" MinWidth="80"/>
+                <Button x:Name="ButtonYes" Content="{x:Static res:Resources.Yes}" FontSize="16" Margin="5, 0" Padding="5"  MinWidth="80"/>
+                <Button x:Name="ButtonOk" Content="{x:Static res:Resources.Ok}" FontSize="16" Margin="5, 0" Padding="5"  MinWidth="80"/>
+            </DockPanel>
+        </Grid>
+    </Grid>
+</Window>
