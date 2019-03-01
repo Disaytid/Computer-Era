@@ -23,6 +23,8 @@ namespace Computer_Era.Game.Objects
         mouse,
         keyboard,
         optical_disc,
+        os,
+        program,
     }
     public class Items
     {
@@ -41,6 +43,8 @@ namespace Computer_Era.Game.Objects
         public Collection<Mouse> AllMice = new Collection<Mouse>();
         public Collection<Keyboard> AllKeyboards = new Collection<Keyboard>();
         public Collection<OpticalDisc> AllOpticalDiscs = new Collection<OpticalDisc>();
+        public Collection<OperatingSystem> AllOperatingSystems = new Collection<OperatingSystem>();
+        public Collection<Program> AllPrograms = new Collection<Program>();
 
         public Collection<Case> Cases = new Collection<Case>();
         public Collection<Motherboard> Motherboards = new Collection<Motherboard>();
@@ -55,6 +59,8 @@ namespace Computer_Era.Game.Objects
         public Collection<Mouse> Mice = new Collection<Mouse>();
         public Collection<Keyboard> Keyboards = new Collection<Keyboard>();
         public Collection<OpticalDisc> OpticalDiscs = new Collection<OpticalDisc>();
+        public Collection<OperatingSystem> OperatingSystems = new Collection<OperatingSystem>();
+        public Collection<Program> Programs = new Collection<Program>();
 
         public Items(SQLiteConnection connection, int save_id)
         {
@@ -76,7 +82,7 @@ namespace Computer_Era.Game.Objects
 
                     string json = Convert.ToString(data_reader["properties"]);
                     AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
-                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoСards, OpticalDrives, Mice, Keyboards, OpticalDiscs);
+                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoСards, OpticalDrives, Mice, Keyboards, OpticalDiscs, OperatingSystems, Programs);
                 }
             }
 
@@ -96,7 +102,8 @@ namespace Computer_Era.Game.Objects
 
                     string json = Convert.ToString(data_reader["properties"]);
                     AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
-                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoСards, AllOpticalDrives, AllMice, AllKeyboards, AllOpticalDiscs);
+                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoСards, AllOpticalDrives, AllMice,
+                                             AllKeyboards, AllOpticalDiscs, AllOperatingSystems, AllPrograms);
                 }
             }
         }
@@ -104,7 +111,8 @@ namespace Computer_Era.Game.Objects
         private void AddItemsToSaveCollection(int id, string name, string type, int price, DateTime manufacturing_date, string json,
                                               Collection<Case> cases, Collection<Motherboard> motherboards, Collection<RAM> rams, Collection<PowerSupplyUnit> powerSupplyUnits,
                                               Collection<CPU> cpus, Collection<CPUCooler> cpu_coolers, Collection<HDD> hdds, Collection<Monitor> monitors, Collection<VideoСard> videoСards,
-                                              Collection<OpticalDrive> opticalDrives, Collection<Mouse> mice, Collection<Keyboard> keyboards, Collection<OpticalDisc> discs)
+                                              Collection<OpticalDrive> opticalDrives, Collection<Mouse> mice, Collection<Keyboard> keyboards, Collection<OpticalDisc> discs,
+                                              Collection<OperatingSystem> operatingSystems, Collection<Program> programs)
         {
             ItemTypes itemType = (ItemTypes)Enum.Parse(typeof(ItemTypes), type);
 
@@ -135,6 +143,10 @@ namespace Computer_Era.Game.Objects
                 keyboards.Add(new Keyboard(id, name, type, price, manufacturing_date, AddItem<KeyboardProperties>(json)));
             } else if (itemType == ItemTypes.optical_disc) {
                 discs.Add(new OpticalDisc(id, name, type, price, manufacturing_date, AddItem<OpticalDiscProperties>(json)));
+            } else if(itemType == ItemTypes.os) {
+                operatingSystems.Add(new OperatingSystem(id, name, type, price, manufacturing_date, AddItem<OperatingSystemProperties>(json)));
+            } else if(itemType == ItemTypes.program) {
+                programs.Add(new Program(id, name, type, price, manufacturing_date, AddItem<ProgramProperties>(json)));
             }
         }
 
@@ -184,11 +196,13 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.mouse, "pack://application:,,,/Resources/mouse.png" },
             { Objects.ItemTypes.keyboard, "pack://application:,,,/Resources/keyboard.png" },
             { Objects.ItemTypes.optical_disc, "pack://application:,,,/Resources/compact-disc.png" },
+            { Objects.ItemTypes.os, "pack://application:,,,/Resources/compact-disc.png" },
+            { Objects.ItemTypes.program, "pack://application:,,,/Resources/compact-disc.png" },
         };
         public string GetIcon(ItemTypes type)
         {
             if (!ItemIcon.ContainsKey(type)) throw new ArgumentException(string.Format("Operation {0} is invalid", type), "op");
-            return (string)ItemIcon[type]; ;
+            return (string)ItemIcon[type];
         }
 
         private readonly Dictionary<ItemTypes, string> ItemTypes = new Dictionary<ItemTypes, string>
@@ -206,6 +220,7 @@ namespace Computer_Era.Game.Objects
             { Objects.ItemTypes.mouse, Properties.Resources.Mouse },
             { Objects.ItemTypes.keyboard, Properties.Resources.Keyboard },
             { Objects.ItemTypes.optical_disc, Properties.Resources.OpticalDisc },
+            { Objects.ItemTypes.program, Properties.Resources.Program },
         };
         public string Type
         {
@@ -322,6 +337,28 @@ namespace Computer_Era.Game.Objects
         }
     }
 
+    // = BIOS ========================================================================= //
+
+    public enum MotherboardBIOS
+    {
+        AMI,
+    }
+
+    public class BIOS
+    {
+        public readonly Dictionary<MotherboardBIOS, string> BiosText = new Dictionary<MotherboardBIOS, string>
+        {
+            { Objects.MotherboardBIOS.AMI, "AMIBIOS American Megatrends, Inc." },
+        };
+
+        public string GetBIOSText(MotherboardBIOS type)
+        {
+            if (!BiosText.ContainsKey(type)) throw new ArgumentException(string.Format("Operation {0} is invalid", type), "op");
+            return (string)BiosText[type];
+        }
+    }
+
+
     // = MOTHERBOARDS ================================================================= //
 
     public enum MotherboardTypes
@@ -358,11 +395,6 @@ namespace Computer_Era.Game.Objects
         FM1,
         FM2,
         FM2plus
-    }
-
-    public enum MotherboardBIOS
-    {
-        AMI
     }
 
     public enum RAMTypes
@@ -489,8 +521,8 @@ namespace Computer_Era.Game.Objects
     {
         public Sockets Socket { get; set; }         //Сокет
         public int NumberCores { get; set; }        //Количество ядер
-        public int MinCPUFrequency { get; set; }    //Минимальная частота
-        public int MaxCPUFrequency { get; set; }    //Максимальная частота
+        public int MinCPUFrequency { get; set; }    //Минимальная частота МГц MHz
+        public int MaxCPUFrequency { get; set; }    //Максимальная частота Мгц MHz
 
         public int MinHeatDissipation { get; set; } //Минимальное тепловыделение
         public int MaxHeatDissipation { get; set; } //Максимальное тепловыделение

@@ -43,7 +43,6 @@ namespace Computer_Era
 
         GameEnvironment GameEnvironment = new GameEnvironment();
 
-        readonly List<InstalledProgram> programs = new List<InstalledProgram>();
         readonly Widgets Widgets = new Widgets();
 
         UserControl lastForm = null;
@@ -120,27 +119,6 @@ namespace Computer_Era
         private void LoadSave()
         {
             //int app_id = 1;
-
-            using (SQLiteCommand command = new SQLiteCommand(connection))
-            {
-                command.CommandText = @"SELECT * from sv_apps;";
-                command.CommandType = CommandType.Text;
-                SQLiteDataReader data_reader = command.ExecuteReader();
-
-                while (data_reader.Read())
-                {
-                    int id = Convert.ToInt32(data_reader["id"]);
-                    string name = Convert.ToString(data_reader["name"]);     
-                    int price = Convert.ToInt32(data_reader["price"]);
-                    string control_name = Convert.ToString(data_reader["control_name"]);
-                    int row = Convert.ToInt32(data_reader["row"]);
-                    int column = Convert.ToInt32(data_reader["column"]);
-                    DateTime manufacturing_date = Convert.ToDateTime(data_reader["manufacturing_date"]);
-
-                    string json = Convert.ToString(data_reader["properties"]);
-                    programs.Add(new InstalledProgram(id, name, "program", price, manufacturing_date, GameEnvironment.Items.AddItem<ProgramProperties>(json), control_name, row, column));
-                }
-            }
         }
 
         private void DrawDesktop()
@@ -170,7 +148,7 @@ namespace Computer_Era
             }
 
             //Прорисовка программ на рабочем столе
-            foreach (var program in programs)
+            foreach (var program in GameEnvironment.Items.Programs)
             {
                 //Написать проверку размеров сетки
                 ImageBrush brush = new ImageBrush
@@ -200,9 +178,9 @@ namespace Computer_Era
                 stackPanel.Children.Add(button);
                 stackPanel.Children.Add(textBlock);
 
-                stackPanel.SetValue(Grid.RowProperty, program.Row);
-                stackPanel.SetValue(Grid.ColumnProperty, program.Column);
-                Desktop.Children.Add(stackPanel);
+                //stackPanel.SetValue(Grid.RowProperty, program.Row);
+                //stackPanel.SetValue(Grid.ColumnProperty, program.Column);
+                //Desktop.Children.Add(stackPanel);
             }
         }
 

@@ -29,6 +29,7 @@ namespace Computer_Era.Game.Objects
         public Collection<Monitor> Monitors { get; set; } = new Collection<Monitor>();
         public Collection<Mouse> Mice { get; set; } = new Collection<Mouse>();
         public Collection<Keyboard> Keyboards { get; set; } = new Collection<Keyboard>();
+        public OperatingSystem OperatingSystem { get; set; }
 
         public Computer(string name, Case @case)
         {

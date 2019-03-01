@@ -192,10 +192,11 @@
     <Compile Include="Game\Objects\Companies.cs" />
     <Compile Include="Game\Objects\Items\Computers.cs" />
     <Compile Include="Game\Objects\Items\Items.cs" />
+    <Compile Include="Game\Objects\Items\OperatingSystem.cs" />
     <Compile Include="Game\Objects\Money.cs" />
     <Compile Include="Game\Objects\PlayerProfile.cs" />
     <Compile Include="Game\Objects\Professions.cs" />
-    <Compile Include="Game\Objects\Program.cs" />
+    <Compile Include="Game\Objects\Items\Program.cs" />
     <Compile Include="Game\Objects\Services.cs" />
     <Compile Include="Game\Objects\Items\StorageMedia.cs" />
     <Compile Include="Game\Objects\Widgets.cs" />

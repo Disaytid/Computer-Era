@@ -252,4 +252,10 @@
   <data name="Ok" xml:space="preserve">
     <value>Ok</value>
   </data>
+  <data name="OperatingSystem" xml:space="preserve">
+    <value>Operating system</value>
+  </data>
+  <data name="Program" xml:space="preserve">
+    <value>Program</value>
+  </data>
 </root>

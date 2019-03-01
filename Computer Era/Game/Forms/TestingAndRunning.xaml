@@ -37,15 +37,25 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <DockPanel Background="#CCFFFFFF" LastChildFill="False" Height="50" Grid.Row="0">
+                    <DockPanel Background="#CCFFFFFF" Height="50" Grid.Row="0">
                         <Label Name="AssemblyName" Content="Имя сборки" FontSize="14" VerticalAlignment="Center"></Label>
                         <Button Name="ComputerStart" Margin="5" Width="40" BorderBrush="{x:Null}" Click="ComputerStart_Click">
                             <Button.Background>
                                 <ImageBrush ImageSource="/Computer Era;component/Resources/button-finger.png"/>
                             </Button.Background>
                         </Button>
+                        <Label Content="Диск в приводе: " FontSize="14" VerticalAlignment="Center"/>
+                        <ComboBox Name="DiscInDrive" Margin="5" VerticalContentAlignment="Center" IsEnabled="False">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Label Content="{Binding Name}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
                     </DockPanel>
-                    <TextBlock Name="OutputFromComputer" Grid.Row="1" Padding="5" TextWrapping="Wrap" Background="Black" Foreground="White"/>
+                    <TextBlock Name="OutputFromComputer" Grid.Row="1" Padding="5" FontSize="16" TextWrapping="Wrap" Background="Black" Foreground="White"/>
                 </Grid>
             </Grid>
         </Grid>

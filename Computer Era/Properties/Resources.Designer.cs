@@ -376,6 +376,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Operating system.
+        /// </summary>
+        public static string OperatingSystem {
+            get {
+                return ResourceManager.GetString("OperatingSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Optical Disc.
         /// </summary>
         public static string OpticalDisc {
@@ -399,6 +408,15 @@ namespace Computer_Era.Properties {
         public static string PlayerName {
             get {
                 return ResourceManager.GetString("PlayerName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Program.
+        /// </summary>
+        public static string Program {
+            get {
+                return ResourceManager.GetString("Program", resourceCulture);
             }
         }
         

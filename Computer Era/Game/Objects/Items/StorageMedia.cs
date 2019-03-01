@@ -20,7 +20,8 @@ namespace Computer_Era.Game.Objects
         public int ReadSpeed { get; set; }      //В x где x = 150 кб/c (килобайт в секунду)
         public int WriteSpeed { get; set; }     //В x где x = 150 кб/c (килобайт в секунду)
         public string CoverName { get; set; }   //Название обложки
-        //public Collection<Program> Programs = new Collection<Program>(); 
+        public int OperatingSystem { get; set; }
+        public int[] Programms { get; set; }
     }
     public class OpticalDisc : Item<OpticalDiscProperties>
     {
