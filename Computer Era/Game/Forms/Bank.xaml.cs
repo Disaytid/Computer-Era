@@ -118,19 +118,20 @@ namespace Computer_Era.Game.Forms
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             if (ServiceType.SelectedItem == null) { CashierText.Text = "Уважаемый не балуйтесь, выберите уже тип услуги!"; return; }
-            if (ServiceType.SelectedItem == null) { CashierText.Text = "Уважаемый не балуйтесь, тариф сам себя не выберет!"; return; }
+            if (ServiceTariff.SelectedItem == null) { CashierText.Text = "Уважаемый не балуйтесь, тариф сам себя не выберет!"; return; }
 
             Service service = (Service)ServiceType.SelectedItem;
             Tariff tariff = (Tariff)ServiceTariff.SelectedItem;
             if (double.TryParse(Sum.Text, out double sum)) {
-                if (tariff.MinSum != 0 & sum < tariff.MinSum && tariff.MaxSum!=0 & sum > tariff.MaxSum) { CashierText.Text = "Разве не видно что вы не вкладываетесь в рамки тарифа?"; return; }
+                if (tariff.MinSum != 0 & sum < tariff.MinSum || tariff.MaxSum!=0 & sum > tariff.MaxSum) { CashierText.Text = "Разве не видно что вы не вкладываетесь в рамки тарифа?"; return; }
                 double sum_tarrifs = 0;
                 foreach (PlayerTariff p_tariff in GameEnvironment.Services.PlayerTariffs)
                 {
-                    if (p_tariff.Service.UId == service.UId) { sum_tarrifs += p_tariff.Amount; break; }
+                    if (p_tariff.Service.UId == service.UId) { sum_tarrifs += p_tariff.Amount; }
                 }
                 if (service.Type == TransactionType.TopUp)
                 {
+                    if (tariff.MaxSum != 0 && sum > tariff.MaxSum) { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному тарифу!"; return; }
                     if (service.TotalMaxContribution !=0 & service.TotalMaxContribution < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxContribution * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
                     if (tariff.Currency.Withdraw(service.Name, Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, sum) == false)
@@ -138,12 +139,12 @@ namespace Computer_Era.Game.Forms
                 }
                 if (service.Type == TransactionType.Withdraw)
                 {
+                    if (tariff.MaxSum !=0 && sum > tariff.MaxSum) { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному тарифу!"; return; }
                     if (service.TotalMaxDebt != 0 & service.TotalMaxDebt < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxDebt * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
                     if (tariff.Currency.TopUp(service.Name, Properties.Resources.BankName,
                                               GameEnvironment.GameEvents.GameTimer.DateAndTime, sum) == false) { CashierText.Text = "Компьютер завис, сочувствую но мы не сможем перевести вам деньги"; return; }
                 }
-                Collection<Tariff> tariffs = new Collection<Tariff>();
                 GameEnvironment.Services.PlayerTariffs.Add(new PlayerTariff(tariff.UId, tariff.Name, tariff.Currency, tariff.Coefficient,
                                                             tariff.MinSum, tariff.MinSum, tariff.Periodicity,
                                                             tariff.PeriodicityValue, tariff.TermUnit, tariff.MinTerm,

@@ -425,6 +425,11 @@ namespace Computer_Era.Game.Forms
             }  
         }
 
+        private void SaveAssembly_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
         private bool AssemblyListHandleSelection = true;
         string oldName = string.Empty; //Пердыдущее выбранное имя, нужно что бы не срабатывал код при вводе текста в поле, так как в код отдаеться еще не измененный текст
         private void AssemblyList_SelectionChanged(object sender, SelectionChangedEventArgs e)

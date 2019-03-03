@@ -871,6 +871,7 @@ namespace Computer_Era.Game.Objects
         public int MaxReadSpeedDVD { get; set; }    //x
         public int ReadAccessTimeCD { get; set; }   //Время доступа в режиме чтения CD в милисикундах
         public int ReadAccessTimeDVD { get; set; }  //Время доступа в режиме чтения DVD в милисикундах
+        public OpticalDisc OpticalDisc { get; set; }
     }
     public class OpticalDrive : Item<OpticalDriveProperties>
     {

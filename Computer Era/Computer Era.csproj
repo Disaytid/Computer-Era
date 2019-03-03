@@ -285,6 +285,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\save.png" />
     <Resource Include="Resources\message-icons\error.png" />
     <Resource Include="Resources\message-icons\information.png" />
     <Resource Include="Resources\message-icons\question.png" />
