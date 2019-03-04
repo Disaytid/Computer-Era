@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
 using System.Linq;
@@ -87,33 +88,125 @@ namespace Computer_Era
 
                 GameEnvironment.GameEvents.GameTimer.Minute += this.TimerTick;  
 
-                // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
-
-                Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
-                Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
-                Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
-                Widgets.Draw(WidgetPanel);
-
-                // ================================================================================ //
-
                 CreateNewGame.Visibility = Visibility.Hidden;
-                Game.Visibility = Visibility.Visible;
                 GamePanel.Visibility = Visibility.Visible;
 
-                ImageBrush brush = new ImageBrush
-                {
-                    ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg")),
-                    Stretch = Stretch.UniformToFill
-                };
-                this.Background = brush;
+                ComputerBoot();
+                Game.Visibility = Visibility.Visible;
+                GameEnvironment.GameEvents.Events.Add(new GameEvent("CheckComputer", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddMinutes(30), Periodicity.Minute, 30, ComputerBoot, true));
 
                 LoadSave();
                 DrawDesktop();
                 LabelTime.Text = GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
             } else {
                 MessageBox.Show("Пожалуйста введите имя =)", "Имя любимое мое, мое любимое", MessageBoxButton.OK, MessageBoxImage.Information);
+            }  
+        }
+
+        private bool OldState = false;
+        public void ComputerBoot(GameEvent @event) => ComputerBoot();
+        public void ComputerBoot()
+        {
+            bool currentState = false;
+            if (GameEnvironment.Computers.CurrentPlayerComputer != null) { currentState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
+
+            if (OldState && currentState)
+            {
+                if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
+                return;
+            } else {
+                OutputFromComputer.Visibility = Visibility.Visible;
+                ComputerBootPanel.Visibility = Visibility.Collapsed;
             }
-         
+
+            if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState)
+            {  
+                foreach (HDD hdd in GameEnvironment.Computers.CurrentPlayerComputer.HDDs)
+                {
+                    if (hdd.Properties.OperatingSystem != null)
+                    {
+                        // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
+
+                        Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
+                        Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
+                        Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
+                        Widgets.Draw(WidgetPanel);
+
+                        // ================================================================================ //
+
+                        ImageBrush brush = new ImageBrush
+                        {
+                            ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg")),
+                            Stretch = Stretch.UniformToFill
+                        };
+                        this.Background = brush;
+
+                        NoComputerPanel.Visibility = Visibility.Collapsed;
+                        Desktop.Visibility = Visibility.Visible;
+                        DesktopWidgets.Visibility = Visibility.Visible;
+
+                        return;
+                    }
+                }
+                ComputerBootPanel.Visibility = Visibility.Visible;
+
+                Collection<OpticalDisc> opticalDiscs = new Collection<OpticalDisc>();
+                foreach (OpticalDrive opticalDrive in GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives)
+                {
+                    if (opticalDrive.Properties.OpticalDisc != null)
+                    {
+                        opticalDiscs.Add(opticalDrive.Properties.OpticalDisc);
+                        break;
+                    }
+                }
+
+                if (opticalDiscs.Count == 0)
+                {
+                    OutputFromComputer.Text = "Reboot and Select proper Boot device \r or Insert Boot Media in selected Boot device";
+                } else {
+                    OutputFromComputer.Text = "Load from CD...";
+                    GameEnvironment.GameEvents.Events.Add(new GameEvent("", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, LoadFromCD));
+                }
+            } else {
+                Desktop.Visibility = Visibility.Collapsed;
+                DesktopWidgets.Visibility = Visibility.Collapsed;
+                NoComputerPanel.Visibility = Visibility.Visible;
+
+                if (GameEnvironment.Computers.PlayerComputers.Count == 0)
+                {
+                    NoComputerText.Text = "О ужас, у вас нет компьютера! Нужно это срочно исправить, вот вам пошаговое руководство как исправить это недоразумение:" + Environment.NewLine +
+                                          "1. Раздобудьте денег (можно устроиться на работу, можно взять кредит тут уж сами решайте)" + Environment.NewLine +
+                                          "2. Закупись комплектующими в магазине \"" + Properties.Resources.ComponentStoreName + "\", при покупке обращайте внимание на совместимость компонентов" + Environment.NewLine +
+                                          "3. В меню \"Установка комплектуюющих\" создай новую сборку и добавь к ней купленные компоненты" + Environment.NewLine+
+                                          "4. В игре можно собирать и хранить несколько компьютеров, однако единовременно работать можно только за одним. Поэтому не забудь созданную сборку установить как сборку по умолчанию." + Environment.NewLine +
+                                          "5. Теперь пришла пора проверить правильно ли был собран компьютер и запустить его, сделать это можно в меню \"Тестирование и запуск\"" + Environment.NewLine +
+                                          "6. Наслаждаться гудением свежесобранного компьютера!";
+                } else {
+                    if (GameEnvironment.Computers.CurrentPlayerComputer != null && !GameEnvironment.Computers.CurrentPlayerComputer.IsEnable)
+                    { NoComputerText.Text = string.Empty; } else { NoComputerText.Text = "У вас есть компьютерная сборка но она не установлена по умолчанию."; }
+                }
+            }
+            if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
+        }
+
+        private void LoadFromCD(GameEvent @event)
+        {
+            Collection<OpticalDisc> opticalDiscs = new Collection<OpticalDisc>();
+            foreach (OpticalDrive opticalDrive in GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives)
+            {
+                if (opticalDrive.Properties.OpticalDisc != null)
+                {
+                    opticalDiscs.Add(opticalDrive.Properties.OpticalDisc);
+                }
+            }
+
+            if (opticalDiscs.Count != 0)
+            {
+                OutputFromComputer.Visibility = Visibility.Collapsed;
+                ComputerBootPanel.Children.RemoveRange(1, ComputerBootPanel.Children.Count);
+                ComputerBootPanel.Children.Add(new OSInstallation(GameEnvironment));
+            }
+            else { OutputFromComputer.Text = "Reboot and Select proper Boot device \r or Insert Boot Media in selected Boot device"; }
         }
 
         private void LoadSave()

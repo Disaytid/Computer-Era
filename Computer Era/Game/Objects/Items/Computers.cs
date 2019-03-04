@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Computer_Era.Game.Objects;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace Computer_Era.Game.Objects
     {
         public Collection<Computer> PlayerComputers = new Collection<Computer>();
         public Computer CurrentPlayerComputer;
-
     }
 
     public class Computer //Для создания объекта "Computer" должны обязательно указываться корпус или материнская плата, без них объект бесполезен и равноценен пустому
@@ -30,6 +30,7 @@ namespace Computer_Era.Game.Objects
         public Collection<Mouse> Mice { get; set; } = new Collection<Mouse>();
         public Collection<Keyboard> Keyboards { get; set; } = new Collection<Keyboard>();
         public OperatingSystem OperatingSystem { get; set; }
+        public bool IsEnable { get; set; } = false;
 
         public Computer(string name, Case @case)
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ namespace Computer_Era.Game.Objects
         public string Description { get; set; }
         public string Author { get; set; }
         public int[] Programms { get; set; }
+        public Collection<FileSystem> FileSystems { get; set; }
     }
 
     public class OperatingSystem : Item<OperatingSystemProperties>

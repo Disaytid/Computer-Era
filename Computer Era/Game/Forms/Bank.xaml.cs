@@ -131,7 +131,7 @@ namespace Computer_Era.Game.Forms
                 }
                 if (service.Type == TransactionType.TopUp)
                 {
-                    if (tariff.MaxSum != 0 && sum > tariff.MaxSum) { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному тарифу!"; return; }
+                    //if (tariff.MaxSum != 0 && sum > tariff.MaxSum) { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному тарифу!"; return; }
                     if (service.TotalMaxContribution !=0 & service.TotalMaxContribution < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxContribution * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
                     if (tariff.Currency.Withdraw(service.Name, Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, sum) == false)
@@ -139,7 +139,7 @@ namespace Computer_Era.Game.Forms
                 }
                 if (service.Type == TransactionType.Withdraw)
                 {
-                    if (tariff.MaxSum !=0 && sum > tariff.MaxSum) { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному тарифу!"; return; }
+                    //if (tariff.MaxSum !=0 && sum > tariff.MaxSum) { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному тарифу!"; return; }
                     if (service.TotalMaxDebt != 0 & service.TotalMaxDebt < ((sum_tarrifs + sum) / tariff.Currency.Course))
                     { CashierText.Text = "Уважаемый, введенная вами сумма превышает максимальную сумму по данному типу услуги на: " + ((sum_tarrifs + sum) - (service.TotalMaxDebt * tariff.Currency.Course)) + " " + tariff.Currency.Abbreviation; return; }
                     if (tariff.Currency.TopUp(service.Name, Properties.Resources.BankName,

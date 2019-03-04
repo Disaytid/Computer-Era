@@ -249,4 +249,13 @@
   <data name="ErrorСodeOk" xml:space="preserve">
     <value>Ок</value>
   </data>
+  <data name="ComponentStoreName" xml:space="preserve">
+    <value>Клепаем сами</value>
+  </data>
+  <data name="ComponentStoreFullName" xml:space="preserve">
+    <value>Магазин "Клепаем сами"</value>
+  </data>
+  <data name="Shop" xml:space="preserve">
+    <value>Магазин</value>
+  </data>
 </root>

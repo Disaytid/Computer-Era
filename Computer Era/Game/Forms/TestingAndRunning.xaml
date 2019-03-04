@@ -45,7 +45,7 @@
                             </Button.Background>
                         </Button>
                         <Label Content="Диск в приводе: " FontSize="14" VerticalAlignment="Center"/>
-                        <ComboBox Name="DiscInDrive" Margin="5" VerticalContentAlignment="Center" IsEnabled="False">
+                        <ComboBox Name="DiscInDrive" Margin="5" VerticalContentAlignment="Center" IsEnabled="False" SelectionChanged="DiscInDrive_SelectionChanged">
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid>
@@ -56,6 +56,12 @@
                         </ComboBox>
                     </DockPanel>
                     <TextBlock Name="OutputFromComputer" Grid.Row="1" Padding="5" FontSize="16" TextWrapping="Wrap" Background="Black" Foreground="White"/>
+                    <Grid Name="DiscPanel" Grid.Row="1" Visibility="Collapsed" Background="Yellow">
+                        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Label Content="Установка" Margin="0, 0, 0, 10" FontSize="24" HorizontalContentAlignment="Center"/>
+                            <Button Name="StartInstall" Padding="10"  Content="Начать" Background="Blue" Foreground="White" FontSize="14" Click="StartInstall_Click"/>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

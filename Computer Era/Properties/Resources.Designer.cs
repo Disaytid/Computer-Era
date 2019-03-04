@@ -115,6 +115,24 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Shop &quot;Spike yourself&quot;.
+        /// </summary>
+        public static string ComponentStoreFullName {
+            get {
+                return ResourceManager.GetString("ComponentStoreFullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Spike yourself.
+        /// </summary>
+        public static string ComponentStoreName {
+            get {
+                return ResourceManager.GetString("ComponentStoreName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Computer.
         /// </summary>
         public static string Computer {
@@ -444,6 +462,15 @@ namespace Computer_Era.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Shop.
+        /// </summary>
+        public static string Shop {
+            get {
+                return ResourceManager.GetString("Shop", resourceCulture);
             }
         }
         

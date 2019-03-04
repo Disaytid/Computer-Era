@@ -108,7 +108,7 @@ namespace Computer_Era.Game.Forms
 
                 if (price <= GameEnvironment.Money.PlayerCurrency[0].Count)
                 {
-                    GameEnvironment.Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, "Магазин \"Клепаем сами\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, price);
+                    GameEnvironment.Money.PlayerCurrency[0].Withdraw("Оплата покупки: " + (button.Tag as BaseItem).Name, Properties.Resources.ComponentStoreFullName, GameEnvironment.GameEvents.GameTimer.DateAndTime, price);
                     CoinCount.Content = GameEnvironment.Money.PlayerCurrency[0].Count.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
 
                     if (button.Tag is Case)

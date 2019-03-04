@@ -65,11 +65,17 @@
         </StackPanel>
 
         <!-- Игра -->
-        <Grid Name="Game" Margin="0,0,0,50" Visibility="Hidden">
+        <Grid Name="Game" Margin="0,0,0,50" Visibility="Collapsed">
+            <Grid Name="NoComputerPanel" Background="Black">
+                <TextBlock Name="NoComputerText" Text="У вас нет компьютера!" Margin="10" TextWrapping="Wrap" Foreground="White" FontSize="14"/>
+            </Grid>
+            <Grid Name="ComputerBootPanel" Visibility="Collapsed">
+                <TextBlock Name="OutputFromComputer" Background="Black" Foreground="White" FontSize="14"/>
+            </Grid>
             <Grid Name="Desktop" ShowGridLines="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible">
 
             </Grid>
-            <Grid Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" HorizontalAlignment="Right">
+            <Grid Name="DesktopWidgets" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" HorizontalAlignment="Right">
                 <StackPanel Name="WidgetPanel"></StackPanel>
             </Grid>
             <Grid Name="Program" Visibility="Hidden"/>
