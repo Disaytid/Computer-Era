@@ -12,7 +12,8 @@ namespace Computer_Era.Game.Objects
         public string Description { get; set; }
         public string Author { get; set; }
         public int[] Programms { get; set; }
-        public Collection<FileSystem> FileSystems { get; set; }
+        public int Size { get; set; } //В килобайтах
+        public Collection<FileSystem> FileSystems { get; set; } = new Collection<FileSystem>();
     }
 
     public class OperatingSystem : Item<OperatingSystemProperties>

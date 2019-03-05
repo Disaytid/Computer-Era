@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:controllib="clr-namespace:ControlLib;assembly=NumericUpDown"
              xmlns:local="clr-namespace:Computer_Era.Game.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -16,7 +17,7 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <ListBox Name="ListPartition" Grid.Row="0">
+            <ListBox Name="ListPartition" Grid.Row="0" SelectionChanged="ListPartition_SelectionChanged">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>
@@ -26,16 +27,17 @@
                 </ListBox.ItemTemplate>
             </ListBox>
             <DockPanel Grid.Row="1" LastChildFill="False" Margin="0, 5">
-                <Button Content="Создать раздел" Padding="5" Margin="0, 0, 5, 0" IsEnabled="False"/>
-                <Button Content="Удалить раздел" Padding="5" Margin="5, 0" IsEnabled="False"/>
-                <Button Content="Форматировать" Padding="5" Margin="5, 0" IsEnabled="False"/>
-                <Button Content="Далее" Padding="5" Margin="5, 0, 0, 0" IsEnabled="False" DockPanel.Dock="Right"/>
+                <Button Name="CreatePartition" Content="Создать раздел" Padding="5" Margin="0, 0, 5, 0" IsEnabled="False" Click="CreatePartition_Click"/>
+                <controllib:NumericUpDown Name="PartitionVolume" Background="White" IsEnabled="False"/>
+                <Button Name="DeletePartition" Content="Удалить раздел" Padding="5" Margin="5, 0" IsEnabled="False" Click="DeletePartition_Click"/>
+                <Button Name="Formatting" Content="Форматировать" Padding="5" Margin="5, 0" IsEnabled="False" Click="Formatting_Click"/>
+                <ComboBox Name="FileSystems" VerticalContentAlignment="Center" IsEnabled="False"/>
+                <Button Name="Next" Content="Далее" Padding="5" Margin="5, 0, 0, 0" IsEnabled="False" DockPanel.Dock="Right" Click="Next_Click"/>
             </DockPanel>
         </Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Visibility="Collapsed">
-            <Label Content="Установка" Margin="0, 0, 0, 10" FontSize="26" HorizontalContentAlignment="Center"/>
+        <StackPanel Name="InstallationProcess" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Visibility="Collapsed">
+            <Label Name="LabelProcessInstall" Content="Установка" Margin="0, 0, 0, 10" FontSize="26" HorizontalContentAlignment="Center"/>
             <ProgressBar x:Name="InstallationProgress" MinHeight="40"/>
-            <Label Content="Процесс утсановки: "/>
         </StackPanel>
     </Grid>
 </UserControl>

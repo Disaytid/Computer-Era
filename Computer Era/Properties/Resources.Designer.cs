@@ -421,6 +421,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Partition.
+        /// </summary>
+        public static string Partition {
+            get {
+                return ResourceManager.GetString("Partition", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Player name.
         /// </summary>
         public static string PlayerName {

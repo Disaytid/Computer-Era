@@ -31,7 +31,6 @@ namespace Computer_Era.Game.Objects
         public int BufferCapacity { get; set; }
         public HDDInterface Interface { get; set; }
         public int MaximumTemperature { get; set; }         //В градусах по цельсию
-        public OperatingSystem OperatingSystem { get; set; }
         public Collection<Partition> Partitions { get; set; } = new Collection<Partition>();
     }
 
@@ -74,6 +73,8 @@ namespace Computer_Era.Game.Objects
     public class Partition
     {
         public string Name { get; set; }
+        public int PartitionNumber { get; set; }
+        public int Volume { get; set; } //В килобайтах
         public FileSystem FileSystem { get; set; }
         public OperatingSystem OperatingSystem { get; set; }
     }

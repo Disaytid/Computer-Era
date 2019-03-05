@@ -19,7 +19,7 @@ namespace Computer_Era.Game
 
         public static KeyValuePair<double, MediaCapacityUnits> СonversionToMore(MediaCapacityUnits unit, double value)
         {
-            for (int i = (int)unit; i < Enum.GetNames(typeof(MediaCapacityUnits)).Length; i++)
+            for (int i = (int)unit; i < Enum.GetNames(typeof(MediaCapacityUnits)).Length + 1; i++)
             {
                 MediaCapacityUnits local_unit = (MediaCapacityUnits)Enum.GetValues(typeof(MediaCapacityUnits)).GetValue(i - 1);
                 if (value >= 1024) { value /= 1024; } else { return new KeyValuePair<double, MediaCapacityUnits>(value, local_unit); }

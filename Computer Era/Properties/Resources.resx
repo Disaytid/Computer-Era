@@ -267,4 +267,7 @@
   <data name="ComponentStoreFullName" xml:space="preserve">
     <value>Shop "Spike yourself"</value>
   </data>
+  <data name="Partition" xml:space="preserve">
+    <value>Partition</value>
+  </data>
 </root>

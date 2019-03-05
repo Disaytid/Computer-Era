@@ -112,21 +112,24 @@ namespace Computer_Era
 
             if (OldState && currentState)
             {
-                if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
+                if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = currentState; }
                 return;
             } else {
                 OutputFromComputer.Visibility = Visibility.Visible;
                 ComputerBootPanel.Visibility = Visibility.Collapsed;
             }
 
-            if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState)
+            if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState == true)
             {  
                 foreach (HDD hdd in GameEnvironment.Computers.CurrentPlayerComputer.HDDs)
                 {
-                    if (hdd.Properties.OperatingSystem != null)
+                    bool isInstalledOS = false;
+                    foreach (Partition partition in hdd.Properties.Partitions) { if (partition.OperatingSystem != null) { isInstalledOS = true; break; } }
+                    if (isInstalledOS)
                     {
                         // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
-
+                        WidgetPanel.Children.Clear();
+                        Widgets.PlayerWidgets.Clear();
                         Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
                         Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
                         Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
@@ -145,6 +148,7 @@ namespace Computer_Era
                         Desktop.Visibility = Visibility.Visible;
                         DesktopWidgets.Visibility = Visibility.Visible;
 
+                        OldState = currentState;
                         return;
                     }
                 }
@@ -186,7 +190,7 @@ namespace Computer_Era
                     { NoComputerText.Text = string.Empty; } else { NoComputerText.Text = "У вас есть компьютерная сборка но она не установлена по умолчанию."; }
                 }
             }
-            if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
+            if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = currentState; }
         }
 
         private void LoadFromCD(GameEvent @event)

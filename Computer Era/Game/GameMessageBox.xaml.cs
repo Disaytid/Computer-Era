@@ -109,6 +109,12 @@ namespace Computer_Era.Game
                     _messageBox.ButtonOk.Visibility = Visibility.Collapsed;
                     _messageBox.ButtonNo.Focus();
                     break;
+                case MessageBoxButton.OKCancel:
+                    _messageBox.ButtonNo.Visibility = Visibility.Collapsed;
+                    _messageBox.ButtonYes.Visibility = Visibility.Collapsed;
+                    _messageBox.TextInput.Visibility = Visibility.Visible;
+                    _messageBox.ButtonOk.Focus();
+                    break;
                 default:
                     break;
             }

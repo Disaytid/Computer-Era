@@ -258,4 +258,7 @@
   <data name="Shop" xml:space="preserve">
     <value>Магазин</value>
   </data>
+  <data name="Partition" xml:space="preserve">
+    <value>Раздел</value>
+  </data>
 </root>
