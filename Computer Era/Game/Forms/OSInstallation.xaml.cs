@@ -186,8 +186,7 @@ namespace Computer_Era.Game.Forms
                 SectionSetup.Visibility = Visibility.Collapsed;
                 InstallationProcess.Visibility = Visibility.Visible;
                 InstallationProgress.Maximum = 100;
-                int minutes = Convert.ToInt32((OperatingSystem.Properties.Size * (OpticalDisc.Properties.ReadSpeed * 150)) / 60);
-                double speedInstall = (OpticalDisc.Properties.ReadSpeed * 150) / 60;
+                int minutes = Convert.ToInt32((OperatingSystem.Properties.Size / (OpticalDisc.Properties.ReadSpeed * 150)) / 60); //150 кб/c в одном x (тоесть если скорость чтения диска x2 то значение будет 2 * 150 = 300)
 
                 GameEnvironment.GameEvents.Events.Add(new GameEvent("InstallOS", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddMinutes(minutes), Periodicity.Minute, minutes, InstallOS, true));
             }

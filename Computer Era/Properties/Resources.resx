@@ -270,4 +270,22 @@
   <data name="Partition" xml:space="preserve">
     <value>Partition</value>
   </data>
+  <data name="SaveAssembly" xml:space="preserve">
+    <value>Save assembly</value>
+  </data>
+  <data name="AddAssembly" xml:space="preserve">
+    <value>Add assembly</value>
+  </data>
+  <data name="AssemblingAdded" xml:space="preserve">
+    <value>Assembling added</value>
+  </data>
+  <data name="AssemblingChanged" xml:space="preserve">
+    <value>Assembling changed</value>
+  </data>
+  <data name="AssemblyMessage1" xml:space="preserve">
+    <value>The specified name is already in the list of assemblies.</value>
+  </data>
+  <data name="ModifiedAssembly" xml:space="preserve">
+    <value>Modified assembly</value>
+  </data>
 </root>

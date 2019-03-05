@@ -261,4 +261,22 @@
   <data name="Partition" xml:space="preserve">
     <value>Раздел</value>
   </data>
+  <data name="SaveAssembly" xml:space="preserve">
+    <value>Сохранение сборки</value>
+  </data>
+  <data name="AddAssembly" xml:space="preserve">
+    <value>Добавление сборки</value>
+  </data>
+  <data name="AssemblingAdded" xml:space="preserve">
+    <value>Сборка добавлена</value>
+  </data>
+  <data name="AssemblingСhanged" xml:space="preserve">
+    <value>Сборка изменена</value>
+  </data>
+  <data name="AssemblyMessage1" xml:space="preserve">
+    <value>Указанное имя уже есть в списке сборок.</value>
+  </data>
+  <data name="ModifiedAssembly" xml:space="preserve">
+    <value>Изменение сборки</value>
+  </data>
 </root>

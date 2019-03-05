@@ -41,16 +41,15 @@ namespace Computer_Era.Game.Forms
             foreach (Computer computer in computers.PlayerComputers) { AssemblyList.Items.Add(computer.Name); }
         }
 
-        private void AddAssembly_Click(object sender, RoutedEventArgs e)
+        private void AddAssemblyName(string name, bool isCleaningItemsSource = true)
         {
-            string name = AssemblyList.Text;
-
             foreach (String item in AssemblyList.Items)
-            { if (item == name) {  name = string.Empty; MessageBox.Show("Данное имя уже существует!"); break; } }
+            { if (item == name) { name = string.Empty; GameMessageBox.Show(Properties.Resources.AddAssembly, Properties.Resources.AssemblyMessage1, GameMessageBox.MessageBoxType.Warning); break; } }
 
             if (!string.IsNullOrEmpty(name))
-            { AssemblyList.Items.Add(name); ComputerСomponents.ItemsSource = new Collection<ListBoxObject>(); }
+            { AssemblyList.Items.Add(name); if (isCleaningItemsSource) { ComputerСomponents.ItemsSource = new Collection<ListBoxObject>(); } }
         }
+        private void AddAssembly_Click(object sender, RoutedEventArgs e) => AddAssemblyName(AssemblyList.Text);
 
         private void DefaultBuild_Click(object sender, RoutedEventArgs e)
         {
@@ -58,9 +57,9 @@ namespace Computer_Era.Game.Forms
             if (currentComputer.Count == 1)
             {
                 GameEnvironment.Computers.CurrentPlayerComputer = currentComputer[0];
-                MessageBox.Show("Сборка установлена как сборка по умолчанию!");
+                GameMessageBox.Show("Сборка установлена как сборка по умолчанию!");
             } else {
-                MessageBox.Show("Компьютер с таким именем не существует!");
+                GameMessageBox.Show("Компьютер с таким именем не существует!");
             }
         }
 
@@ -424,210 +423,235 @@ namespace Computer_Era.Game.Forms
                 }
             }  
         }
+        
+        private bool IsChangedComputer(Computer computer)
+        {
+            bool isChangedComputer = false;
+            foreach (object obj in ComputerСomponents.Items)
+            {
+                object iobj = (obj as ListBoxObject).IObject;
+                switch (iobj)
+                {
+                    case Case _:
+                        isChangedComputer = computer.Case == (iobj as Case) ? false : true;
+                        break;
+                    case Motherboard _:
+                        isChangedComputer = computer.Motherboard == (iobj as Motherboard) ? false : true;
+                        break;
+                    case CPU _:
+                        isChangedComputer = computer.CPU == (iobj as CPU) ? false : true;
+                        break;
+                    case PowerSupplyUnit _:
+                        isChangedComputer = computer.PSU == (iobj as PowerSupplyUnit) ? false : true;
+                        break;
+                    case RAM _:
+                        isChangedComputer = true;
+                        foreach (RAM ram in computer.RAMs) { isChangedComputer = ram == (iobj as RAM) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                    case HDD _:
+                        isChangedComputer = true;
+                        foreach (HDD hdd in computer.HDDs) { isChangedComputer = hdd == (iobj as HDD) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                    case VideoСard _:
+                        isChangedComputer = true;
+                        foreach (VideoСard videoСard in computer.VideoСards) { isChangedComputer = videoСard == (iobj as VideoСard) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                    case OpticalDrive _:
+                        isChangedComputer = true;
+                        foreach (OpticalDrive opticalDrive in computer.OpticalDrives) { isChangedComputer = opticalDrive == (iobj as OpticalDrive) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                    case Monitor _:
+                        isChangedComputer = true;
+                        foreach (Monitor monitor in computer.Monitors) { isChangedComputer = monitor == (iobj as Monitor) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                    case Mouse _:
+                        isChangedComputer = true;
+                        foreach (Mouse mouse in computer.Mice) { isChangedComputer = mouse == (iobj as Mouse) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                    case Keyboard _:
+                        isChangedComputer = true;
+                        foreach (Keyboard keyboard in computer.Keyboards) { isChangedComputer = keyboard == (iobj as Keyboard) ? false : true; if (!isChangedComputer) { break; } }
+                        break;
+                }
+
+                if (isChangedComputer) { break; }
+            }
+            return isChangedComputer;
+        }
+
+        private Computer AddСomponents(Computer computer)
+        {
+            foreach (object obj in ComputerСomponents.Items)
+            {
+                object iobj = (obj as ListBoxObject).IObject;
+                switch (iobj)
+                {
+                    case Case _:
+                        computer.Case = iobj as Case;
+                        break;
+                    case Motherboard _:
+                        computer.Motherboard = iobj as Motherboard;
+                        break;
+                    case CPU _:
+                        computer.CPU = iobj as CPU;
+                        break;
+                    case CPUCooler _:
+                        computer.CPUCooler = iobj as CPUCooler;
+                        break;
+                    case PowerSupplyUnit _:
+                        computer.PSU = iobj as PowerSupplyUnit;
+                        break;
+                    case RAM _:
+                        bool isNewRAM = true;
+                        foreach (RAM ram in computer.RAMs) { if (iobj as RAM == ram) { isNewRAM = false; } }
+                        if (isNewRAM) { computer.RAMs.Add(iobj as RAM); }
+                        break;
+                    case HDD _:
+                        bool isNewHDD = true;
+                        foreach (HDD hdd in computer.HDDs) { if (iobj as HDD == hdd) { isNewHDD = false; } }
+                        if (isNewHDD) { computer.HDDs.Add(iobj as HDD); }
+                        break;
+                    case VideoСard _:
+                        bool isNewVideoCard = true;
+                        foreach (VideoСard videoСard in computer.VideoСards) { if (iobj as VideoСard == videoСard) { isNewVideoCard = false; } }
+                        if (isNewVideoCard) { computer.VideoСards.Add(iobj as VideoСard); }
+                        break;
+                    case OpticalDrive _:
+                        bool isNewOpticalDrive = true;
+                        foreach (OpticalDrive opticalDrive in computer.OpticalDrives) { if (iobj as OpticalDrive == opticalDrive) { isNewOpticalDrive = false; } }
+                        if (isNewOpticalDrive) { computer.OpticalDrives.Add(iobj as OpticalDrive); }
+                        break;
+                    case Monitor _:
+                        bool isNewMonitor = true;
+                        foreach (Monitor monitor in computer.Monitors) { if (iobj as Monitor == monitor) { isNewMonitor = false; } }
+                        if (isNewMonitor) { computer.Monitors.Add(iobj as Monitor); }
+                        break;
+                    case Mouse _:
+                        bool isNewMouse = true;
+                        foreach (Mouse mouse in computer.Mice) { if (iobj as Mouse == mouse) { isNewMouse = false; } }
+                        if (isNewMouse) { computer.Mice.Add(iobj as Mouse); }
+                        break;
+                    case Keyboard _:
+                        bool isNewKeyboard = true;
+                        foreach (Keyboard keyboard in computer.Keyboards) { if (iobj as Keyboard == keyboard) { isNewKeyboard = false; } }
+                        if (isNewKeyboard) { computer.Keyboards.Add(iobj as Keyboard); }
+                        break;
+                }
+            }
+            return computer;
+        }
+
+        /// <param name="auxiliary_check">Вспомогательная проверка нужна при вызове метода из AssemblyList_SelectionChanged</param>
+        private void SaveComputer(bool auxiliary_check = true)
+        {
+            string name = AssemblyList.Text;
+            bool isName = false;
+            if (!string.IsNullOrEmpty(name)) { foreach (String item in AssemblyList.Items) { if (item == name) { isName = true; break; } } }
+
+            Computer[] currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == name).ToArray();
+            bool isNewComputer = currentComputer.Count() == 1 ? false : true;
+            bool isChangedComputer = false;
+
+            if (isNewComputer == false) { isChangedComputer = IsChangedComputer(currentComputer[0]); }
+            if (!auxiliary_check) { return; }
+            if (!(ComputerСomponents.Items.Count >= 1 && isNewComputer || !isNewComputer && isChangedComputer)) { return; }
+            if (!isName) { AddAssemblyName(name, false); }
+
+            Computer newComputer;
+            if (!isChangedComputer)
+            {
+                Case @case = null;
+                Motherboard motherboard = null;
+                foreach (object obj in ComputerСomponents.Items)
+                {
+                    object iobj = (obj as ListBoxObject).IObject;
+                    if (iobj is Case) { @case = iobj as Case; } else if (iobj is Motherboard) { motherboard = iobj as Motherboard; }
+                    if (@case != null && motherboard != null) { break; }
+                }
+
+                if (@case == null || motherboard == null)
+                {
+                    switch (@case)
+                    {
+                        case null:
+                            if (motherboard != null)
+                            {
+                                newComputer = new Computer(name, motherboard);
+                            }
+                            else { newComputer = null; }
+                            break;
+                        default:
+                            newComputer = new Computer(name, @case);
+                            break;
+                    }
+                }
+                else { newComputer = new Computer(name, @case, motherboard); }
+            }
+            else { newComputer = currentComputer[0]; }
+
+            if (newComputer == null) { return; }
+
+            newComputer = AddСomponents(newComputer);
+            if (isChangedComputer)
+            { _ = GameMessageBox.Show(Properties.Resources.ModifiedAssembly, Properties.Resources.AssemblingChanged, GameMessageBox.MessageBoxType.Information); }
+            else
+            {
+                GameEnvironment.Computers.PlayerComputers.Add(newComputer);
+                _ = GameMessageBox.Show(Properties.Resources.AddAssembly, Properties.Resources.AssemblingAdded, GameMessageBox.MessageBoxType.Information);
+            }
+        }
 
         private void SaveAssembly_Click(object sender, RoutedEventArgs e)
         {
-            
+            string name = AssemblyList.Text;
+
+            Computer[] currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == name).ToArray();
+            bool isNewComputer = currentComputer.Count() == 1 ? false : true;
+            bool isChangedComputer = false;
+
+            if (isNewComputer == false) { isChangedComputer = IsChangedComputer(currentComputer[0]); }
+            SaveComputer();
         }
 
-        private bool AssemblyListHandleSelection = true;
         string oldName = string.Empty; //Пердыдущее выбранное имя, нужно что бы не срабатывал код при вводе текста в поле, так как в код отдаеться еще не измененный текст
         private void AssemblyList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string name = AssemblyList.Text;
-            bool isName = false;
-            bool isOldName = false;
             string selectedName = string.Empty;
             if (AssemblyList.SelectedValue != null) { selectedName = AssemblyList.SelectedValue.ToString(); }
-            if (!string.IsNullOrEmpty(name)) { foreach (String item in AssemblyList.Items) { if (item == name) { isName = true; break; } } } //Проверяет было ли имя добавлено в имена сборки
-            if (!string.IsNullOrEmpty(oldName)) { foreach (String item in AssemblyList.Items) { if (item == oldName) { isOldName = true; break; } } } //Заменить на переменную присваемую в конце
+            bool isOldName = false;
+            if (!string.IsNullOrEmpty(oldName)) { foreach (string item in AssemblyList.Items) { if (item == oldName) { isOldName = true; break; } } }
 
-            List<Computer> currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == name).ToList();
-            bool isNewComputer = currentComputer.Count() == 1 ? false : true; //Добавить возможность модификации
+            Computer[] currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == name).ToArray();
+            bool isNewComputer = currentComputer.Count() == 1 ? false : true;
             bool isChangedComputer = false;
 
-            if (isNewComputer == false)
+            if (isNewComputer == false) { isChangedComputer = IsChangedComputer(currentComputer[0]); }
+            SaveComputer(isOldName);
+            ComputerСomponents.ItemsSource = null;
+            ComputerСomponents.Items.Clear();
+
+            List<Computer> computer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == selectedName).ToList();
+
+            if (computer.Count == 1)
             {
-                foreach (object obj in ComputerСomponents.Items)
-                {
-                    object iobj = (obj as ListBoxObject).IObject;
-                    if (iobj is Case)
-                    {
-                        isChangedComputer = currentComputer[0].Case == (iobj as Case) ? false : true;
-                    } else if (iobj is Motherboard) {
-                        isChangedComputer = currentComputer[0].Motherboard == (iobj as Motherboard) ? false : true;
-                    } else if (iobj is CPU) {
-                        isChangedComputer = currentComputer[0].CPU == (iobj as CPU) ? false : true;
-                    } else if (iobj is PowerSupplyUnit) {
-                        isChangedComputer = currentComputer[0].PSU == (iobj as PowerSupplyUnit) ? false : true;
-                    }  else if (iobj is RAM) {
-                        isChangedComputer = true;
-                        foreach (RAM ram in currentComputer[0].RAMs) { isChangedComputer = ram == (iobj as RAM) ? false : true; if (!isChangedComputer) { break; } }
-                    } else if (iobj is HDD) {
-                        isChangedComputer = true;
-                        foreach (HDD hdd in currentComputer[0].HDDs) { isChangedComputer = hdd == (iobj as HDD) ? false : true; if (!isChangedComputer) { break; } }
-                    } else if (iobj is VideoСard) {
-                        isChangedComputer = true;
-                        foreach (VideoСard videoСard in currentComputer[0].VideoСards) { isChangedComputer = videoСard == (iobj as VideoСard) ? false : true; if (!isChangedComputer) { break; } }
-                    } else if (iobj is OpticalDrive) {
-                        isChangedComputer = true;
-                        foreach (OpticalDrive opticalDrive in currentComputer[0].OpticalDrives) { isChangedComputer = opticalDrive == (iobj as OpticalDrive) ? false : true; if (!isChangedComputer) { break; } }
-                    } else if (iobj is Monitor) {
-                        isChangedComputer = true;
-                        foreach (Monitor monitor in currentComputer[0].Monitors) { isChangedComputer = monitor == (iobj as Monitor) ? false : true; if (!isChangedComputer) { break; } }
-                    } else if (iobj is Mouse) {
-                        isChangedComputer = true;
-                        foreach (Mouse mouse in currentComputer[0].Mice) { isChangedComputer = mouse == (iobj as Mouse) ? false : true; if (!isChangedComputer) { break; } }
-                    } else if (iobj is Keyboard) {
-                        isChangedComputer = true;
-                        foreach (Keyboard keyboard in currentComputer[0].Keyboards) { isChangedComputer = keyboard == (iobj as Keyboard) ? false : true; if (!isChangedComputer) { break; } }
-                    }
+                Collection<ListBoxObject> items = new Collection<ListBoxObject>();
+                if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Case)); }
+                if (computer[0].Motherboard != null) { items.Add(new ListBoxObject(computer[0].Motherboard)); }
+                if (computer[0].PSU != null) { items.Add(new ListBoxObject(computer[0].PSU)); }
+                if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU)); }
+                if (computer[0].CPUCooler != null) { items.Add(new ListBoxObject(computer[0].CPUCooler)); }
+                if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram)); } }
+                if (computer[0].HDDs != null) { foreach (HDD hdd in computer[0].HDDs) { items.Add(new ListBoxObject(hdd)); } }
+                if (computer[0].VideoСards != null) { foreach (VideoСard videoСard in computer[0].VideoСards) { items.Add(new ListBoxObject(videoСard)); } }
+                if (computer[0].Monitors != null) { foreach (Monitor monitor in computer[0].Monitors) { items.Add(new ListBoxObject(monitor)); } }
+                if (computer[0].OpticalDrives != null) { foreach (OpticalDrive opticalDrive in computer[0].OpticalDrives) { items.Add(new ListBoxObject(opticalDrive)); } }
+                if (computer[0].Mice != null) { foreach (Mouse mouse in computer[0].Mice) { items.Add(new ListBoxObject(mouse)); } }
+                if (computer[0].Keyboards != null) { foreach (Keyboard keyboard in computer[0].Keyboards) { items.Add(new ListBoxObject(keyboard)); } }
 
-                    if (isChangedComputer) { break; }
-                }
+                ComputerСomponents.ItemsSource = items;
             }
 
-            if (AssemblyListHandleSelection & name != oldName)
-            {
-                if (ComputerСomponents.Items.Count >= 1 && isNewComputer || !isNewComputer && isChangedComputer)
-                {
-                    if (isName && isOldName)
-                    {
-                        Computer newComputer;
-
-                        if (!isChangedComputer)
-                        {
-                            Case @case = null;
-                            Motherboard motherboard = null;
-                            foreach (object obj in ComputerСomponents.Items)
-                            {
-                                object iobj = (obj as ListBoxObject).IObject;
-                                if (iobj is Case) { @case = iobj as Case; } else if (iobj is Motherboard) { motherboard = iobj as Motherboard; }
-                                if (@case != null && motherboard != null) { break; }
-                            }
-
-                            if (@case != null && motherboard != null)
-                            {
-                                newComputer = new Computer(name, @case, motherboard);
-                            }
-                            else if (@case != null)
-                            {
-                                newComputer = new Computer(name, @case);
-                            }
-                            else if (motherboard != null)
-                            {
-                                newComputer = new Computer(name, motherboard);
-                            }
-                            else
-                            {
-                                newComputer = null;
-                                MessageBoxResult result = MessageBox.Show("В списке компонентов нет ни материнской платы не корпуса, сохранение не возможно!" +
-                                    "Вы действитьльно хотите перейти к другому списку потяряв изменения в этом?", "", MessageBoxButton.YesNo);
-                                if (result == MessageBoxResult.No)
-                                {
-                                    ComboBox combo = (ComboBox)sender;
-                                    AssemblyListHandleSelection = false;
-                                    combo.SelectedItem = e.RemovedItems[0];
-                                    return;
-                                }
-                            }
-                        } else {
-                            newComputer = currentComputer[0];
-                        }
-
-                        if (newComputer != null) {
-                            foreach (object obj in ComputerСomponents.Items)
-                            {
-                                object iobj = (obj as ListBoxObject).IObject;
-                                if (iobj is Case)
-                                {
-                                    newComputer.Case = iobj as Case;
-                                } else if (iobj is Motherboard) {
-                                    newComputer.Motherboard = iobj as Motherboard;
-                                } else if (iobj is CPU) {
-                                    newComputer.CPU = iobj as CPU;
-                                } else if (iobj is CPUCooler) {
-                                    newComputer.CPUCooler = iobj as CPUCooler;
-                                } else if (iobj is PowerSupplyUnit) {
-                                    newComputer.PSU = iobj as PowerSupplyUnit;
-                                } else if (iobj is RAM) {
-                                    bool isNewRAM = true;
-                                    foreach (RAM ram in newComputer.RAMs) { if (iobj as RAM == ram) { isNewRAM = false; } }
-                                    if (isNewRAM) { newComputer.RAMs.Add(iobj as RAM); }
-                                } else if (iobj is HDD) {
-                                    bool isNewHDD = true;
-                                    foreach (HDD hdd in newComputer.HDDs) { if (iobj as HDD == hdd) { isNewHDD = false; } }
-                                    if (isNewHDD) { newComputer.HDDs.Add(iobj as HDD); }
-                                } else if (iobj is VideoСard) {
-                                    bool isNewVideoCard = true;
-                                    foreach (VideoСard videoСard in newComputer.VideoСards) { if (iobj as VideoСard == videoСard) { isNewVideoCard = false; } }
-                                    if (isNewVideoCard) { newComputer.VideoСards.Add(iobj as VideoСard); }
-                                } else if (iobj is OpticalDrive) {
-                                    bool isNewOpticalDrive = true;
-                                    foreach (OpticalDrive opticalDrive in newComputer.OpticalDrives) { if (iobj as OpticalDrive == opticalDrive) { isNewOpticalDrive = false; } }
-                                    if (isNewOpticalDrive) { newComputer.OpticalDrives.Add(iobj as OpticalDrive); }
-                                } else if (iobj is Monitor) {
-                                    bool isNewMonitor = true;
-                                    foreach (Monitor monitor in newComputer.Monitors) { if (iobj as Monitor == monitor) { isNewMonitor = false; } }
-                                    if (isNewMonitor) { newComputer.Monitors.Add(iobj as Monitor); }
-                                } else if (iobj is Mouse) {
-                                    bool isNewMouse = true;
-                                    foreach (Mouse mouse in newComputer.Mice) { if (iobj as Mouse == mouse) { isNewMouse = false; } }
-                                    if (isNewMouse) { newComputer.Mice.Add(iobj as Mouse); }
-                                } else if (iobj is Keyboard) {
-                                    bool isNewKeyboard = true;
-                                    foreach (Keyboard keyboard in newComputer.Keyboards) { if (iobj as Keyboard == keyboard) { isNewKeyboard = false; } }
-                                    if (isNewKeyboard) { newComputer.Keyboards.Add(iobj as Keyboard); }
-                                }
-                            }
-
-                            if (!isChangedComputer)
-                            {
-                                GameEnvironment.Computers.PlayerComputers.Add(newComputer);
-                                MessageBox.Show("Добавлен компьютер");
-                            } else {
-                                MessageBox.Show("Компьютер изменен!");
-                            }
-
-                            ComputerСomponents.ItemsSource = null;
-                            ComputerСomponents.Items.Clear();
-                        }
-
-
-                    } else {
-                        MessageBox.Show("Имя этой сборки не существует, добавьте его в список!");
-                    }
-                }
-
-                ComputerСomponents.ItemsSource = null;
-                ComputerСomponents.Items.Clear();
-            }
-
-            if (true) //!isNewComputer
-            { 
-                List<Computer> computer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == selectedName).ToList();
-
-                if (computer.Count == 1)
-                {
-                    Collection<ListBoxObject> items = new Collection<ListBoxObject>();
-                    if (computer[0].Case != null) { items.Add(new ListBoxObject(computer[0].Case)); }
-                    if (computer[0].Motherboard != null) { items.Add(new ListBoxObject(computer[0].Motherboard)); }
-                    if (computer[0].PSU != null) { items.Add(new ListBoxObject(computer[0].PSU)); }
-                    if (computer[0].CPU != null) { items.Add(new ListBoxObject(computer[0].CPU)); }
-                    if (computer[0].CPUCooler != null) { items.Add(new ListBoxObject(computer[0].CPUCooler)); }
-                    if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram)); } }
-                    if (computer[0].HDDs != null) { foreach (HDD hdd in computer[0].HDDs) { items.Add(new ListBoxObject(hdd)); } }
-                    if (computer[0].VideoСards != null) { foreach (VideoСard videoСard in computer[0].VideoСards) { items.Add(new ListBoxObject(videoСard)); } }
-                    if (computer[0].Monitors != null) { foreach (Monitor monitor in computer[0].Monitors) { items.Add(new ListBoxObject(monitor)); } }
-                    if (computer[0].OpticalDrives != null) { foreach (OpticalDrive opticalDrive in computer[0].OpticalDrives) { items.Add(new ListBoxObject(opticalDrive)); } }
-                    if (computer[0].Mice != null) { foreach (Mouse mouse in computer[0].Mice) { items.Add(new ListBoxObject(mouse)); } }
-                    if (computer[0].Keyboards != null) { foreach (Keyboard keyboard in computer[0].Keyboards) { items.Add(new ListBoxObject(keyboard)); } }
-
-                    ComputerСomponents.ItemsSource = items;
-                }
-            }
-
-            AssemblyListHandleSelection = true;
             ComputerСomponents.Items.Refresh();
             oldName = name;
         }

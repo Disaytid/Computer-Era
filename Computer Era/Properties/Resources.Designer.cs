@@ -70,11 +70,47 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Add assembly.
+        /// </summary>
+        public static string AddAssembly {
+            get {
+                return ResourceManager.GetString("AddAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на All.
         /// </summary>
         public static string All {
             get {
                 return ResourceManager.GetString("All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Assembling added.
+        /// </summary>
+        public static string AssemblingAdded {
+            get {
+                return ResourceManager.GetString("AssemblingAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Assembling changed.
+        /// </summary>
+        public static string AssemblingChanged {
+            get {
+                return ResourceManager.GetString("AssemblingChanged", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на The specified name is already in the list of assemblies..
+        /// </summary>
+        public static string AssemblyMessage1 {
+            get {
+                return ResourceManager.GetString("AssemblyMessage1", resourceCulture);
             }
         }
         
@@ -331,6 +367,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Modified assembly.
+        /// </summary>
+        public static string ModifiedAssembly {
+            get {
+                return ResourceManager.GetString("ModifiedAssembly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Monitor.
         /// </summary>
         public static string Monitor {
@@ -462,6 +507,15 @@ namespace Computer_Era.Properties {
         public static string RAM {
             get {
                 return ResourceManager.GetString("RAM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Save assembly.
+        /// </summary>
+        public static string SaveAssembly {
+            get {
+                return ResourceManager.GetString("SaveAssembly", resourceCulture);
             }
         }
         
