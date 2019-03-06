@@ -34,6 +34,7 @@ namespace Computer_Era
         public Companies Companies;
         public Computers Computers;
         public Services Services;
+        public Realty Realty;
 
         public Random Random = new Random(DateTime.Now.Millisecond);
     }
@@ -76,6 +77,7 @@ namespace Computer_Era
             GameEnvironment.Companies = new Companies(connection);
             GameEnvironment.Computers = new Computers();
             GameEnvironment.Services = new Services(connection, GameEnvironment.Money); //Объявляеться не раньше Money
+            GameEnvironment.Realty = new Realty(connection);
 
             if (ScenariosList.SelectedItem != null) { ((IScenario)ScenariosList.SelectedItem).Start(this, GameEnvironment); } else { return; }
 
@@ -91,9 +93,9 @@ namespace Computer_Era
                 CreateNewGame.Visibility = Visibility.Hidden;
                 GamePanel.Visibility = Visibility.Visible;
 
-                ComputerBoot();
+                PreloadingComputer();
                 Game.Visibility = Visibility.Visible;
-                GameEnvironment.GameEvents.Events.Add(new GameEvent("CheckComputer", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddMinutes(30), Periodicity.Minute, 30, ComputerBoot, true));
+                GameEnvironment.GameEvents.Events.Add(new GameEvent("PreloadingComputer", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddMinutes(30), Periodicity.Minute, 30, PreloadingComputer, true));
 
                 LoadSave();
                 DrawDesktop();
@@ -103,21 +105,54 @@ namespace Computer_Era
             }  
         }
 
+        bool currentState = false;
         private bool OldState = false;
-        public void ComputerBoot(GameEvent @event) => ComputerBoot();
-        public void ComputerBoot()
+        private void PreloadingComputer(GameEvent @event) => PreloadingComputer();
+
+        private void PreloadingComputer()
         {
-            bool currentState = false;
             if (GameEnvironment.Computers.CurrentPlayerComputer != null) { currentState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
 
             if (OldState && currentState)
             {
                 if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = currentState; }
                 return;
-            } else {
-                OutputFromComputer.Visibility = Visibility.Visible;
-                ComputerBootPanel.Visibility = Visibility.Collapsed;
             }
+
+            if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState == true)
+            {
+                ComputerBootPanel.Visibility = Visibility.Visible;
+                OutputFromComputer.Text = new BIOS().GetBIOSText(MotherboardBIOS.AMI) + Environment.NewLine +
+                GameEnvironment.Computers.CurrentPlayerComputer.Motherboard.Name + " BIOS Date:" + GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("MM/dd/yy") + Environment.NewLine +
+                "CPU : " + GameEnvironment.Computers.CurrentPlayerComputer.CPU.Name + " @ " + GameEnvironment.Computers.CurrentPlayerComputer.CPU.Properties.MinCPUFrequency + "MHz";
+                GameEnvironment.GameEvents.Events.Add(new GameEvent("ComputerBoot", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, ComputerBoot));
+            } else {
+                Desktop.Visibility = Visibility.Collapsed;
+                DesktopWidgets.Visibility = Visibility.Collapsed;
+                NoComputerPanel.Visibility = Visibility.Visible;
+
+                if (GameEnvironment.Computers.PlayerComputers.Count == 0)
+                {
+                    NoComputerText.Text = "О ужас, у вас нет компьютера! Нужно это срочно исправить, вот вам пошаговое руководство как исправить это недоразумение:" + Environment.NewLine +
+                                          "1. Раздобудьте денег (можно устроиться на работу, можно взять кредит тут уж сами решайте)" + Environment.NewLine +
+                                          "2. Закупитесь комплектующими в магазине \"" + Properties.Resources.ComponentStoreName + "\", при покупке обращайте внимание на совместимость компонентов" + Environment.NewLine +
+                                          "3. В меню \"Установка комплектуюющих\" создай новую сборку и добавь к ней купленные компоненты" + Environment.NewLine +
+                                          "4. В игре можно собирать и хранить несколько компьютеров, однако единовременно работать можно только за одним. Поэтому не забудь созданную сборку установить как сборку по умолчанию." + Environment.NewLine +
+                                          "5. Теперь пришла пора проверить правильно ли был собран компьютер и запустить его, сделать это можно в меню \"Тестирование и запуск\"" + Environment.NewLine +
+                                          "6. Наслаждаться гудением свежесобранного компьютера!";
+                } else {
+                    if (GameEnvironment.Computers.CurrentPlayerComputer != null && !GameEnvironment.Computers.CurrentPlayerComputer.IsEnable)
+                    { NoComputerText.Text = string.Empty; }
+                    else { NoComputerText.Text = "У вас есть компьютерная сборка но она не установлена по умолчанию."; }
+                }
+                OldState = currentState;
+            }
+        }
+        
+        private void ComputerBoot(GameEvent @event)
+        {
+            OutputFromComputer.Visibility = Visibility.Visible;
+            ComputerBootPanel.Visibility = Visibility.Collapsed;
 
             if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState == true)
             {  
@@ -170,24 +205,6 @@ namespace Computer_Era
                 } else {
                     OutputFromComputer.Text = "Load from CD...";
                     GameEnvironment.GameEvents.Events.Add(new GameEvent("", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, LoadFromCD));
-                }
-            } else {
-                Desktop.Visibility = Visibility.Collapsed;
-                DesktopWidgets.Visibility = Visibility.Collapsed;
-                NoComputerPanel.Visibility = Visibility.Visible;
-
-                if (GameEnvironment.Computers.PlayerComputers.Count == 0)
-                {
-                    NoComputerText.Text = "О ужас, у вас нет компьютера! Нужно это срочно исправить, вот вам пошаговое руководство как исправить это недоразумение:" + Environment.NewLine +
-                                          "1. Раздобудьте денег (можно устроиться на работу, можно взять кредит тут уж сами решайте)" + Environment.NewLine +
-                                          "2. Закупитесь комплектующими в магазине \"" + Properties.Resources.ComponentStoreName + "\", при покупке обращайте внимание на совместимость компонентов" + Environment.NewLine +
-                                          "3. В меню \"Установка комплектуюющих\" создай новую сборку и добавь к ней купленные компоненты" + Environment.NewLine+
-                                          "4. В игре можно собирать и хранить несколько компьютеров, однако единовременно работать можно только за одним. Поэтому не забудь созданную сборку установить как сборку по умолчанию." + Environment.NewLine +
-                                          "5. Теперь пришла пора проверить правильно ли был собран компьютер и запустить его, сделать это можно в меню \"Тестирование и запуск\"" + Environment.NewLine +
-                                          "6. Наслаждаться гудением свежесобранного компьютера!";
-                } else {
-                    if (GameEnvironment.Computers.CurrentPlayerComputer != null && !GameEnvironment.Computers.CurrentPlayerComputer.IsEnable)
-                    { NoComputerText.Text = string.Empty; } else { NoComputerText.Text = "У вас есть компьютерная сборка но она не установлена по умолчанию."; }
                 }
             }
             if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = currentState; }
@@ -322,6 +339,8 @@ namespace Computer_Era
                     NewWindow(new Bank(GameEnvironment)); break;
                 case "disc_stand":
                     NewWindow(new DiscStand(GameEnvironment)); break;
+                case "estate_agency":
+                    NewWindow(new RealEstateAgency(GameEnvironment)); break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");
                     break;

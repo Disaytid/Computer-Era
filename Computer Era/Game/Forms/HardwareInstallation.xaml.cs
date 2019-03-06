@@ -587,7 +587,7 @@ namespace Computer_Era.Game.Forms
                 }
                 else { newComputer = new Computer(name, @case, motherboard); }
             }
-            else { newComputer = currentComputer[0]; }
+            else { newComputer = currentComputer[0]; currentComputer[0].IsEnable = false; }
 
             if (newComputer == null) { return; }
 

@@ -47,11 +47,6 @@ namespace Computer_Era.Game.Forms
             AddItem(GameEnvironment.Items);
         }
 
-        private void GluingImages(Uri image, Uri cover)
-        {
-            
-        }
-
         private void AddItemsToItemsSource(Collection<OpticalDisc> items, List<ListBoxObject> items_source, ItemTypes type) //Добавление предметов в ItemsSource
         {
             BaseItem baseItem = new BaseItem();

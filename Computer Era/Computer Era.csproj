@@ -125,6 +125,10 @@
     <Page Include="Game\Forms\Purse.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Forms\RealEstateAgency.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Forms\Shop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -183,6 +187,9 @@
     <Compile Include="Game\Forms\Purse.xaml.cs">
       <DependentUpon>Purse.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Game\Forms\RealEstateAgency.xaml.cs">
+      <DependentUpon>RealEstateAgency.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Forms\Shop.xaml.cs">
       <DependentUpon>Shop.xaml</DependentUpon>
     </Compile>
@@ -206,6 +213,7 @@
     <Compile Include="Game\Objects\PlayerProfile.cs" />
     <Compile Include="Game\Objects\Professions.cs" />
     <Compile Include="Game\Objects\Items\Program.cs" />
+    <Compile Include="Game\Objects\Realty.cs" />
     <Compile Include="Game\Objects\Services.cs" />
     <Compile Include="Game\Objects\Items\StorageMedia.cs" />
     <Compile Include="Game\Objects\Widgets.cs" />
@@ -294,6 +302,8 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\realty\house.png" />
+    <Resource Include="Resources\real-estate-agent.png" />
     <Resource Include="Resources\save.png" />
     <Resource Include="Resources\message-icons\error.png" />
     <Resource Include="Resources\message-icons\information.png" />

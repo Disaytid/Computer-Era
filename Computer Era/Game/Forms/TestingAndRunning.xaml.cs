@@ -133,6 +133,11 @@ namespace Computer_Era.Game.Forms
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
+            if (!ComputersList.IsEnabled)
+            {
+                SelectedComputer.IsEnable = true;
+            }
+
             this.Visibility = Visibility.Collapsed;
         }
     }

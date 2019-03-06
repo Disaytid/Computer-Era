@@ -198,10 +198,10 @@ namespace Computer_Era.Game.Forms
             {
                 InstallationProgress.Value++;
             } else {
-                InstallationProgress.Value = 100;
                 GameEnvironment.GameEvents.Events.Remove(@event);
 
                 SelectedPartition.OperatingSystem = OperatingSystem;
+                this.Visibility = Visibility.Collapsed;
                 GameEnvironment.Computers.CurrentPlayerComputer.IsEnable = false;
                 GameEnvironment.GameEvents.Events.Add(new GameEvent("RebootComputer", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, RebootComputer));
             }
