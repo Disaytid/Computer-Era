@@ -23,6 +23,7 @@ namespace Computer_Era.Game.Objects
                     int area = Convert.ToInt32(data_reader["area"]);
                     int storage_size = Convert.ToInt32(data_reader["storage_size"]);
                     double rent = Convert.ToDouble(data_reader["rent"]);
+                    double price = Convert.ToDouble(data_reader["price"]);
                     double communal_payments = Convert.ToDouble(data_reader["communal_payments"]);
                     string location = Convert.ToString(data_reader["location"]);
                     int distance = Convert.ToInt32(data_reader["distance"]);
@@ -31,7 +32,7 @@ namespace Computer_Era.Game.Objects
                     bool is_credit_purchase = Convert.ToBoolean(data_reader["is_credit_purchase"]);
                     string image_name = Convert.ToString(data_reader["image_name"]);
 
-                    Houses.Add(new House(id, name, area, storage_size,  rent, communal_payments, location, distance, is_purchase, is_rent, is_credit_purchase, image_name));
+                    Houses.Add(new House(id, name, area, storage_size,  rent, price, communal_payments, location, distance, is_purchase, is_rent, is_credit_purchase, image_name));
                 }
             }
         }
@@ -44,6 +45,7 @@ namespace Computer_Era.Game.Objects
         public int Area { get; set; }
         public int StorageSize { get; set; }
         public double Rent { get; set; }
+        public double Price { get; set; }
         public double CommunalPayments { get; set; }
         public string Location { get; set; }
         public int Distance { get; set; } //В метрах
@@ -52,13 +54,14 @@ namespace Computer_Era.Game.Objects
         public  bool IsCreditPurchase { get; set; }
         public string Image { get; set; }
 
-        public House(int id, string name, int area, int storage_size, double rent, double communal_payments, string location, int distance, bool is_purchase, bool is_rent, bool is_credit_purchase, string image_name)
+        public House(int id, string name, int area, int storage_size, double rent, double price, double communal_payments, string location, int distance, bool is_purchase, bool is_rent, bool is_credit_purchase, string image_name)
         {
             UId = id;
             Name = name;
             Area = area;
             StorageSize = storage_size;
             Rent = rent;
+            Price = price;
             CommunalPayments = communal_payments;
             Location = location;
             Distance = distance;
@@ -66,6 +69,15 @@ namespace Computer_Era.Game.Objects
             IsRent = is_rent;
             IsCreditPurchase = is_credit_purchase;
             Image = image_name;
+        }
+
+        public override string ToString()
+        {
+            string str = "Площадь " + Area + " м²" + Environment.NewLine +
+                          "Размер кладовки: " + StorageSize + " ячеек";
+            if (IsRent) { str += "Стоимость аренды: " + Price + Environment.NewLine; }
+            if (IsPurchase) { str += "Стоимость покупки: "; }
+            return str;
         }
     }
 }

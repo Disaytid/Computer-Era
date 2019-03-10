@@ -25,7 +25,7 @@
                         <Label Name="CoinCount" Margin="5, 0, 0, 0"  FontSize="16"/>
                     </DockPanel>
                     <Border Margin="10, 0" Height="1" BorderThickness="0, 0, 0, 1" BorderBrush="DarkGray"/>
-                    <TextBlock x:Name="SellerText" Text='Добро пожаловать в агенство недвижимости "Крыша над головой", мы удовлетваряем любые, даже самы изысканные нужды наших клиентов.' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
+                    <TextBlock x:Name="SellerText" Text='Добро пожаловать в агенство недвижимости "Крыша над головой", мы удовлетваряем любые, даже самые изысканные нужды наших клиентов.' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
                 </StackPanel>
             </DockPanel>
             <Grid Grid.Row="1" Background="#CCFFFFFF">
