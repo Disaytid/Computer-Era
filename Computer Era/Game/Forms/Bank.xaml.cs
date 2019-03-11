@@ -56,7 +56,7 @@ namespace Computer_Era.Game.Forms
         {
             ServiceInfo.Visibility = Visibility.Collapsed;
             ServiceForm.Visibility = Visibility.Visible;
-            ServiceType.ItemsSource = GameEnvironment.Services.AllServices;
+            ServiceType.ItemsSource = GameEnvironment.Services.AllServices.Where(s => !s.IsSystem);
             if (ServiceType.Items.Count > 0)
             {
                 ServiceType.SelectedIndex = 0;
@@ -185,7 +185,7 @@ namespace Computer_Era.Game.Forms
                     if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEnvironment.GameEvents.Events.Remove(@event); GameEnvironment.Services.PlayerTariffs.Remove(tariff); }
                 }
             } else {
-                MessageBox.Show("Что-то пошло не так, тариф не найден!");
+                GameMessageBox.Show("Обработка выплат и взысканий", "Что-то пошло не так, тариф не найден!", GameMessageBox.MessageBoxType.Error);
             }
         }
 

@@ -74,10 +74,28 @@ namespace Computer_Era.Game.Objects
         public override string ToString()
         {
             string str = "Площадь " + Area + " м²" + Environment.NewLine +
-                          "Размер кладовки: " + StorageSize + " ячеек";
-            if (IsRent) { str += "Стоимость аренды: " + Price + Environment.NewLine; }
-            if (IsPurchase) { str += "Стоимость покупки: "; }
+                          "Размер кладовки: " + StorageSize + " ячеек" + Environment.NewLine;
+            if (IsRent) { str += "Стоимость аренды: " + Rent + Environment.NewLine; }
+            if (IsPurchase) { str += "Стоимость покупки: " + Price ; }
             return str;
+        }
+    }
+
+    public class PlayerHouse : House
+    {
+        public bool IsRentedOut { get; set; }
+        public bool IsPurchased { get; set; }
+        public bool IsPurchasedOnCredit { get; set; }
+        public PlayerTariff PlayerRent { get; set; }
+        public PlayerTariff PlayerCredit { get; set; }
+        public PlayerHouse(int id, string name, int area, int storage_size, double rent, double price, double communal_payments, string location, int distance, bool is_purchase, bool is_rent, bool is_credit_purchase, string image_name, bool isRentedOut = false, bool isPurchased = false, bool isPurchasedOnCredit = false, PlayerTariff tariff = null)
+                          : base(id, name, area, storage_size, rent, price, communal_payments, location, distance, is_purchase, is_rent, is_credit_purchase, image_name)
+        {
+            IsRentedOut = isRentedOut;
+            IsPurchase = isPurchased;
+            IsPurchasedOnCredit = isPurchasedOnCredit;
+            if (IsRentedOut) { PlayerRent = tariff; }
+            else if (IsCreditPurchase) { PlayerCredit = tariff; }
         }
     }
 }

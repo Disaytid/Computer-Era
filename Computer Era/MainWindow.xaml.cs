@@ -35,6 +35,7 @@ namespace Computer_Era
         public Computers Computers;
         public Services Services;
         public Realty Realty;
+        public IScenario Scenario;
 
         public Random Random = new Random(DateTime.Now.Millisecond);
     }
@@ -79,7 +80,7 @@ namespace Computer_Era
             GameEnvironment.Services = new Services(connection, GameEnvironment.Money); //Объявляеться не раньше Money
             GameEnvironment.Realty = new Realty(connection);
 
-            if (ScenariosList.SelectedItem != null) { ((IScenario)ScenariosList.SelectedItem).Start(this, GameEnvironment); } else { return; }
+            if (ScenariosList.SelectedItem != null) { GameEnvironment.Scenario = (IScenario)ScenariosList.SelectedItem; GameEnvironment.Scenario.Start(this, GameEnvironment); } else { return; }
 
             if (PlayerName.Text.Length > 0)
             {

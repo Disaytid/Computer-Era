@@ -21,10 +21,12 @@ namespace Computer_Era.Game.Objects
                 while (data_reader.Read())
                 {
                     int id = Convert.ToInt32(data_reader["id"]);
+                    string system_name = Convert.ToString(data_reader["system_name"]);
                     string name = Convert.ToString(data_reader["name"]);
                     TransactionType type = (TransactionType)Enum.Parse(typeof(TransactionType), Convert.ToString(data_reader["transaction_type"]));
                     double total_max_debt = Convert.ToDouble(data_reader["total_max_debt"]);
                     double total_max_contribution = Convert.ToDouble(data_reader["total_max_contribution"]);
+                    bool is_system = Convert.ToBoolean(data_reader["is_system"]);
                     Collection<Tariff> tariffs = new Collection<Tariff>();
 
                     SQLiteCommand command2 = new SQLiteCommand(connection)
@@ -76,7 +78,7 @@ namespace Computer_Era.Game.Objects
                         tariffs.Add(tariff);
                     }
 
-                    AllServices.Add(new Service(id, name, type, tariffs, total_max_debt, total_max_contribution));
+                    AllServices.Add(new Service(id, system_name, name, type, tariffs, is_system, total_max_debt, total_max_contribution));
                 }
             }
         }
@@ -176,20 +178,24 @@ namespace Computer_Era.Game.Objects
     public class Service
     {
         public int UId { get; set; }
+        public string SystemName { get; set; }
         public string Name { get; set; }
         public TransactionType Type { get; set; }
         public Collection<Tariff> Tariffs { get; set; } = new Collection<Tariff>();
         public double TotalMaxDebt { get; set; } //Указывается в UGC(Универсальной игровой валюте)
         public double TotalMaxContribution { get; set; } //Указывается в UGC(Универсальной игровой валюте)
+        public bool IsSystem { get; set; }
 
-        public Service(int uid, string name, TransactionType type, Collection<Tariff> tariffs, double tmd = 0, double tmc = 0)
+        public Service(int uid, string system_name, string name, TransactionType type, Collection<Tariff> tariffs, bool isSystem , double tmd = 0, double tmc = 0)
         {
             UId = uid;
+            SystemName = system_name;
             Name = name;
             Type = type;
             Tariffs = tariffs;
             TotalMaxDebt = tmd;
             TotalMaxContribution = tmc;
+            IsSystem = isSystem;
         }
     }
 }

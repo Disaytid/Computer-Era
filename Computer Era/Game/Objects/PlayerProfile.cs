@@ -11,6 +11,7 @@ namespace Computer_Era.Game.Objects
     {
         public string Name { get; set; }
         public JobCard Job { get; set; }
+        public PlayerHouse House { get; set; }
 
         public PlayerProfile (string name)
         {

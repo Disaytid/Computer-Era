@@ -3,17 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Computer_Era.Game.Forms
 {
@@ -76,22 +69,96 @@ namespace Computer_Era.Game.Forms
             //textBlock.Text = price.ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
         }
 
+        private void RentButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = sender as Button;
+
+            if (button.Tag is House)
+            {
+                House house = button.Tag as House;
+
+                if (GameEnvironment.Player.House != null)
+                {
+                    if (GameEnvironment.Player.House.IsRent == true & GameEnvironment.Player.House.IsRentedOut & house.UId == GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Аренда", "Вы уже арендовали данное жилье", GameMessageBox.MessageBoxType.Warning); return; }
+                    if (GameEnvironment.Player.House.IsPurchase) { if (GameMessageBox.Show("Аренда", "У вас куплено жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
+                    if (GameEnvironment.Player.House.IsPurchasedOnCredit) { _ = GameMessageBox.Show("Аренда", "Нельзя арендовать купленное в кредит жилье!", GameMessageBox.MessageBoxType.Information); return; }
+                }
+
+                Service service = null;
+                for (int i = 0; i <= GameEnvironment.Services.AllServices.Count - 1; i++)
+                {
+                    if (GameEnvironment.Services.AllServices[i].SystemName == "rent") { service = GameEnvironment.Services.AllServices[i]; break; }
+                }
+                if (service == null) { GameMessageBox.Show("Аренда", "Не найдена услуга аренды, убедитесь в целостности базы данных!", GameMessageBox.MessageBoxType.Error); return; }
+                PropertyForSale();
+
+                int uid = GameEnvironment.Services.AllServices.Count + 1; //Возможно прийдеться поменять
+                PlayerTariff playerTariff = new PlayerTariff(uid, house.Name, GameEnvironment.Money.PlayerCurrency[0], 0, house.Rent, house.Rent, Periodicity.Month, 1, Periodicity.Month, 1, 1, service, house.Rent, 1, GameEnvironment.GameEvents.GameTimer.DateAndTime);
+                GameEnvironment.Services.PlayerTariffs.Add(playerTariff);
+                GameEnvironment.Player.House = new PlayerHouse(house.UId, house.Name, house.Area, house.StorageSize, house.Rent, house.Price, house.CommunalPayments, house.Location, house.Distance, house.IsPurchase, house.IsRent, house.IsCreditPurchase, house.Image, true, false, false, playerTariff);
+
+                GameEnvironment.GameEvents.Events.Add(new GameEvent(service.UId + ":" + playerTariff.UId + ":" + house.Rent,
+                                    GameEnvironment.GameEvents.GetDateTimeFromPeriodicity(GameEnvironment.GameEvents.GameTimer.DateAndTime, playerTariff.Periodicity, playerTariff.PeriodicityValue),
+                                    playerTariff.Periodicity, playerTariff.PeriodicityValue, RentalPayment, true));
+                GameEnvironment.Messages.NewMessage("Агенство недвижимости", "Вы арендовали: " + house.Name + ". Поздравляем Вас!", GameMessages.Icon.Info);
+            }
+        }
+
+        private void PropertyForSale()
+        {
+            if (GameEnvironment.Player.House != null && GameEnvironment.Player.House.IsRentedOut)
+            {
+                GameEvent @event;
+                for (int i = 0; i >= GameEnvironment.GameEvents.Events.Count - 1; i++)
+                {
+                    if (GameEnvironment.GameEvents.Events[i].Name == (GameEnvironment.Player.House.PlayerRent.Service.UId + ":" + GameEnvironment.Player.House.PlayerRent.UId + ":" + GameEnvironment.Player.House.Rent))
+                    {
+                        @event = GameEnvironment.GameEvents.Events[i];
+                        double sum = (@event.ResponseTime - GameEnvironment.GameEvents.GameTimer.DateAndTime).TotalDays * (GameEnvironment.Player.House.PlayerRent.Amount * GameEnvironment.Player.House.PlayerRent.Currency.Course);
+                        if (GameEnvironment.Player.House.PlayerRent.Currency.Withdraw("Выплата аренды", "Агенство недвижимости \"Крыша над головой\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, sum)) { GameMessageBox.Show("Аренда", "Вам не хватает средств на выплату задолженности по текущей аренде!", GameMessageBox.MessageBoxType.Information); return; }
+                        GameEnvironment.GameEvents.Events.Remove(@event);
+                        break;
+                    }
+                }
+            }
+            else if (GameEnvironment.Player.House != null && GameEnvironment.Player.House.IsPurchased)
+            {
+                GameEnvironment.Money.PlayerCurrency[0].TopUp("Продажа недвижимости", GameEnvironment.Player.Name, GameEnvironment.GameEvents.GameTimer.DateAndTime, (GameEnvironment.Player.House.Price * 90 / 100) * GameEnvironment.Money.PlayerCurrency[0].Course);
+            }
+        }
+
+        private void RentalPayment(GameEvent @event)
+        {
+            string[] keys = @event.Name.Split(new char[] { ':' });
+            List<PlayerTariff> tariffs = GameEnvironment.Services.PlayerTariffs.Where(t => t.Service.UId.ToString() == keys[0] & t.UId.ToString() == keys[1] & t.Amount.ToString() == keys[2]).ToList();
+            if (tariffs.Count == 1)
+            {
+                if (tariffs[0].Currency.Withdraw("Выплата аренды", "Агенство недвижимости \"Крыша над головой\"", GameEnvironment.GameEvents.GameTimer.DateAndTime, tariffs[0].Amount * tariffs[0].Currency.Course) == false)
+                {
+                    GameEnvironment.Player.House = null;
+                    GameEnvironment.GameEvents.Events.Remove(@event);
+                    GameEnvironment.Messages.NewMessage("Агенство недвижимости \"Крыша над головой\"", "Вы были выселены за неуплату аренды!", GameMessages.Icon.Info);
+                }
+            } else { GameMessageBox.Show("Обработка выплат и взысканий", "Что-то пошло не так, тариф не найден!", GameMessageBox.MessageBoxType.Error); }
+        }
+
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Hidden;
         }
-
     }
 
     class RealtyObject
     {
         public House House { get; set; }
         public ImageSource Image { get; set; }
+        public string Tag { get; set; }
 
         public RealtyObject(House house, ImageSource imageSource)
         {
             House = house;
             Image = imageSource;
+            Tag = house.ToString();
         }
     }
 }

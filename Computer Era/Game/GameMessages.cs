@@ -32,7 +32,8 @@ namespace Computer_Era.Game
 
         public enum Icon
         {
-            Money
+            Money,
+            Info,
         }
 
         private string GetIcon(Icon icon)
