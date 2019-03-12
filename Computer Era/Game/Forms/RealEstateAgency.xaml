@@ -46,9 +46,9 @@
                                         <TextBlock VerticalAlignment="Center" Margin="0,5,5,5" Text="{Binding Item.Price}" Loaded="TextBlock_Loaded" />
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
-                                        <Button x:Name="RentButton" Content="Арендовать" Margin="10" Padding="5" Background="Blue" Foreground="White" BorderThickness="0" Tag="{Binding House}" Click="RentButton_Click"/>
-                                        <Button x:Name="BuyButton" Content="Купить" Margin="10" Padding="5" Background="Green" Foreground="White" BorderThickness="0" Tag="{Binding House}"/>
-                                        <Button x:Name="BuyCreditButton" Content="Купить в кредит" Margin="10" Padding="5" Background="Orange" Foreground="White" BorderThickness="0" Tag="{Binding House}"/>
+                                        <Button x:Name="RentButton" Content="Арендовать" Margin="5" Padding="5" Background="Blue" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsRent}" Tag="{Binding House}" Click="RentButton_Click"/>
+                                        <Button x:Name="BuyButton" Content="Купить" Margin="5" Padding="5" Background="Green" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsPurchase}" Tag="{Binding House}" Click="BuyButton_Click"/>
+                                        <Button x:Name="BuyCreditButton" Content="Купить в кредит" Margin="5" Padding="5" Background="Orange" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsCreditPurchase}" Tag="{Binding House}"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left">
                                         <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding House.Name}" FontSize="24" />

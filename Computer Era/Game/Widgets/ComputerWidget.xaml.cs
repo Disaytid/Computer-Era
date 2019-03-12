@@ -26,8 +26,6 @@ namespace Computer_Era.Game.Widgets
             InitializeComponent();
 
             GameEnvironment = gameEnvironment;
-
-            GameEnvironment = gameEnvironment;
             Update();
             GameEnvironment.GameEvents.Events.Add(new GameEvent("player widget", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, Update, true));
         }

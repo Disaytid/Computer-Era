@@ -302,6 +302,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\realty\country_house1.png" />
     <Resource Include="Resources\realty\house.png" />
     <Resource Include="Resources\real-estate-agent.png" />
     <Resource Include="Resources\save.png" />

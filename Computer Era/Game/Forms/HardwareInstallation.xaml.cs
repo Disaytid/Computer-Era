@@ -208,7 +208,7 @@ namespace Computer_Era.Game.Forms
                 if (collection[i].Item.Type == "optical_drive")
                 {
                     OpticalDrive od = collection[i].IObject as OpticalDrive;
-                    if (hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30 && od.Properties.Interface == OpticalDriveInterface.SATA)
+                    if ((hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30) && od.Properties.Interface == OpticalDriveInterface.SATA)
                     { count_interfaces++; }
                     else if (hdd.Properties.Interface == HDDInterface.IDE && od.Properties.Interface == OpticalDriveInterface.IDE)
                     { count_interfaces++; }
@@ -216,7 +216,7 @@ namespace Computer_Era.Game.Forms
                 else if (collection[i].Item.Type == "hdd")
                 {
                     HDD lhdd = collection[i].IObject as HDD;
-                    if (hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30 && lhdd.Properties.Interface == HDDInterface.sata_20 || lhdd.Properties.Interface == HDDInterface.sata_30)
+                    if ((hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30) && (lhdd.Properties.Interface == HDDInterface.sata_20 || lhdd.Properties.Interface == HDDInterface.sata_30))
                     { count_interfaces++; }
                     else if (hdd.Properties.Interface == HDDInterface.IDE && lhdd.Properties.Interface == HDDInterface.IDE)
                     { count_interfaces++; }

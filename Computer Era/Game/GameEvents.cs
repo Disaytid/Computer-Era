@@ -242,7 +242,7 @@ namespace Computer_Era.Game
             if (DateAndTime.Hour > OldDateAndTime.Hour & DateAndTime.Day == OldDateAndTime.Day
                 || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day > OldDateAndTime.Day
                 || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month
-                || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > DateAndTime.Year)
+                || DateAndTime.Hour < OldDateAndTime.Hour & DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > OldDateAndTime.Year)
             {
                 OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, OldDateAndTime.Day, DateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Hour?.Invoke();
@@ -253,7 +253,7 @@ namespace Computer_Era.Game
         {
             if (DateAndTime.Day > OldDateAndTime.Day & DateAndTime.Month == OldDateAndTime.Month
                 || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month > OldDateAndTime.Month
-                || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > DateAndTime.Year)
+                || DateAndTime.Day < OldDateAndTime.Day & DateAndTime.Month < OldDateAndTime.Month & DateAndTime.Year > OldDateAndTime.Year)
             {
                 OldDateAndTime = new DateTime(OldDateAndTime.Year, OldDateAndTime.Month, DateAndTime.Day, OldDateAndTime.Hour, OldDateAndTime.Minute, OldDateAndTime.Second);
                 Day?.Invoke();

@@ -111,7 +111,7 @@ namespace Computer_Era.Game.Forms
                 {
                     if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итого начисления составят: " + ((sum * tariff.Coefficient / 100) * TariffPeriod.Value).ToString("N3"); }
                 } else if (service.Type == TransactionType.Withdraw) {
-                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итоговая сумма выплат составит: " + (sum + ((sum * tariff.Coefficient / 100)) * TariffPeriod.Value).ToString("N3"); }
+                    if (double.TryParse(Sum.Text, out double sum)) { SummaryInformation.Content = "Итоговая сумма выплат составит: " + (sum + (sum * tariff.Coefficient / 100) * TariffPeriod.Value).ToString("N3"); }
                 }
             } else { SummaryInformation.Content = ""; }
         }

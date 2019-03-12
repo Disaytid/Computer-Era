@@ -90,7 +90,7 @@ namespace Computer_Era.Game.Objects
             if (CPUCooler == null) { errorСodes.Add(ErrorСodes.NoCPUCooler); }
             if (RAMs.Count == 0) { errorСodes.Add(ErrorСodes.NoRAM); }
             if (HDDs.Count == 0) { errorСodes.Add(ErrorСodes.NoHDD); }
-            if (Motherboard != null && !Motherboard.Properties.EmbeddedGraphics & VideoСards.Count == 0) { errorСodes.Add(ErrorСodes.NoVideoСard); }
+            if (Motherboard != null && !Motherboard.Properties.EmbeddedGraphics && VideoСards.Count == 0) { errorСodes.Add(ErrorСodes.NoVideoСard); }
 
             if (errorСodes.Count == 0) { errorСodes.Add(ErrorСodes.Ok); }
 
