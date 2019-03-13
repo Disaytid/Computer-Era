@@ -98,7 +98,7 @@ namespace Computer_Era.Game.Objects
         public int MinTerm { get; set; }
         public int MaxTerm { get; set; }
         public bool SpecialOffer { get; set; }
-        public int PropertyPledged { get; set; } //Имущество под залог
+        public object PropertyPledged { get; set; } //Имущество под залог
 
         public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, bool spec_offer = false)
         {
@@ -115,7 +115,7 @@ namespace Computer_Era.Game.Objects
             MaxTerm = max_term;
             SpecialOffer = spec_offer;
         }
-        public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, int property_pledged, bool spec_offer = false)
+        public Tariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, object property_pledged, bool spec_offer = false)
         {
             UId = uid;
             Name = name;
@@ -154,6 +154,15 @@ namespace Computer_Era.Game.Objects
         public DateTime StartDateOfService { get; set; }
         public PlayerTariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, Service service, double amount, int term, DateTime start_date, bool spec_offer = false) 
                      : base(uid, name, currency, coefficient, min_sum, max_sum, periodicity, periodicity_value, term_unit, min_term, max_term, spec_offer)
+        {
+            Service = service;
+            Amount = amount;
+            Term = term;
+            StartDateOfService = start_date;
+        }
+
+        public PlayerTariff(int uid, string name, Currency currency, int coefficient, double min_sum, double max_sum, Periodicity periodicity, int periodicity_value, Periodicity term_unit, int min_term, int max_term, Service service, double amount, int term, DateTime start_date, object property_pledged, bool spec_offer = false)
+                        : base (uid, name, currency, coefficient, min_sum, max_sum, periodicity, periodicity_value, term_unit, min_term, max_term, property_pledged, spec_offer)
         {
             Service = service;
             Amount = amount;

@@ -279,4 +279,10 @@
   <data name="ModifiedAssembly" xml:space="preserve">
     <value>Изменение сборки</value>
   </data>
+  <data name="Cost" xml:space="preserve">
+    <value>Стоимость</value>
+  </data>
+  <data name="RentPrice" xml:space="preserve">
+    <value>Стоимость аренды</value>
+  </data>
 </root>

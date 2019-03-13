@@ -187,6 +187,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Cost.
+        /// </summary>
+        public static string Cost {
+            get {
+                return ResourceManager.GetString("Cost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Central processing unit.
         /// </summary>
         public static string CPU {
@@ -507,6 +516,15 @@ namespace Computer_Era.Properties {
         public static string RAM {
             get {
                 return ResourceManager.GetString("RAM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Rent price.
+        /// </summary>
+        public static string RentPrice {
+            get {
+                return ResourceManager.GetString("RentPrice", resourceCulture);
             }
         }
         

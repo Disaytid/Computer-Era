@@ -288,4 +288,10 @@
   <data name="ModifiedAssembly" xml:space="preserve">
     <value>Modified assembly</value>
   </data>
+  <data name="Cost" xml:space="preserve">
+    <value>Cost</value>
+  </data>
+  <data name="RentPrice" xml:space="preserve">
+    <value>Rent price</value>
+  </data>
 </root>

@@ -45,13 +45,11 @@ namespace Computer_Era.Game.Forms
 
             LoadListServices();
         }
-
         private void LoadListServices()
         {
             ListServices.ItemsSource = GameEnvironment.Services.PlayerTariffs;
             ListServices.Items.Refresh();
         }
-
         private void NewService_Click(object sender, RoutedEventArgs e)
         {
             ServiceInfo.Visibility = Visibility.Collapsed;
@@ -65,26 +63,38 @@ namespace Computer_Era.Game.Forms
                 { ServiceTariff.SelectedIndex = 0; }
             }
         }
-
+        public void LoadCredits()
+        {
+            if (Sum.IsEnabled) { ServiceType.ItemsSource = GameEnvironment.Services.AllServices.Where(s => !s.IsSystem && s.Type == TransactionType.Withdraw); }
+            else { ServiceType.ItemsSource = GameEnvironment.Services.AllServices.Where(s => !s.IsSystem && s.Type == TransactionType.Withdraw && s.TotalMaxDebt >= (double)Sum.Tag); }
+            if (ServiceType.Items.Count > 0)
+            {
+                ServiceType.SelectedIndex = 0;
+                ServiceTariff.ItemsSource = ((Service)ServiceType.SelectedItem).Tariffs.Where(t => t.MaxSum >= (double)Sum.Tag * t.Currency.Course);
+                if (ServiceTariff.Items.Count > 0)
+                { ServiceTariff.SelectedIndex = 0; }
+            }
+        }
         private void ServiceType_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ServiceType.SelectedItem != null)
             {
-                ServiceTariff.ItemsSource = ((Service)ServiceType.SelectedItem).Tariffs;
+                if (Sum.IsEnabled) { ServiceTariff.ItemsSource = ((Service)ServiceType.SelectedItem).Tariffs; }
+                else { ServiceTariff.ItemsSource = ((Service)ServiceType.SelectedItem).Tariffs.Where(t => t.MaxSum >= (double)Sum.Tag * t.Currency.Course); }
                 if (ServiceTariff.Items.Count > 0) { ServiceTariff.SelectedIndex = 0; }
             }
             CalculationOfTheTotal();
         }
-
         private void ServiceTariff_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ServiceTariff.SelectedItem != null)
             {
                 Tariff tariff = (Tariff)ServiceTariff.SelectedItem;
                 TariffDescription.Text = tariff.ToString(); TariffDescription.Visibility = Visibility.Visible;
-                LabelPeriod.Content = GameEnvironment.GameEvents.FromPeriodicityToLocalizedString(tariff.Periodicity) + ": ";
+                LabelPeriod.Content = GameEnvironment.GameEvents.FromPeriodicityToLocalizedString(tariff.TermUnit) + ": ";
                 TariffPeriod.MinValue = tariff.MinTerm;
                 TariffPeriod.MaxValue = tariff.MaxTerm;
+                if (!Sum.IsEnabled) { Sum.Text = ((double)Sum.Tag * tariff.Currency.Course).ToString(); }
             } else {
                 TariffDescription.Visibility = Visibility.Collapsed;
             }
@@ -115,7 +125,7 @@ namespace Computer_Era.Game.Forms
                 }
             } else { SummaryInformation.Content = ""; }
         }
-        private void Accept_Click(object sender, RoutedEventArgs e)
+        public void Accept_Click(object sender, RoutedEventArgs e)
         {
             if (ServiceType.SelectedItem == null) { CashierText.Text = "Уважаемый не балуйтесь, выберите уже тип услуги!"; return; }
             if (ServiceTariff.SelectedItem == null) { CashierText.Text = "Уважаемый не балуйтесь, тариф сам себя не выберет!"; return; }
@@ -164,7 +174,7 @@ namespace Computer_Era.Game.Forms
             } else { CashierText.Text = "Хватит баловаться! Введите уже сумму и оформим " + service.Name.ToLower() + "!"; }
         }
 
-        private void ProcessingServices(GameEvent @event)
+        public void ProcessingServices(GameEvent @event)
         {
             string[] keys = @event.Name.Split(new char[] { ':' });
             List<PlayerTariff> tariffs = GameEnvironment.Services.PlayerTariffs.Where(t => t.Service.UId.ToString() == keys[0] & t.UId.ToString() == keys[1] & t.Amount.ToString() == keys[2]).ToList();
@@ -211,7 +221,7 @@ namespace Computer_Era.Game.Forms
             else { return 0; }
         }
 
-        private void CloseServiceForm_Click(object sender, RoutedEventArgs e)
+        public void CloseServiceForm_Click(object sender, RoutedEventArgs e)
         {
             ServiceForm.Visibility = Visibility.Collapsed;
             if (ListServices.Items.Count > 0) { ListServices.SelectedIndex = 0; }

@@ -6,6 +6,19 @@
              xmlns:local="clr-namespace:Computer_Era.Game.Forms"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:StateConverter x:Key="StateConverter"></local:StateConverter>
+        <Style TargetType="TextBlock" x:Key="property">
+            <Style.Setters>
+                <Setter Property="Visibility" Value="Visible"/>
+            </Style.Setters>
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
     <Grid>
         <DockPanel VerticalAlignment="Top" Background="#E5747474" Height="32">
             <Button x:Name="ButtonClose" Content="X" Width="22" HorizontalAlignment="Right" Background="Red" Foreground="White" DockPanel.Dock="Right" Margin="5" Click="ButtonClose_Click" BorderThickness="0"/>
@@ -28,7 +41,7 @@
                     <TextBlock x:Name="SellerText" Text='Добро пожаловать в агенство недвижимости "Крыша над головой", мы удовлетваряем любые, даже самые изысканные нужды наших клиентов.' FontSize="18" TextWrapping="Wrap" Margin="10,5,10,5" />
                 </StackPanel>
             </DockPanel>
-            <Grid Grid.Row="1" Background="#CCFFFFFF">
+            <Grid x:Name="RentPanel" Grid.Row="1" Background="#CCFFFFFF" Visibility="Visible">
                 <ListBox x:Name="HousesList" Background="{x:Null}" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
@@ -48,10 +61,12 @@
                                     <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
                                         <Button x:Name="RentButton" Content="Арендовать" Margin="5" Padding="5" Background="Blue" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsRent}" Tag="{Binding House}" Click="RentButton_Click"/>
                                         <Button x:Name="BuyButton" Content="Купить" Margin="5" Padding="5" Background="Green" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsPurchase}" Tag="{Binding House}" Click="BuyButton_Click"/>
-                                        <Button x:Name="BuyCreditButton" Content="Купить в кредит" Margin="5" Padding="5" Background="Orange" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsCreditPurchase}" Tag="{Binding House}"/>
+                                        <Button x:Name="BuyCreditButton" Content="Купить в кредит" Margin="5" Padding="5" Background="Orange" Foreground="White" BorderThickness="0" IsEnabled="{Binding House.IsCreditPurchase}" Tag="{Binding House}" Click="BuyCreditButton_Click"/>
                                     </StackPanel>
                                     <StackPanel DockPanel.Dock="Left">
                                         <TextBlock VerticalAlignment="Center" Margin="5,0,5,5" Text="{Binding House.Name}" FontSize="24" />
+                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding House.Rent}" TextWrapping="Wrap" FontSize="16" IsEnabled="{Binding House.IsRent}" Style="{StaticResource property}" Loaded="RentTextBlock_Loaded"/>
+                                        <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding House.Price}" TextWrapping="Wrap" FontSize="16" IsEnabled="{Binding House, Converter={StaticResource StateConverter}}" Style="{StaticResource property}" Loaded="TextBlock_Loaded"/>
                                         <TextBlock VerticalAlignment="Center" Margin="5,5,5,0" Text="{Binding Tag}" TextWrapping="Wrap" FontSize="16" />
                                     </StackPanel>
                                 </DockPanel>
@@ -59,6 +74,9 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+            </Grid>
+            <Grid x:Name="CreditPanel" Grid.Row="1" Background="#CCFFFFFF" Visibility="Collapsed">
+                
             </Grid>
         </Grid>
     </Grid>
