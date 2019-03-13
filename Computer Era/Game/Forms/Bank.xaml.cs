@@ -192,7 +192,19 @@ namespace Computer_Era.Game.Forms
                 } else if (tariff.Service.Type == TransactionType.Withdraw) {
                     int per_s = GetNumberOfPeriods(tariff.Periodicity, tariff.PeriodicityValue, tariff.StartDateOfService, GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term));
                     if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s)) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
-                    if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0) { GameEnvironment.GameEvents.Events.Remove(@event); GameEnvironment.Services.PlayerTariffs.Remove(tariff); }
+                    if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0)
+                    {
+                        if (tariff.PropertyPledged != null)
+                        {
+                            if (tariff.PropertyPledged is House)
+                            {
+                                GameEnvironment.Player.House.IsPurchasedOnCredit = false;
+                                GameEnvironment.Player.House.IsPurchased = true;
+                            }
+                        }
+                        GameEnvironment.GameEvents.Events.Remove(@event);
+                        GameEnvironment.Services.PlayerTariffs.Remove(tariff);
+                    }
                 }
             } else {
                 GameMessageBox.Show("Обработка выплат и взысканий", "Что-то пошло не так, тариф не найден!", GameMessageBox.MessageBoxType.Error);

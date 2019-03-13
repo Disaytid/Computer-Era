@@ -73,7 +73,7 @@ namespace Computer_Era.Game.Forms
             if (GameEnvironment.Player.House != null)
             {
                 if (GameEnvironment.Player.House.IsRent == true & GameEnvironment.Player.House.IsRentedOut & house.UId == GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Аренда", "Вы уже арендовали данное жилье", GameMessageBox.MessageBoxType.Warning); return; }
-                if (GameEnvironment.Player.House.IsPurchase) { if (GameMessageBox.Show("Аренда", "У вас куплено жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
+                if (GameEnvironment.Player.House.IsPurchased) { if (GameMessageBox.Show("Аренда", "У вас куплено жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
                 if (GameEnvironment.Player.House.IsPurchasedOnCredit) { _ = GameMessageBox.Show("Аренда", "Нельзя арендовать если есть купленное в кредит жилье!", GameMessageBox.MessageBoxType.Information); return; }
             }
 
@@ -116,9 +116,9 @@ namespace Computer_Era.Game.Forms
             if (GameEnvironment.Player.House != null)
             {
                 if (GameEnvironment.Player.House.IsRent == true & GameEnvironment.Player.House.IsRentedOut & house.UId == GameEnvironment.Player.House.UId) { if (GameMessageBox.Show("Покупка", "Данное жилье арендовано вами, вы действительно хотите расторгнуть аренду?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
-                if ((GameEnvironment.Player.House.IsPurchase || GameEnvironment.Player.House.IsCreditPurchase) && house.UId == GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка", "У вас уже куплено данное жилье!", GameMessageBox.MessageBoxType.Information); return; }
-                if (GameEnvironment.Player.House.IsCreditPurchase && house.UId != GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка", "Нельзя купить новое жилье пока не погасите кредит за текущее!", GameMessageBox.MessageBoxType.Information); return; }
-                if (GameEnvironment.Player.House.IsPurchase && house.UId != GameEnvironment.Player.House.UId) { if (GameMessageBox.Show("Покупка", "У вас есть другое купленно жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
+                if ((GameEnvironment.Player.House.IsPurchased || GameEnvironment.Player.House.IsPurchasedOnCredit) && house.UId == GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка", "У вас уже куплено данное жилье!", GameMessageBox.MessageBoxType.Information); return; }
+                if (GameEnvironment.Player.House.IsPurchasedOnCredit && house.UId != GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка", "Нельзя купить новое жилье пока не погасите кредит за текущее!", GameMessageBox.MessageBoxType.Information); return; }
+                if (GameEnvironment.Player.House.IsPurchased && house.UId != GameEnvironment.Player.House.UId) { if (GameMessageBox.Show("Покупка", "У вас есть другое купленно жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
             }
 
             Service communal_service = null;
@@ -162,9 +162,9 @@ namespace Computer_Era.Game.Forms
             if (GameEnvironment.Player.House != null)
             {
                 if (GameEnvironment.Player.House.IsRent == true & GameEnvironment.Player.House.IsRentedOut & house.UId == GameEnvironment.Player.House.UId) { if (GameMessageBox.Show("Покупка в кредит", "Данное жилье арендовано вами, вы действительно хотите расторгнуть аренду?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
-                if ((GameEnvironment.Player.House.IsPurchase || GameEnvironment.Player.House.IsCreditPurchase) && house.UId == GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка в кредит", "У вас уже куплено данное жилье!", GameMessageBox.MessageBoxType.Information); return; }
-                if (GameEnvironment.Player.House.IsCreditPurchase && house.UId != GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка в кредит", "Нельзя купить новое жилье пока не погасите кредит за текущее!", GameMessageBox.MessageBoxType.Information); return; }
-                if (GameEnvironment.Player.House.IsPurchase && house.UId != GameEnvironment.Player.House.UId) { if (GameMessageBox.Show("Покупка в кредит", "У вас есть другое купленно жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
+                if ((GameEnvironment.Player.House.IsPurchased || GameEnvironment.Player.House.IsPurchasedOnCredit) && house.UId == GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка в кредит", "У вас уже куплено данное жилье!", GameMessageBox.MessageBoxType.Information); return; }
+                if (GameEnvironment.Player.House.IsPurchasedOnCredit && house.UId != GameEnvironment.Player.House.UId) { _ = GameMessageBox.Show("Покупка в кредит", "Нельзя купить новое жилье пока не погасите кредит за текущее!", GameMessageBox.MessageBoxType.Information); return; }
+                if (GameEnvironment.Player.House.IsPurchased && house.UId != GameEnvironment.Player.House.UId) { if (GameMessageBox.Show("Покупка в кредит", "У вас есть другое купленно жилье, вы действительно хотите его продать?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.No) { return; } }
             }
 
             Service service = null;
@@ -224,10 +224,11 @@ namespace Computer_Era.Game.Forms
                                                             Convert.ToInt32(bank.TariffPeriod.Value),
                                                             GameEnvironment.GameEvents.GameTimer.DateAndTime, house, tariff.SpecialOffer);
                 int uid = GameEnvironment.Services.AllServices.Count + 1; //Возможно прийдеться поменять
-                PlayerTariff playerCommunalTariff = new PlayerTariff(uid, house.Name, GameEnvironment.Money.PlayerCurrency[0], 0, house.Rent, house.Rent, Periodicity.Month, 1, Periodicity.Month, 1, 1, communal_service, house.CommunalPayments  * GameEnvironment.Money.PlayerCurrency[0].Course, 1, GameEnvironment.GameEvents.GameTimer.DateAndTime);
+                PlayerTariff playerCommunalTariff = new PlayerTariff(uid, house.Name, GameEnvironment.Money.PlayerCurrency[0], 0, house.Price, house.Price, Periodicity.Month, 1, Periodicity.Month, 1, 1, communal_service, house.CommunalPayments  * GameEnvironment.Money.PlayerCurrency[0].Course, 1, GameEnvironment.GameEvents.GameTimer.DateAndTime);
                 GameEnvironment.Services.PlayerTariffs.Add(playerCommunalTariff);
                 GameEnvironment.Services.PlayerTariffs.Add(playerTariff);
 
+                GameEnvironment.Player.House = new PlayerHouse(house.UId, house.Name, house.Area, house.StorageSize, house.Rent, house.Price, house.CommunalPayments, house.Location, house.Distance, house.IsPurchase, house.IsRent, house.IsCreditPurchase, house.Image, playerCommunalTariff, false, false, true, playerTariff);
                 GameEnvironment.GameEvents.Events.Add(new GameEvent(service.UId + ":" + tariff.UId + ":" + sum,
                                                     GameEnvironment.GameEvents.GetDateTimeFromPeriodicity(GameEnvironment.GameEvents.GameTimer.DateAndTime, tariff.Periodicity, tariff.PeriodicityValue),
                                                     tariff.Periodicity, tariff.PeriodicityValue, bank.ProcessingServices, true));
@@ -235,7 +236,6 @@ namespace Computer_Era.Game.Forms
                 GameEnvironment.GameEvents.Events.Add(new GameEvent(communal_service.UId + ":" + playerCommunalTariff.UId + ":" + (house.CommunalPayments * playerCommunalTariff.Currency.Course),
                       GameEnvironment.GameEvents.GetDateTimeFromPeriodicity(date, playerCommunalTariff.Periodicity, playerCommunalTariff.PeriodicityValue),
                       playerCommunalTariff.Periodicity, playerCommunalTariff.PeriodicityValue, CommunalPayment, true));
-                GameEnvironment.Player.House = new PlayerHouse(house.UId, house.Name, house.Area, house.StorageSize, house.Rent, house.Price, house.CommunalPayments, house.Location, house.Distance, house.IsPurchase, house.IsRent, house.IsCreditPurchase, house.Image, playerCommunalTariff, false, false, true, playerTariff);
                 SellerText.Text = "Благодарим за покупку, с Вами приятно иметь дело!";
                 GameEnvironment.Messages.NewMessage("Агенство недвижимости", "Вы купили: " + house.Name + ". Поздравляем Вас с покупкой!", GameMessages.Icon.Info);
 
