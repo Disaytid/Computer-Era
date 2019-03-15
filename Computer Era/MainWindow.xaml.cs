@@ -293,9 +293,9 @@ namespace Computer_Era
                 stackPanel.Children.Add(button);
                 stackPanel.Children.Add(textBlock);
 
-                //stackPanel.SetValue(Grid.RowProperty, program.Row);
-                //stackPanel.SetValue(Grid.ColumnProperty, program.Column);
-                //Desktop.Children.Add(stackPanel);
+                stackPanel.SetValue(Grid.RowProperty, program.Properties.Row);
+                stackPanel.SetValue(Grid.ColumnProperty, program.Properties.Column);
+                Desktop.Children.Add(stackPanel);
             }
         }
 
