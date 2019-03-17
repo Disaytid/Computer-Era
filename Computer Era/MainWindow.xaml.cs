@@ -7,12 +7,14 @@ using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Computer_Era.Game;
 using Computer_Era.Game.Forms;
 using Computer_Era.Game.Objects;
+using Computer_Era.Game.Programs;
 using Computer_Era.Game.Scenarios;
 using Computer_Era.Game.Widgets;
 
@@ -99,35 +101,31 @@ namespace Computer_Era
                 GameEnvironment.GameEvents.Events.Add(new GameEvent("PreloadingComputer", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddMinutes(30), Periodicity.Minute, 30, PreloadingComputer, true));
 
                 LoadSave();
-                DrawDesktop();
                 LabelTime.Text = GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("HH:mm \r\n dd.MM.yyyy");
             } else {
                 MessageBox.Show("Пожалуйста введите имя =)", "Имя любимое мое, мое любимое", MessageBoxButton.OK, MessageBoxImage.Information);
             }  
         }
 
-        bool currentState = false;
-        private bool OldState = false;
+        enum ComputerStates
+        {
+            No,
+            NoComputer,
+            NoDefaultBuild,
+            СomputerNotTurnedOn,
+            Loading,
+            BootFromDisk,
+            InstallationOS,
+            LoadedOS,
+        }
+
+        ComputerStates state = ComputerStates.No;
         private void PreloadingComputer(GameEvent @event) => PreloadingComputer();
 
         private void PreloadingComputer()
         {
-            if (GameEnvironment.Computers.CurrentPlayerComputer != null) { currentState = GameEnvironment.Computers.CurrentPlayerComputer.IsEnable; }
-
-            if (OldState && currentState)
+            if (GameEnvironment.Computers.CurrentPlayerComputer == null)
             {
-                if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = currentState; }
-                return;
-            }
-
-            if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState == true)
-            {
-                ComputerBootPanel.Visibility = Visibility.Visible;
-                OutputFromComputer.Text = new BIOS().GetBIOSText(MotherboardBIOS.AMI) + Environment.NewLine +
-                GameEnvironment.Computers.CurrentPlayerComputer.Motherboard.Name + " BIOS Date:" + GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("MM/dd/yy") + Environment.NewLine +
-                "CPU : " + GameEnvironment.Computers.CurrentPlayerComputer.CPU.Name + " @ " + GameEnvironment.Computers.CurrentPlayerComputer.CPU.Properties.MinCPUFrequency + "MHz";
-                GameEnvironment.GameEvents.Events.Add(new GameEvent("ComputerBoot", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, ComputerBoot));
-            } else {
                 Desktop.Visibility = Visibility.Collapsed;
                 DesktopWidgets.Visibility = Visibility.Collapsed;
                 NoComputerPanel.Visibility = Visibility.Visible;
@@ -141,74 +139,96 @@ namespace Computer_Era
                                           "4. В игре можно собирать и хранить несколько компьютеров, однако единовременно работать можно только за одним. Поэтому не забудь созданную сборку установить как сборку по умолчанию." + Environment.NewLine +
                                           "5. Теперь пришла пора проверить правильно ли был собран компьютер и запустить его, сделать это можно в меню \"Тестирование и запуск\"" + Environment.NewLine +
                                           "6. Наслаждаться гудением свежесобранного компьютера!";
+                    state = ComputerStates.NoComputer;
                 } else {
-                    if (GameEnvironment.Computers.CurrentPlayerComputer != null && !GameEnvironment.Computers.CurrentPlayerComputer.IsEnable)
-                    { NoComputerText.Text = string.Empty; }
-                    else { NoComputerText.Text = "У вас есть компьютерная сборка но она не установлена по умолчанию."; }
+                    NoComputerText.Text = "У вас есть компьютерная сборка но она не установлена по умолчанию.";
+                    state = ComputerStates.NoDefaultBuild;
                 }
-                OldState = currentState;
+            } else {
+                if (!GameEnvironment.Computers.CurrentPlayerComputer.IsEnable)
+                {
+                    Desktop.Visibility = Visibility.Collapsed;
+                    DesktopWidgets.Visibility = Visibility.Collapsed;
+                    NoComputerPanel.Visibility = Visibility.Visible;
+                    NoComputerText.Text = "";
+                    state = ComputerStates.СomputerNotTurnedOn;
+                    return;
+                }
+                if (state == ComputerStates.СomputerNotTurnedOn)
+                {
+                    ComputerBootPanel.Visibility = Visibility.Visible;
+                    OutputFromComputer.Text = new BIOS().GetBIOSText(MotherboardBIOS.AMI) + Environment.NewLine +
+                    GameEnvironment.Computers.CurrentPlayerComputer.Motherboard.Name + " BIOS Date:" + GameEnvironment.GameEvents.GameTimer.DateAndTime.ToString("MM/dd/yy") + Environment.NewLine +
+                    "CPU : " + GameEnvironment.Computers.CurrentPlayerComputer.CPU.Name + " @ " + GameEnvironment.Computers.CurrentPlayerComputer.CPU.Properties.MinCPUFrequency + "MHz";
+                    GameEnvironment.GameEvents.Events.Add(new GameEvent("ComputerBoot", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, ComputerBoot));
+                    state = ComputerStates.Loading;
+                }
             }
         }
         
         private void ComputerBoot(GameEvent @event)
         {
+            if (state < ComputerStates.Loading) { return; }
+            if (state == ComputerStates.LoadedOS) { return; }
+            if (state == ComputerStates.InstallationOS) { return; }
+
             OutputFromComputer.Visibility = Visibility.Visible;
             ComputerBootPanel.Visibility = Visibility.Collapsed;
 
-            if (GameEnvironment.Computers.CurrentPlayerComputer != null && currentState == true)
-            {  
-                foreach (HDD hdd in GameEnvironment.Computers.CurrentPlayerComputer.HDDs)
+            foreach (HDD hdd in GameEnvironment.Computers.CurrentPlayerComputer.HDDs)
+            {
+                bool isInstalledOS = false;
+                foreach (Partition partition in hdd.Properties.Partitions) { if (partition.OperatingSystem != null) { isInstalledOS = true; break; } }
+                if (isInstalledOS)
                 {
-                    bool isInstalledOS = false;
-                    foreach (Partition partition in hdd.Properties.Partitions) { if (partition.OperatingSystem != null) { isInstalledOS = true; break; } }
-                    if (isInstalledOS)
+                    // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
+                    WidgetPanel.Children.Clear();
+                    Widgets.PlayerWidgets.Clear();
+                    Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
+                    Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
+                    Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
+                    Widgets.Draw(WidgetPanel);
+
+                    // ================================================================================ //
+
+                    ImageBrush brush = new ImageBrush
                     {
-                        // = ЗАГРУЗКА ВИДЖЕТОВ ============================================================ //
-                        WidgetPanel.Children.Clear();
-                        Widgets.PlayerWidgets.Clear();
-                        Widgets.PlayerWidgets.Add(new Widget(new PlayerWidget(GameEnvironment)));
-                        Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
-                        Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
-                        Widgets.Draw(WidgetPanel);
+                        ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg")),
+                        Stretch = Stretch.UniformToFill
+                    };
+                    this.Background = brush;
 
-                        // ================================================================================ //
-
-                        ImageBrush brush = new ImageBrush
-                        {
-                            ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/agriculture.jpg")),
-                            Stretch = Stretch.UniformToFill
-                        };
-                        this.Background = brush;
-
-                        NoComputerPanel.Visibility = Visibility.Collapsed;
-                        Desktop.Visibility = Visibility.Visible;
-                        DesktopWidgets.Visibility = Visibility.Visible;
-
-                        OldState = currentState;
-                        return;
-                    }
-                }
-                ComputerBootPanel.Visibility = Visibility.Visible;
-
-                Collection<OpticalDisc> opticalDiscs = new Collection<OpticalDisc>();
-                foreach (OpticalDrive opticalDrive in GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives)
-                {
-                    if (opticalDrive.Properties.OpticalDisc != null)
-                    {
-                        opticalDiscs.Add(opticalDrive.Properties.OpticalDisc);
-                        break;
-                    }
-                }
-
-                if (opticalDiscs.Count == 0)
-                {
-                    OutputFromComputer.Text = "Reboot and Select proper Boot device \r or Insert Boot Media in selected Boot device";
-                } else {
-                    OutputFromComputer.Text = "Load from CD...";
-                    GameEnvironment.GameEvents.Events.Add(new GameEvent("", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, LoadFromCD));
+                    NoComputerPanel.Visibility = Visibility.Collapsed;
+                    Desktop.Visibility = Visibility.Visible;
+                    DesktopWidgets.Visibility = Visibility.Visible;
+                    DrawDesktop();
+                    state = ComputerStates.LoadedOS;
+                    return;
                 }
             }
-            if (GameEnvironment.Computers.CurrentPlayerComputer != null) { OldState = currentState; }
+            if (state == ComputerStates.BootFromDisk) { return; }
+            ComputerBootPanel.Visibility = Visibility.Visible;
+
+            Collection<OpticalDisc> opticalDiscs = new Collection<OpticalDisc>();
+            foreach (OpticalDrive opticalDrive in GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives)
+            {
+                if (opticalDrive.Properties.OpticalDisc != null)
+                {
+                    opticalDiscs.Add(opticalDrive.Properties.OpticalDisc);
+                    break;
+                }
+            }
+
+            if (opticalDiscs.Count == 0)
+            {
+                OutputFromComputer.Text = "Reboot and Select proper Boot device \r or Insert Boot Media in selected Boot device";
+            }
+            else
+            {
+                OutputFromComputer.Text = "Load from CD...";
+                GameEnvironment.GameEvents.Events.Add(new GameEvent("", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, LoadFromCD));
+                state = ComputerStates.BootFromDisk;
+            }
         }
 
         private void LoadFromCD(GameEvent @event)
@@ -227,6 +247,7 @@ namespace Computer_Era
                 OutputFromComputer.Visibility = Visibility.Collapsed;
                 ComputerBootPanel.Children.RemoveRange(1, ComputerBootPanel.Children.Count);
                 ComputerBootPanel.Children.Add(new OSInstallation(GameEnvironment));
+                state = ComputerStates.InstallationOS;
             }
             else { OutputFromComputer.Text = "Reboot and Select proper Boot device \r or Insert Boot Media in selected Boot device"; }
         }
@@ -242,6 +263,7 @@ namespace Computer_Era
             Desktop.RowDefinitions.Clear();
 
             double cell_size = 96;
+            MessageBox.Show(cell_size.ToString());
             double size = Math.Floor(Desktop.ActualWidth / cell_size);
             double len = Desktop.ActualWidth / size;
 
@@ -272,12 +294,11 @@ namespace Computer_Era
                     Stretch = Stretch.UniformToFill
                 };
 
-                Button button = new Button {
-                    Background = brush,
-                    Width = 64,
-                    Height = 64,
-                    BorderThickness = new Thickness(0, 0, 0, 0),
-                    HorizontalAlignment = HorizontalAlignment.Center
+                 Image icon = new Image {
+                     Source = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.Properties.IconName + ".png")),
+                     Width = 64,
+                     Height = 64,
+                     HorizontalAlignment = HorizontalAlignment.Center
                 };
 
                 TextBlock textBlock = new TextBlock {
@@ -288,14 +309,31 @@ namespace Computer_Era
 
                 StackPanel stackPanel = new StackPanel
                 {
-                    Margin = new Thickness(10, 10, 10, 10)
+                    Margin = new Thickness(10, 10, 10, 10),
+                    Cursor = Cursors.Hand,
+                    Tag = program,
                 };
-                stackPanel.Children.Add(button);
+                stackPanel.Children.Add(icon);
                 stackPanel.Children.Add(textBlock);
 
                 stackPanel.SetValue(Grid.RowProperty, program.Properties.Row);
                 stackPanel.SetValue(Grid.ColumnProperty, program.Properties.Column);
+                stackPanel.MouseLeftButtonDown += OpenProgram;
                 Desktop.Children.Add(stackPanel);
+            }
+        }
+
+        private void OpenProgram(object sender, MouseButtonEventArgs e)
+        {
+            string name_control = ((Program)(sender as StackPanel).Tag).Properties.ControlName;
+            
+            switch (name_control)
+            {
+                case "MyComputer":
+                    NewWindow(new MyComputer(GameEnvironment));
+                    break;
+                default:
+                    break;
             }
         }
 
@@ -312,7 +350,7 @@ namespace Computer_Era
 
         private void window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (Game.Visibility == Visibility.Visible) { DrawDesktop(); }
+            if (Game.Visibility == Visibility.Visible && Desktop.Visibility == Visibility.Visible) { DrawDesktop(); }
         }
 
         private void NewWindow(UserControl control)
