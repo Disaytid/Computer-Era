@@ -259,6 +259,15 @@ namespace Computer_Era
 
         private void DrawDesktop()
         {
+            //Назначение буквы дисководу
+            for (int i = 0; i < GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.Letter)) { continue; }
+                string letter = GameEnvironment.Computers.CurrentPlayerComputer.GetLetters(4);
+                if (!GameEnvironment.Computers.CurrentPlayerComputer.AssignValueToLetter(letter, GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i])) { continue; }
+                GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.Letter = letter;
+            }
+
             Desktop.ColumnDefinitions.Clear();
             Desktop.RowDefinitions.Clear();
 

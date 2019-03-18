@@ -149,22 +149,20 @@ namespace Computer_Era.Game.Programs
                 };
 
                 string name;
-                if (string.IsNullOrEmpty(GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Name))
+                if (string.IsNullOrEmpty(GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.Letter)) { continue; }
+                if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc == null)
                 {
-                   // name = Properties.Resources.LocalDisk + " (" + GameEnvironment.Computers.CurrentPlayerComputer.HDDs[i].Properties.Partitions[j].Letter + ":)";
+                    name = Properties.Resources.OpticalDrive + " (" + GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.Letter + ":)";
+                } else {
+                    name = GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc.Name + " (" + GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.Letter + ":)";
                 }
-                else
-                {
-                    //name = GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Name + " (" + GameEnvironment.Computers.CurrentPlayerComputer.HDDs[i].Properties.Partitions[j].Letter + ":)";
-                }
-
                 Label partitionName = new Label
                 {
-                    //Content = name,
+                    Content = name,
                     FontSize = 16,
                 };
 
-                ComboBox progressBar = new ComboBox
+                ComboBox comboBox = new ComboBox
                 {
                     Height = 20,
                 };
@@ -181,8 +179,8 @@ namespace Computer_Era.Game.Programs
                 };
 
                 stackPanel.Children.Add(partitionName);
-                stackPanel.Children.Add(progressBar);
-                stackPanel.Children.Add(freeSpace);
+                stackPanel.Children.Add(comboBox);
+                //stackPanel.Children.Add(freeSpace);
 
                 DockPanel dockPanel = new DockPanel
                 {

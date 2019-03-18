@@ -205,7 +205,6 @@ namespace Computer_Era.Game.Forms
                 InstallationProgress.Value++;
             } else {
                 GameEnvironment.GameEvents.Events.Remove(@event);
-
                 SelectedPartition.OperatingSystem = OperatingSystem;
                 this.Visibility = Visibility.Collapsed;
                 GameEnvironment.Computers.CurrentPlayerComputer.IsEnable = false;

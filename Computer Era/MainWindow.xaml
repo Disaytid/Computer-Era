@@ -72,7 +72,7 @@
             <Grid Name="ComputerBootPanel" Visibility="Collapsed">
                 <TextBlock Name="OutputFromComputer" Background="Black" Foreground="White" FontSize="14"/>
             </Grid>
-            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" SizeChanged="Desktop_SizeChanged">
+            <Grid Name="Desktop" ShowGridLines="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" SizeChanged="Desktop_SizeChanged">
 
             </Grid>
             <Grid Name="DesktopWidgets" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" HorizontalAlignment="Right">
