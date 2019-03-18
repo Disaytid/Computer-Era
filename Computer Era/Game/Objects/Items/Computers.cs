@@ -8,6 +8,34 @@ using System.Threading.Tasks;
 
 namespace Computer_Era.Game.Objects
 {
+    enum EngLetters
+    {
+        A,
+        B,
+        C,
+        D,
+        E,
+        F,
+        G,
+        H,
+        I,
+        J,
+        K,
+        L,
+        M,
+        N,
+        O,
+        P,
+        R,
+        S,
+        T,
+        U,
+        V,
+        W,
+        X,
+        Y,
+        Z,
+    }
     public class Computers
     {
         public Collection<Computer> PlayerComputers = new Collection<Computer>();
@@ -31,6 +59,54 @@ namespace Computer_Era.Game.Objects
         public Collection<Keyboard> Keyboards { get; set; } = new Collection<Keyboard>();
         public OperatingSystem OperatingSystem { get; set; }
         public bool IsEnable { get; set; } = false;
+
+        private Dictionary<EngLetters, object> DriveLetters = new Dictionary<EngLetters, object>
+        {
+            { EngLetters.A, null },
+            { EngLetters.B, null },
+            { EngLetters.C, null },
+            { EngLetters.D, null },
+            { EngLetters.E, null },
+            { EngLetters.F, null },
+            { EngLetters.G, null },
+            { EngLetters.H, null },
+            { EngLetters.I, null },
+            { EngLetters.J, null },
+            { EngLetters.K, null },
+            { EngLetters.L, null },
+            { EngLetters.M, null },
+            { EngLetters.N, null },
+            { EngLetters.O, null },
+            { EngLetters.P, null },
+            { EngLetters.R, null },
+            { EngLetters.S, null },
+            { EngLetters.T, null },
+            { EngLetters.U, null },
+            { EngLetters.V, null },
+            { EngLetters.W, null },
+            { EngLetters.X, null },
+            { EngLetters.Y, null },
+            { EngLetters.Z, null },
+        };
+
+        public string GetLetters(int start_pos = 0)
+        {
+            string letter = string.Empty;
+            foreach (KeyValuePair<EngLetters, object> dletter in DriveLetters)
+            {
+                if ((int)dletter.Key >= start_pos && dletter.Value == null) { letter = dletter.Key.ToString(); break; }
+            }
+
+            return letter;
+        }
+
+        public bool AssignValueToLetter(string letter, object obj)
+        {
+            EngLetters el = (EngLetters)Enum.Parse(typeof(EngLetters), letter);
+            if (!DriveLetters.ContainsKey(el)) { return false; };
+            DriveLetters[el] = obj; 
+            return true;
+        }
 
         public Computer(string name, Case @case)
         {

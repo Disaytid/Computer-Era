@@ -294,4 +294,13 @@
   <data name="RentPrice" xml:space="preserve">
     <value>Rent price</value>
   </data>
+  <data name="Free" xml:space="preserve">
+    <value>Free</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>Of</value>
+  </data>
+  <data name="LocalDisk" xml:space="preserve">
+    <value>Local disk</value>
+  </data>
 </root>

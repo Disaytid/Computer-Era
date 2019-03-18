@@ -46,7 +46,7 @@ namespace Computer_Era
         readonly DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
 
-        GameEnvironment GameEnvironment = new GameEnvironment();
+        readonly GameEnvironment GameEnvironment = new GameEnvironment();
 
         readonly Widgets Widgets = new Widgets();
 
@@ -263,7 +263,6 @@ namespace Computer_Era
             Desktop.RowDefinitions.Clear();
 
             double cell_size = 96;
-            MessageBox.Show(cell_size.ToString());
             double size = Math.Floor(Desktop.ActualWidth / cell_size);
             double len = Desktop.ActualWidth / size;
 
@@ -348,9 +347,9 @@ namespace Computer_Era
             CreateNewGame.Visibility = Visibility.Visible;
         }
 
-        private void window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Desktop_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (Game.Visibility == Visibility.Visible && Desktop.Visibility == Visibility.Visible) { DrawDesktop(); }
+            DrawDesktop();
         }
 
         private void NewWindow(UserControl control)

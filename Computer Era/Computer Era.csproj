@@ -309,6 +309,7 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\discs\disc-cover_win-7.png" />
     <Resource Include="Resources\realty\apartment1.png" />
     <Resource Include="Resources\realty\room1.png" />
     <Resource Include="Resources\realty\country_house1.png" />

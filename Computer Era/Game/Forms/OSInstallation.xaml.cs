@@ -84,8 +84,10 @@ namespace Computer_Era.Game.Forms
                 int pcounter = 0;
                 foreach (Partition partition in hdd.Properties.Partitions)
                 {
+                    string name = Properties.Resources.Partition;
+                    if (!string.IsNullOrEmpty(partition.Name)) { name = "(" + partition.Name + ")" + Name; }
                     KeyValuePair<double, MediaCapacityUnits> convert_volume = СonversionToMore(MediaCapacityUnits.Kilobyte, partition.Volume);
-                    HDDPartitions.Add(new HDDPartition(partition.Name + " " + pcounter + " на диске " + counter + " (" + Math.Round(convert_volume.Key, 2) + " " + convert_volume.Value.ToString() + ")", counter, hdd, partition));
+                    HDDPartitions.Add(new HDDPartition(name + " " + pcounter + " на диске " + counter + " (" + Math.Round(convert_volume.Key, 2) + " " + convert_volume.Value.ToString() + ")", counter, hdd, partition));
                     pcounter++;
                 }
                 counter++;
@@ -143,11 +145,14 @@ namespace Computer_Era.Game.Forms
 
                 if (summVolume + PartitionVolume.Value <= SelectedHDDPartition.HDD.Properties.Volume)
                 {
+                    string letter = GameEnvironment.Computers.CurrentPlayerComputer.GetLetters(2);
+                    if (string.IsNullOrEmpty(letter)) { return; }
                     Partition partition = new Partition
                     {
-                        Name = Properties.Resources.Partition,
+                        Letter = letter,
                         Volume = Convert.ToInt32(PartitionVolume.Value),
                     };
+                    if (!GameEnvironment.Computers.CurrentPlayerComputer.AssignValueToLetter(letter, partition)) { return; }
                     SelectedHDDPartition.HDD.Properties.Partitions.Add(partition);
 
                     LoadPartitionsList();
@@ -161,6 +166,7 @@ namespace Computer_Era.Game.Forms
         {
             if (SelectedHDDPartition != null && SelectedHDDPartition.Partition != null)
             {
+                if (!GameEnvironment.Computers.CurrentPlayerComputer.AssignValueToLetter(SelectedHDDPartition.Partition.Letter, null)) { return; }
                 SelectedHDDPartition.HDD.Properties.Partitions.Remove(SelectedHDDPartition.Partition);
                 LoadPartitionsList();
             }

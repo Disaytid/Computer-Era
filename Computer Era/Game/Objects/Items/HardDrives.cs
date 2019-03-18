@@ -74,6 +74,7 @@ namespace Computer_Era.Game.Objects
     {
         public string Name { get; set; }
         public int PartitionNumber { get; set; }
+        public string Letter { get; set; }
         public int Volume { get; set; } //В килобайтах
         public FileSystem FileSystem { get; set; }
         public OperatingSystem OperatingSystem { get; set; }

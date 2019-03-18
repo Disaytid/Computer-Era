@@ -285,4 +285,13 @@
   <data name="RentPrice" xml:space="preserve">
     <value>Стоимость аренды</value>
   </data>
+  <data name="Free" xml:space="preserve">
+    <value>Свободно</value>
+  </data>
+  <data name="Of" xml:space="preserve">
+    <value>Из</value>
+  </data>
+  <data name="LocalDisk" xml:space="preserve">
+    <value>Локальный диск</value>
+  </data>
 </root>

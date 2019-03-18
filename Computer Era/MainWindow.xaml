@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Computer_Era"
         xmlns:res="clr-namespace:Computer_Era.Properties"
         mc:Ignorable="d"
-        Title="Computer Era" Height="480" Width="640" Background="White" SizeChanged="window_SizeChanged" WindowStartupLocation="CenterScreen">
+        Title="Computer Era" Height="480" Width="640" Background="White" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style TargetType="MenuItem" x:Key="MenuItem">
@@ -72,7 +72,7 @@
             <Grid Name="ComputerBootPanel" Visibility="Collapsed">
                 <TextBlock Name="OutputFromComputer" Background="Black" Foreground="White" FontSize="14"/>
             </Grid>
-            <Grid Name="Desktop" ShowGridLines="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible">
+            <Grid Name="Desktop" ShowGridLines="True" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" SizeChanged="Desktop_SizeChanged">
 
             </Grid>
             <Grid Name="DesktopWidgets" Width="300" ScrollViewer.VerticalScrollBarVisibility="Disabled" Visibility="Visible" HorizontalAlignment="Right">
