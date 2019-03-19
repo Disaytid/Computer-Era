@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Computer_Era.Game.Objects;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -156,6 +158,15 @@ namespace Computer_Era.Game.Programs
                 } else {
                     name = GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc.Name + " (" + GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.Letter + ":)";
                 }
+
+                Collection<OpticalDisc> opticalDiscs = new Collection<OpticalDisc>();
+                for (int j=0; j < GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives.Count; j++)
+                {
+                    if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[j].Properties.OpticalDisc != null &&
+                        GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[j] != GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i])
+                    { opticalDiscs.Add(GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[j].Properties.OpticalDisc); }
+                }
+
                 Label partitionName = new Label
                 {
                     Content = name,
@@ -165,7 +176,18 @@ namespace Computer_Era.Game.Programs
                 ComboBox comboBox = new ComboBox
                 {
                     Height = 20,
+                   
                 };
+
+                for (int od=0; od < GameEnvironment.Items.OpticalDiscs.Count; od++)
+                {
+                    bool add = true;
+                    for (int tod=0; tod  < opticalDiscs.Count; tod++)
+                    {
+                        if (GameEnvironment.Items.OpticalDiscs[od] == opticalDiscs[tod]) { add = false; break; }
+                    }
+                    if (add) { comboBox.Items.Add(new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] } ); }
+                }
 
                 Label freeSpace = new Label
                 {
