@@ -179,15 +179,19 @@ namespace Computer_Era.Game.Programs
                    
                 };
 
+                int index = -1;
                 for (int od=0; od < GameEnvironment.Items.OpticalDiscs.Count; od++)
                 {
                     bool add = true;
+                    
                     for (int tod=0; tod  < opticalDiscs.Count; tod++)
                     {
                         if (GameEnvironment.Items.OpticalDiscs[od] == opticalDiscs[tod]) { add = false; break; }
                     }
                     if (add) { comboBox.Items.Add(new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] } ); }
+                    if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc != null && GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc == GameEnvironment.Items.OpticalDiscs[od]) { index = od; }
                 }
+                if (index >= 0) { comboBox.SelectedIndex = index; }
 
                 Label freeSpace = new Label
                 {
