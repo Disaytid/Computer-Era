@@ -340,6 +340,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Launch.
+        /// </summary>
+        public static string Launch {
+            get {
+                return ResourceManager.GetString("Launch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Loading.
         /// </summary>
         public static string Loading {
@@ -534,6 +543,15 @@ namespace Computer_Era.Properties {
         public static string PSU {
             get {
                 return ResourceManager.GetString("PSU", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Pull out.
+        /// </summary>
+        public static string PullOut {
+            get {
+                return ResourceManager.GetString("PullOut", resourceCulture);
             }
         }
         

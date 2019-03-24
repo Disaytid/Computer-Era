@@ -176,22 +176,50 @@ namespace Computer_Era.Game.Programs
                 ComboBox comboBox = new ComboBox
                 {
                     Height = 20,
-                   
+                    FlowDirection = FlowDirection.LeftToRight,
+                    Tag = GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i],
+                };
+                comboBox.SelectionChanged += OpticalDisc_SelectionChanged;
+
+                Button runButton = new Button
+                {
+                    Background = new SolidColorBrush(Colors.Green),
+                    Tag = Properties.Resources.Launch,
+                    Width = 20,
+                    FlowDirection = FlowDirection.LeftToRight,
+                };
+                runButton.Click += OpenDisc_Click;
+
+                Button pullOutButton = new Button
+                {
+                    Background = new SolidColorBrush(Colors.Red),
+                    Tag = Properties.Resources.PullOut,
+                    Width = 20,
+                    FlowDirection = FlowDirection.LeftToRight,
+                };
+
+                DockPanel discPanel = new DockPanel()
+                {
+                    FlowDirection = FlowDirection.RightToLeft,
                 };
 
                 int index = -1;
-                for (int od=0; od < GameEnvironment.Items.OpticalDiscs.Count; od++)
+                for (int od = 0; od < GameEnvironment.Items.OpticalDiscs.Count; od++)
                 {
                     bool add = true;
-                    
-                    for (int tod=0; tod  < opticalDiscs.Count; tod++)
+
+                    for (int tod = 0; tod < opticalDiscs.Count; tod++)
                     {
                         if (GameEnvironment.Items.OpticalDiscs[od] == opticalDiscs[tod]) { add = false; break; }
                     }
-                    if (add) { comboBox.Items.Add(new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] } ); }
+                    if (add) { comboBox.Items.Add(new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] }); }
                     if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc != null && GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc == GameEnvironment.Items.OpticalDiscs[od]) { index = od; }
                 }
-                if (index >= 0) { comboBox.SelectedIndex = index; }
+                if (index >= 0) { comboBox.SelectedIndex = index; discPanel.Tag = ((comboBox.SelectedItem as ComboBoxItem).Tag as OpticalDisc); }
+
+                discPanel.Children.Add(pullOutButton);
+                discPanel.Children.Add(runButton);
+                discPanel.Children.Add(comboBox);         
 
                 Label freeSpace = new Label
                 {
@@ -201,11 +229,11 @@ namespace Computer_Era.Game.Programs
 
                 StackPanel stackPanel = new StackPanel
                 {
-
+                    
                 };
 
                 stackPanel.Children.Add(partitionName);
-                stackPanel.Children.Add(comboBox);
+                stackPanel.Children.Add(discPanel);
                 //stackPanel.Children.Add(freeSpace);
 
                 DockPanel dockPanel = new DockPanel
@@ -234,6 +262,69 @@ namespace Computer_Era.Game.Programs
             }
         }
 
+        public static T FindParent<T>(DependencyObject child) where T : DependencyObject
+        {
+            //get parent item
+            DependencyObject parentObject = VisualTreeHelper.GetParent(child);
+
+            //we've reached the end of the tree
+            if (parentObject == null) return null;
+
+            //check if the parent matches the type we're looking for
+            T parent = parentObject as T;
+            if (parent != null)
+                return parent;
+            else
+                return FindParent<T>(parentObject);
+        }
+
+        public static T GetChildOfType<T>(DependencyObject depObj)
+        where T : DependencyObject
+        {
+            if (depObj == null) return null;
+
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                var child = VisualTreeHelper.GetChild(depObj, i);
+
+                var result = (child as T) ?? GetChildOfType<T>(child);
+                if (result != null) return result;
+            }
+            return null;
+        }
+
+        private void OpticalDisc_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox comboBox = (sender as ComboBox);
+            var parent = FindParent<DockPanel>(comboBox);
+            if (parent == null) { return; }
+            if (comboBox.SelectedItem != null)
+            {
+                OpticalDisc opticalDisc = ((comboBox.SelectedItem as ComboBoxItem).Tag as OpticalDisc);
+                (comboBox.Tag as OpticalDrive).Properties.OpticalDisc = opticalDisc;
+                parent.Tag = opticalDisc;
+
+                var subparent = FindParent<StackPanel>(parent);
+                if (subparent == null) { return; }
+                var child = GetChildOfType<Label>(subparent);
+                if (child == null) { return; }
+
+                string name = (comboBox.Tag as OpticalDrive).Properties.OpticalDisc.Name + " (" + (comboBox.Tag as OpticalDrive).Properties.Letter + ":)";
+                child.Content = name;
+            }
+        }
+
+            private void OpenDisc_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (sender as Button);
+            var parent = FindParent<DockPanel>(button);
+            if (parent == null) { return; }
+            if (parent.Tag is OpticalDisc)
+            {
+                OpticalDisc opticalDisc = (parent.Tag as OpticalDisc);
+                GameMessageBox.Show(opticalDisc.Name);
+            }
+        }
         private void DevicesAndDrives_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             Drawing();

@@ -303,4 +303,10 @@
   <data name="LocalDisk" xml:space="preserve">
     <value>Local disk</value>
   </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Launch</value>
+  </data>
+  <data name="PullOut" xml:space="preserve">
+    <value>Pull out</value>
+  </data>
 </root>

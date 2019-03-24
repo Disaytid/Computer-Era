@@ -294,4 +294,10 @@
   <data name="LocalDisk" xml:space="preserve">
     <value>Локальный диск</value>
   </data>
+  <data name="Launch" xml:space="preserve">
+    <value>Запустить</value>
+  </data>
+  <data name="PullOut" xml:space="preserve">
+    <value>Извлечь</value>
+  </data>
 </root>
