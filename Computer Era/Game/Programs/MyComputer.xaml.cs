@@ -24,10 +24,12 @@ namespace Computer_Era.Game.Programs
     public partial class MyComputer : UserControl
     {
         readonly GameEnvironment GameEnvironment;
+        bool initialize = false;
         public MyComputer(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
             GameEnvironment = gameEnvironment;
+            initialize = true;
             Drawing();
         }
 
@@ -204,18 +206,21 @@ namespace Computer_Era.Game.Programs
                 };
 
                 int index = -1;
+                ComboBoxItem cmbItem = null;
                 for (int od = 0; od < GameEnvironment.Items.OpticalDiscs.Count; od++)
                 {
                     bool add = true;
+                    //int added = -1;
 
                     for (int tod = 0; tod < opticalDiscs.Count; tod++)
                     {
                         if (GameEnvironment.Items.OpticalDiscs[od] == opticalDiscs[tod]) { add = false; break; }
                     }
-                    if (add) { comboBox.Items.Add(new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] }); }
+                    
+                    if (add) { cmbItem = new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] }; comboBox.Items.Add(cmbItem); }
                     if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc != null && GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc == GameEnvironment.Items.OpticalDiscs[od]) { index = od; }
                 }
-                if (index >= 0) { comboBox.SelectedIndex = index; discPanel.Tag = ((comboBox.SelectedItem as ComboBoxItem).Tag as OpticalDisc); }
+                if (index >= 0 && cmbItem != null) { comboBox.SelectedItem = cmbItem; }
 
                 discPanel.Children.Add(pullOutButton);
                 discPanel.Children.Add(runButton);
@@ -260,6 +265,8 @@ namespace Computer_Era.Game.Programs
                 }
                 else { collumn++; }
             }
+
+            if (initialize) { initialize = false; }
         }
 
         public static T FindParent<T>(DependencyObject child) where T : DependencyObject
@@ -295,22 +302,13 @@ namespace Computer_Era.Game.Programs
 
         private void OpticalDisc_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (initialize) { return; }
             ComboBox comboBox = (sender as ComboBox);
-            var parent = FindParent<DockPanel>(comboBox);
-            if (parent == null) { return; }
             if (comboBox.SelectedItem != null)
             {
                 OpticalDisc opticalDisc = ((comboBox.SelectedItem as ComboBoxItem).Tag as OpticalDisc);
                 (comboBox.Tag as OpticalDrive).Properties.OpticalDisc = opticalDisc;
-                parent.Tag = opticalDisc;
-
-                var subparent = FindParent<StackPanel>(parent);
-                if (subparent == null) { return; }
-                var child = GetChildOfType<Label>(subparent);
-                if (child == null) { return; }
-
-                string name = (comboBox.Tag as OpticalDrive).Properties.OpticalDisc.Name + " (" + (comboBox.Tag as OpticalDrive).Properties.Letter + ":)";
-                child.Content = name;
+                Drawing();
             }
         }
 
