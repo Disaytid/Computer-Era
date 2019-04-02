@@ -326,7 +326,13 @@ namespace Computer_Era.Game.Programs
             {
                 OpticalDisc opticalDisc = (child.Tag as OpticalDrive).Properties.OpticalDisc;
                 if (opticalDisc == null) { return; }
-                GameMessageBox.Show(opticalDisc.Name);
+                if (opticalDisc.Properties.Programs != null)
+                {
+                    InstallSoft.Children.Clear();
+                    InstallSoft.Children.Add(new MCInstallSoft(GameEnvironment, opticalDisc.Properties.Programs));
+                    DevicesAndDrives.Visibility = Visibility.Collapsed;
+                    InstallSoft.Visibility = Visibility.Visible;
+                } else { GameMessageBox.Show("Запуск с диска", "На этом диске нет программ!", GameMessageBox.MessageBoxType.Information); }
             }
         }
         private void DevicesAndDrives_SizeChanged(object sender, SizeChangedEventArgs e)
