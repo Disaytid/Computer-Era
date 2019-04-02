@@ -205,22 +205,34 @@ namespace Computer_Era.Game.Programs
                     FlowDirection = FlowDirection.RightToLeft,
                 };
 
-                int index = -1;
-                ComboBoxItem cmbItem = null;
                 for (int od = 0; od < GameEnvironment.Items.OpticalDiscs.Count; od++)
                 {
                     bool add = true;
-                    //int added = -1;
+                    int index = -1;
 
                     for (int tod = 0; tod < opticalDiscs.Count; tod++)
                     {
                         if (GameEnvironment.Items.OpticalDiscs[od] == opticalDiscs[tod]) { add = false; break; }
                     }
-                    
-                    if (add) { cmbItem = new ComboBoxItem { Content = GameEnvironment.Items.OpticalDiscs[od].Name, Tag = GameEnvironment.Items.OpticalDiscs[od] }; comboBox.Items.Add(cmbItem); }
-                    if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc != null && GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc == GameEnvironment.Items.OpticalDiscs[od]) { index = od; }
+
+                    ComboBoxItem item = null;
+                    if (add)
+                    {
+                        item = new ComboBoxItem
+                        {
+                            Content = GameEnvironment.Items.OpticalDiscs[od].Name,
+                            Tag = GameEnvironment.Items.OpticalDiscs[od]
+                        };
+
+                        comboBox.Items.Add(item);
+                        index++;
+                    }
+
+                    if (GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc != null && GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives[i].Properties.OpticalDisc == GameEnvironment.Items.OpticalDiscs[od])
+                    {
+                        if (item != null) { initialize = true; comboBox.SelectedItem = item;}
+                    }
                 }
-                if (index >= 0 && cmbItem != null) { comboBox.SelectedItem = cmbItem; }
 
                 discPanel.Children.Add(pullOutButton);
                 discPanel.Children.Add(runButton);
@@ -271,18 +283,9 @@ namespace Computer_Era.Game.Programs
 
         public static T FindParent<T>(DependencyObject child) where T : DependencyObject
         {
-            //get parent item
             DependencyObject parentObject = VisualTreeHelper.GetParent(child);
-
-            //we've reached the end of the tree
             if (parentObject == null) return null;
-
-            //check if the parent matches the type we're looking for
-            T parent = parentObject as T;
-            if (parent != null)
-                return parent;
-            else
-                return FindParent<T>(parentObject);
+            return parentObject is T parent ? parent : FindParent<T>(parentObject);
         }
 
         public static T GetChildOfType<T>(DependencyObject depObj)
@@ -317,9 +320,12 @@ namespace Computer_Era.Game.Programs
             Button button = (sender as Button);
             var parent = FindParent<DockPanel>(button);
             if (parent == null) { return; }
-            if (parent.Tag is OpticalDisc)
+            var child = GetChildOfType<ComboBox>(parent);
+            if (child == null) { return; }
+            if (child.Tag is OpticalDrive)
             {
-                OpticalDisc opticalDisc = (parent.Tag as OpticalDisc);
+                OpticalDisc opticalDisc = (child.Tag as OpticalDrive).Properties.OpticalDisc;
+                if (opticalDisc == null) { return; }
                 GameMessageBox.Show(opticalDisc.Name);
             }
         }

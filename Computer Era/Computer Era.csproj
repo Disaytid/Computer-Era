@@ -141,6 +141,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Game\Programs\MCInstallSoft.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Game\Programs\MyComputer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -221,6 +225,9 @@
     <Compile Include="Game\Objects\Services.cs" />
     <Compile Include="Game\Objects\Items\StorageMedia.cs" />
     <Compile Include="Game\Objects\Widgets.cs" />
+    <Compile Include="Game\Programs\MCInstallSoft.xaml.cs">
+      <DependentUpon>MCInstallSoft.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Game\Programs\MyComputer.xaml.cs">
       <DependentUpon>MyComputer.xaml</DependentUpon>
     </Compile>

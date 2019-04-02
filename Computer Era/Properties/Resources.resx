@@ -309,4 +309,7 @@
   <data name="PullOut" xml:space="preserve">
     <value>Pull out</value>
   </data>
+  <data name="Install" xml:space="preserve">
+    <value>Install</value>
+  </data>
 </root>

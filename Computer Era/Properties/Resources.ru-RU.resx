@@ -300,4 +300,7 @@
   <data name="PullOut" xml:space="preserve">
     <value>Извлечь</value>
   </data>
+  <data name="Install" xml:space="preserve">
+    <value>Установить</value>
+  </data>
 </root>
