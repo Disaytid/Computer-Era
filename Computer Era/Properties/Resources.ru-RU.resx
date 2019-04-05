@@ -303,4 +303,7 @@
   <data name="Install" xml:space="preserve">
     <value>Установить</value>
   </data>
+  <data name="Installation" xml:space="preserve">
+    <value>Установка</value>
+  </data>
 </root>

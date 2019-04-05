@@ -8,17 +8,25 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="White">
-        <ListBox Name="ProgramsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <Grid Width="{Binding ActualWidth, ElementName=ProgramsList, Mode=OneWay}">
-                        <DockPanel FlowDirection="RightToLeft">
-                            <Button Name="InstallProgram" Content="{x:Static res:Resources.Install}" Tag="{Binding}" Margin="10" Padding="5" Background="Green" Foreground="White" BorderThickness="0" FlowDirection="LeftToRight" HorizontalAlignment="Right" Click="InstallProgram_Click"/>
-                            <Label Content="{Binding Name}" FontSize="14" FlowDirection="LeftToRight" HorizontalAlignment="Stretch"/>
-                        </DockPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <Grid Name="List">
+            <ListBox Name="ProgramsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="{Binding ActualWidth, ElementName=ProgramsList, Mode=OneWay}">
+                            <DockPanel FlowDirection="RightToLeft">
+                                <Button Name="InstallProgram" Content="{x:Static res:Resources.Install}" Tag="{Binding}" Margin="10" Padding="5" Background="Green" Foreground="White" BorderThickness="0" FlowDirection="LeftToRight" HorizontalAlignment="Right" Click="InstallProgram_Click"/>
+                                <Label Content="{Binding Name}" FontSize="14" FlowDirection="LeftToRight" HorizontalAlignment="Stretch" VerticalContentAlignment="Center"/>
+                            </DockPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid Name="Install" Visibility="Collapsed">
+            <StackPanel Width="480" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Label Name="InstallationName" Content="Установка" HorizontalContentAlignment="Center" FontSize="24"/>
+                <ProgressBar Name="InstallationProgress" MinHeight="40"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

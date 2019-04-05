@@ -340,6 +340,15 @@ namespace Computer_Era.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Installation.
+        /// </summary>
+        public static string Installation {
+            get {
+                return ResourceManager.GetString("Installation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Keyboard.
         /// </summary>
         public static string Keyboard {

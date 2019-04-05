@@ -312,4 +312,7 @@
   <data name="Install" xml:space="preserve">
     <value>Install</value>
   </data>
+  <data name="Installation" xml:space="preserve">
+    <value>Installation</value>
+  </data>
 </root>

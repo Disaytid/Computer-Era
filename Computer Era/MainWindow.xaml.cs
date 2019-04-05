@@ -273,6 +273,7 @@ namespace Computer_Era
 
             double cell_size = 96;
             double size = Math.Floor(Desktop.ActualWidth / cell_size);
+            int count_collumn = Convert.ToInt32(size);
             double len = Desktop.ActualWidth / size;
 
             for (int i = 0; i < size; i++)
@@ -283,6 +284,7 @@ namespace Computer_Era
             }
 
             size = Math.Floor(Desktop.ActualHeight / cell_size);
+            int count_row = Convert.ToInt32(size);
             len = Desktop.ActualHeight / size;
 
             for (int i = 0; i < size; i++)
@@ -304,13 +306,15 @@ namespace Computer_Era
 
                  Image icon = new Image {
                      Source = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.Properties.IconName + ".png")),
-                     Width = 64,
-                     Height = 64,
+                     Width = 60,
+                     Height = 60,
                      HorizontalAlignment = HorizontalAlignment.Center
                 };
 
                 TextBlock textBlock = new TextBlock {
-                    Text = program.Name, FontSize = 10,
+                    Text = program.Name,
+                    TextWrapping = TextWrapping.Wrap,
+                    FontSize = 10,
                     Foreground = new SolidColorBrush(Colors.White),
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
@@ -324,6 +328,24 @@ namespace Computer_Era
                 stackPanel.Children.Add(icon);
                 stackPanel.Children.Add(textBlock);
 
+                if (program.Properties.Row < 0 || program.Properties.Column < 0) //При установке программы устанавливаеться значение -1
+                {
+                    for (int collumn = 0; count_collumn > collumn; collumn++)
+                    {
+                        for (int row = 0; count_row > row; row++)
+                        {
+                            UIElementCollection children = Desktop.Children;
+                            if (Desktop.Children.Cast<UIElement>().Where(e => Grid.GetColumn(e) == collumn && Grid.GetRow(e) == row).Count() == 0)
+                            {
+                                program.Properties.Row = row;
+                                program.Properties.Column = collumn;
+                                goto InstallProgram;
+                            }
+                        }
+                    }
+                }
+
+                InstallProgram:
                 stackPanel.SetValue(Grid.RowProperty, program.Properties.Row);
                 stackPanel.SetValue(Grid.ColumnProperty, program.Properties.Column);
                 stackPanel.MouseLeftButtonDown += OpenProgram;
