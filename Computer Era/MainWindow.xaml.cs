@@ -271,7 +271,7 @@ namespace Computer_Era
             Desktop.ColumnDefinitions.Clear();
             Desktop.RowDefinitions.Clear();
 
-            double cell_size = 96;
+            double cell_size = 106;
             double size = Math.Floor(Desktop.ActualWidth / cell_size);
             int count_collumn = Convert.ToInt32(size);
             double len = Desktop.ActualWidth / size;
@@ -361,6 +361,9 @@ namespace Computer_Era
             {
                 case "MyComputer":
                     NewWindow(new MyComputer(GameEnvironment));
+                    break;
+                case "GuessTheNumber":
+                    NewWindow(new GuessTheNumber(GameEnvironment));
                     break;
                 default:
                     break;

@@ -45,6 +45,9 @@ namespace Computer_Era.Game.Programs
                 if (GameEnvironment.Items.Programs[i].Uid == program.Uid ) { GameMessageBox.Show("У вас уже установлена эта программа!"); return; }
             }
 
+            InstallationProgress.Minimum = 0;
+            InstallationProgress.Minimum = 100;
+            InstallationProgress.Value = 0;
             InstallationName.Content = Properties.Resources.Installation + " " + program.Name;
             List.Visibility = Visibility.Collapsed;
             Install.Visibility = Visibility.Visible;
