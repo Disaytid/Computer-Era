@@ -41,6 +41,13 @@ namespace Computer_Era.Game.Forms
                     }
 
                     DiscInDrive.ItemsSource = opticalDiscs;
+                    if (SelectedComputer.OpticalDrives[0].Properties.OpticalDisc != null && SelectedComputer.OpticalDrives[0].Properties.OpticalDisc.Properties.OperatingSystem > 0)
+                    {
+                        for (int i=0; DiscInDrive.Items.Count > i; i++)
+                        {
+                            if ((DiscInDrive.Items[i] as OpticalDisc).Uid == SelectedComputer.OpticalDrives[0].Properties.OpticalDisc.Uid) { DiscInDrive.SelectedItem = (DiscInDrive.Items[i] as OpticalDisc); break; }
+                        }
+                    }
                 }
                 if (SelectedComputer.IsEnable) { SelectedComputerStart(); }
             }

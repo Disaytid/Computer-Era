@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Computer_Era.Game.Objects
 {
@@ -17,8 +12,8 @@ namespace Computer_Era.Game.Objects
         public OpticalDiscType Type { get; set; }
         public bool Rewritable { get; set;  }
         public int Volume { get; set; }         //В киллобайтах
-        public int ReadSpeed { get; set; }      //В x где x = 150 кб/c (килобайт в секунду)
-        public int WriteSpeed { get; set; }     //В x где x = 150 кб/c (килобайт в секунду)
+        public int ReadSpeed { get; set; }      //В x где для CD x = 150 кб/c, а для DVD 1 352 кб/с (килобайт в секунду)
+        public int WriteSpeed { get; set; }     //В x где для CD x = 150 кб/c, а для DVD 1 352 кб/с (килобайт в секунду)
         public string CoverName { get; set; }   //Название обложки
         public int OperatingSystem { get; set; }
         public int[] Programs { get; set; }

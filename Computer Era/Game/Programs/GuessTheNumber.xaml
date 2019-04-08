@@ -16,7 +16,7 @@
                 <ImageBrush ImageSource="/Computer Era;component/Resources/confetti.jpg" Stretch="UniformToFill"/>
             </Grid.Background>
             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Width="480" Background="#66000000">
-                <TextBlock Name="Text" Text="Здравствуйте, я Дэн! Давайте сыграем в игру, я загадаю число от 1 до 100 а вы попробуете его угадать." TextWrapping="Wrap" Margin="10, 10, 10, 0" FontSize="16" Foreground="White"/>
+                <TextBlock Name="Text" Text="Здравствуйте, меня зовут Грант! Давайте сыграем в игру, я загадаю число от 1 до 100 а вы попробуете его угадать." TextWrapping="Wrap" Margin="10, 10, 10, 0" FontSize="16" Foreground="White"/>
                 <TextBox Name="Number" Margin="10, 10" FontSize="14" IsEnabled="False"/>
                 <Button Name="Game" Content="Играть" Margin="10, 0" FontSize="14" Background="#FF00BB33" BorderThickness="0" Foreground="White" Click="Game_Click"/>
                 <Label Name="NumberAttempt" Content="Сделано попыток: 0" Margin="10, 0, 10, 10" FontSize="14" Foreground="White"/>

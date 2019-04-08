@@ -27,6 +27,7 @@ namespace Computer_Era
 
     public class GameEnvironment
     {
+        public MainWindow Main;
         public PlayerProfile Player;
         public GameEvents GameEvents;
         public GameMessages Messages;
@@ -71,6 +72,7 @@ namespace Computer_Era
 
         private void StartNewGame_Click(object sender, RoutedEventArgs e)
         {
+            GameEnvironment.Main = this;
             GameEnvironment.Player = new PlayerProfile(PlayerName.Text);
             GameEnvironment.GameEvents = new GameEvents();
             GameEnvironment.Messages = new GameMessages(GameEnvironment.GameEvents, GameMessage, GameMessagePanel, MessageBubble); //Объявляеться не раньше GameEvents
@@ -257,7 +259,7 @@ namespace Computer_Era
             //int app_id = 1;
         }
 
-        private void DrawDesktop()
+        public void DrawDesktop()
         {
             //Назначение буквы дисководу
             for (int i = 0; i < GameEnvironment.Computers.CurrentPlayerComputer.OpticalDrives.Count; i++)
@@ -355,15 +357,16 @@ namespace Computer_Era
 
         private void OpenProgram(object sender, MouseButtonEventArgs e)
         {
-            string name_control = ((Program)(sender as StackPanel).Tag).Properties.ControlName;
+            Program program = (sender as StackPanel).Tag as Program;
+            string name_control = program.Properties.ControlName;
             
             switch (name_control)
             {
                 case "MyComputer":
-                    NewWindow(new MyComputer(GameEnvironment));
+                    NewWindow(new MyComputer(GameEnvironment, program));
                     break;
                 case "GuessTheNumber":
-                    NewWindow(new GuessTheNumber(GameEnvironment));
+                    NewWindow(new GuessTheNumber(GameEnvironment, program));
                     break;
                 default:
                     break;
@@ -404,14 +407,34 @@ namespace Computer_Era
             switch (obj)
             {
                 case "labor_exchange":
+                    if (GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour < 8 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour > 17 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.DayOfWeek == DayOfWeek.Saturday ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.DayOfWeek == DayOfWeek.Sunday)
+                    { GameMessageBox.Show("Режим работы", "пн-пт 8:00 - 17:00 \n сб-вс выходной"); lastForm.Visibility = Visibility.Hidden; return; }
                     NewWindow(new LaborExchange(GameEnvironment)); break;
                 case "computer_parts_store":
+                    if (GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour < 9 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour > 18 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.DayOfWeek == DayOfWeek.Monday ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.DayOfWeek == DayOfWeek.Sunday)
+                    { GameMessageBox.Show("Режим работы", "вт-сб 9:00 - 18:00 \n пн,вс выходной"); lastForm.Visibility = Visibility.Hidden; return; }
                     NewWindow(new Shop(GameEnvironment)); break;
                 case "bank":
+                    if (GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour < 9 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour > 18 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.DayOfWeek == DayOfWeek.Sunday)
+                    { GameMessageBox.Show("Режим работы", "вт-сб 9:00 - 18:00 \n вс выходной"); lastForm.Visibility = Visibility.Hidden; return; }
                     NewWindow(new Bank(GameEnvironment)); break;
                 case "disc_stand":
+                    if (GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour < 10 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour > 19)
+                    { GameMessageBox.Show("Режим работы", "ежедневно 10:00 - 19:00"); lastForm.Visibility = Visibility.Hidden; return; }
                     NewWindow(new DiscStand(GameEnvironment)); break;
                 case "estate_agency":
+                    if (GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour < 9 ||
+                        GameEnvironment.GameEvents.GameTimer.DateAndTime.Hour > 18)
+                    { GameMessageBox.Show("Режим работы", "ежедневно 09:00 - 18:00"); lastForm.Visibility = Visibility.Hidden; return; }
                     NewWindow(new RealEstateAgency(GameEnvironment)); break;
                 default:
                     MessageBox.Show("Вы прибыли к " + obj + "!");

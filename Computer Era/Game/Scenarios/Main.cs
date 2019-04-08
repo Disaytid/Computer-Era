@@ -24,7 +24,8 @@ namespace Computer_Era.Game.Scenarios
         }
         public void GameOver(string cause)
         {
-            throw new NotImplementedException();
+            GameEnvironment.Main.CauseText.Text = "Вы проиграли!" + Environment.NewLine + "Причина: " + cause;
+            GameEnvironment.Main.GameOver.Visibility = Visibility.Visible;
         }
     }
 }

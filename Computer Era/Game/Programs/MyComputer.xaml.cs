@@ -2,18 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static Computer_Era.Game.GameConverter;
 
 namespace Computer_Era.Game.Programs
@@ -25,10 +17,11 @@ namespace Computer_Era.Game.Programs
     {
         readonly GameEnvironment GameEnvironment;
         bool initialize = false;
-        public MyComputer(GameEnvironment gameEnvironment)
+        public MyComputer(GameEnvironment gameEnvironment, Program program)
         {
             InitializeComponent();
             GameEnvironment = gameEnvironment;
+            Title.Text = program.Name;
             initialize = true;
             Drawing();
         }

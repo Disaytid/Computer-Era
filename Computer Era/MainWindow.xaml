@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Computer_Era"
         xmlns:res="clr-namespace:Computer_Era.Properties"
         mc:Ignorable="d"
-        Title="Computer Era" Height="480" Width="640" Background="White" WindowStartupLocation="CenterScreen">
+        Title="Computer Era" MinHeight="480" MinWidth="640" Background="White" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <Style TargetType="MenuItem" x:Key="MenuItem">
@@ -84,6 +84,7 @@
             </StackPanel>
             <StackPanel Name="MessageBubble" Width="300" Margin="10" HorizontalAlignment="Right" VerticalAlignment="Bottom" Background="#E5FFFFFF" Visibility="Collapsed"/>
         </Grid>
+        
         <DockPanel Name="GamePanel" Height="50" Background="#E5747474" VerticalAlignment="Bottom" Visibility="Hidden" LastChildFill="False">
             <Menu HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Background="{x:Null}" UseLayoutRounding="False" VerticalContentAlignment="Top">
                 <MenuItem Height="50" Width="50" Template="{DynamicResource MenuItemControlTemplate}" BorderThickness="0" Background="{x:Null}">
@@ -158,5 +159,8 @@
                     </ContextMenu>
                 </TextBlock.ContextMenu></TextBlock>
         </DockPanel>
+        <Grid Name="GameOver" Background="White" Visibility="Hidden">
+            <TextBlock Name="CauseText" Text="Вы проиграли!" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
     </Grid>
 </Window>

@@ -46,7 +46,7 @@ namespace Computer_Era.Game.Programs
             }
 
             InstallationProgress.Minimum = 0;
-            InstallationProgress.Minimum = 100;
+            InstallationProgress.Maximum = 100;
             InstallationProgress.Value = 0;
             InstallationName.Content = Properties.Resources.Installation + " " + program.Name;
             List.Visibility = Visibility.Collapsed;
@@ -67,6 +67,7 @@ namespace Computer_Era.Game.Programs
                 program.Properties.Row = -1;
                 program.Properties.Column = -1;
                 GameEnvironment.Items.Programs.Add(program);
+                GameEnvironment.Main.DrawDesktop();
                 GameMessageBox.Show("Установка успешно произведена!");
             }
         }

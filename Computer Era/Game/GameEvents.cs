@@ -208,7 +208,7 @@ namespace Computer_Era.Game
         public GameTimer()
         {
             Timer.Tick += new EventHandler(TimerTick);
-            Timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
+            Timer.Interval = new TimeSpan(0, 0, 0, 0, 20);
 
             OldDateAndTime = DateAndTime;
         }

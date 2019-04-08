@@ -192,7 +192,9 @@ namespace Computer_Era.Game.Forms
                 SectionSetup.Visibility = Visibility.Collapsed;
                 InstallationProcess.Visibility = Visibility.Visible;
                 InstallationProgress.Maximum = 100;
-                int minutes = Convert.ToInt32((OperatingSystem.Properties.Size / (OpticalDisc.Properties.ReadSpeed * 150)) / 60); //150 кб/c в одном x (тоесть если скорость чтения диска x2 то значение будет 2 * 150 = 300)
+                int x_speed = 0;
+                if (OpticalDisc.Properties.Type == OpticalDiscType.CD) { x_speed = 150; } else if (OpticalDisc.Properties.Type == OpticalDiscType.DVD) { x_speed = 1352; } //скорость чтения для 1x в зависимости от типа диска
+                int minutes = Convert.ToInt32((OperatingSystem.Properties.Size / (OpticalDisc.Properties.ReadSpeed * x_speed)) / 60);
 
                 GameEnvironment.GameEvents.Events.Add(new GameEvent("InstallOS", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddMinutes(minutes), Periodicity.Minute, minutes, InstallOS, true));
             }

@@ -191,7 +191,20 @@ namespace Computer_Era.Game.Forms
                     }
                 } else if (tariff.Service.Type == TransactionType.Withdraw) {
                     int per_s = GetNumberOfPeriods(tariff.Periodicity, tariff.PeriodicityValue, tariff.StartDateOfService, GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term));
-                    if (tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s)) { } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
+                    if (!tariff.Currency.Withdraw("Взыскание по услуге\"" + tariff.Service.Name + "\" (" + tariff.Name + ")", Properties.Resources.BankName, GameEnvironment.GameEvents.GameTimer.DateAndTime, (tariff.Amount + (tariff.Amount * tariff.Coefficient / 100) * tariff.Term) / per_s))
+                    {
+                        if (tariff.PropertyPledged != null)
+                        {
+                            if (tariff.PropertyPledged is House)
+                            {   
+                                GameEnvironment.Services.PlayerTariffs.Remove(GameEnvironment.Player.House.PlayerCommunalPayments);
+                                GameEnvironment.Player.House = null;
+                                GameEnvironment.Services.PlayerTariffs.Remove(tariff);
+                                GameEnvironment.GameEvents.Events.Remove(@event);
+                                GameEnvironment.Messages.NewMessage("Банк", "У вас изъяли недвижимость в связи с отсутствием средств для выплаты задолженности!", GameMessages.Icon.Info);
+                            }
+                        } else { GameEnvironment.Scenario.GameOver("Нет денег для выплаты по услуге \"" + tariff.Service.Name + "\" тарифный план \"" + tariff.Name + "\"" ); }
+                    } //ВЫЗОВ СОБЫТИЯ GAME_OVER если не хватает денег (Игрок банкрот), исключение если есть залог
                     if (DateTime.Compare(GetDateByPeriod(tariff.StartDateOfService, tariff.TermUnit, tariff.Term), @event.ResponseTime) <= 0)
                     {
                         if (tariff.PropertyPledged != null)

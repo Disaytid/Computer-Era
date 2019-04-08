@@ -323,6 +323,14 @@
     <Resource Include="Resources\veryfastplay-button.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\city-car.png" />
+    <Resource Include="Resources\scooter.png" />
+    <Resource Include="Resources\unicycle.png" />
+    <Resource Include="Resources\chariot.png" />
+    <Resource Include="Resources\cycling.png" />
+    <Resource Include="Resources\bus.png" />
+    <Resource Include="Resources\walk.png" />
+    <Resource Include="Resources\fantasy-background.jpg" />
     <Resource Include="Resources\eight-ball.png" />
     <Resource Include="Resources\confetti.jpg" />
     <Resource Include="Resources\total-commander.png" />

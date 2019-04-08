@@ -35,7 +35,7 @@
                 <Button Name="Next" Content="Далее" Padding="5" Margin="5, 0, 0, 0" IsEnabled="False" DockPanel.Dock="Right" Click="Next_Click"/>
             </DockPanel>
         </Grid>
-        <StackPanel Name="InstallationProcess" HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" Visibility="Collapsed">
+        <StackPanel Name="InstallationProcess" HorizontalAlignment="Center" VerticalAlignment="Center" Width="480" Visibility="Collapsed">
             <Label Name="LabelProcessInstall" Content="Установка" Margin="0, 0, 0, 10" FontSize="26" HorizontalContentAlignment="Center"/>
             <ProgressBar x:Name="InstallationProgress" MinHeight="40"/>
         </StackPanel>

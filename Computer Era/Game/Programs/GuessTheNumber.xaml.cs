@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Computer_Era.Game.Objects;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Computer_Era.Game.Programs
 {
@@ -22,10 +11,11 @@ namespace Computer_Era.Game.Programs
     {
         readonly GameEnvironment GameEnvironment;
         private GameState gameState = GameState.newgame;
-        public GuessTheNumber(GameEnvironment gameEnvironment)
+        public GuessTheNumber(GameEnvironment gameEnvironment, Program program)
         {
             InitializeComponent();
             GameEnvironment = gameEnvironment;
+            Title.Text = program.Name;
         }
 
         enum GameState
@@ -48,7 +38,7 @@ namespace Computer_Era.Game.Programs
             } else if (gameState == GameState.game) {
                 if (int.TryParse(Number.Text, out int num))
                 {
-                    if (num < 1 && num > 100) { GameMessageBox.Show("Введенное число не поподает в диапазон от 1 до 100"); return; }
+                    if (num < 1 || num > 100) { GameMessageBox.Show("Введенное число не поподает в диапазон от 1 до 100"); return; }
                     attempt++;
                     NumberAttempt.Content = "Сделано попыток: " + attempt;
                     if (num < number) { Text.Text = "Загаданное число больше"; }
@@ -56,7 +46,7 @@ namespace Computer_Era.Game.Programs
                     else
                     {
                         Text.Text = "Поздравляю, Вы угадали число с " + attempt + " попыток";
-                        MessageBox.Show("Поздравляю, Вы угадали число с " + attempt + " попыток");
+                        GameMessageBox.Show("Поздравляю, Вы угадали число с " + attempt + " попыток");
                         gameState = GameState.newgame;
                         number = 0;
                         attempt = 0;

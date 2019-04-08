@@ -12,18 +12,91 @@
             <TextBlock Name="Title" Text="Карта" Foreground="White" TextAlignment="Center" DockPanel.Dock="Bottom" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </DockPanel>
         <WebBrowser Name="MapBrowser" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Hidden" Height="{Binding ActualHeight, ElementName=stackPanel, Mode=OneWay}" Margin="0,32,0,0" />
-        <Grid Name="TransitionPanel"  Background="White" Margin="0,32,0,0" Visibility="Hidden">
+        <Grid Name="TransitionPanel" Margin="0,32,0,0" Visibility="Hidden">
+            <Grid.Background>
+                <ImageBrush Stretch="UniformToFill" ImageSource="/Computer Era;component/Resources/fantasy-background.jpg"/>
+            </Grid.Background>
             <StackPanel Name="ChoiсePanel" VerticalAlignment="Center" MaxWidth="500">
-                <TextBlock Text="На чем добираться будем?" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" Margin="10,0,10,5"/>
-                <Button x:Name="Walk" Content="Пешком" VerticalAlignment="Center" Margin="10, 5" Click="Walk_Click"></Button>
-                <Button Content="На общественном транспорте" VerticalAlignment="Center" Margin="10, 5"></Button>
-                <Button Content="На велосипеде" VerticalAlignment="Center" Margin="10, 5"></Button>
-                <Button Content="На самокате" VerticalAlignment="Center" Margin="10, 5"></Button>
-                <Button Content="На моноколесе" VerticalAlignment="Center" Margin="10, 5"></Button>
-                <Button Content="На машине" VerticalAlignment="Center" Margin="10, 5, 10, 0"></Button>
+                <TextBlock Text="На чем добираться будем?" TextAlignment="Center" Foreground="White" FontSize="24" VerticalAlignment="Center" Margin="10,0,10,5"/>
+                <DockPanel LastChildFill="False" HorizontalAlignment="Center">
+                    <StackPanel Width="96" >
+                        <Button Name="Walk" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0" Click="Walk_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/walk.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="Пешком" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="ByBus" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0" Click="ByBus_Click">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/bus.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На общественном транспорте" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="ByBike" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/cycling.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На велосипеде" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="OnScooterA" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/chariot.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На самокате" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="OnMonowheel" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/unicycle.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На моноколесе" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                </DockPanel>
+                <DockPanel LastChildFill="False" HorizontalAlignment="Center">
+                    <StackPanel Width="96" >
+                        <Button Name="OnScooterB" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/scooter.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На скутере" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="OnMoped" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/scooter.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На мопеде" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="OnMotorcycle" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/scooter.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На мотоцикле" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                    <StackPanel Width="96" >
+                        <Button Name="ByCar" Width="96" Height="96" VerticalAlignment="Center" Margin="0" BorderThickness="0">
+                            <Button.Background>
+                                <ImageBrush ImageSource="/Computer Era;component/Resources/city-car.png" Stretch="UniformToFill"/>
+                            </Button.Background>
+                        </Button>
+                        <TextBlock Text="На машине" TextWrapping="Wrap" Foreground="White" FontSize="10" TextAlignment="Center"/>
+                    </StackPanel>
+                </DockPanel>
             </StackPanel>
             <StackPanel Name="MovePanel" VerticalAlignment="Center" MaxWidth="500" Visibility="Hidden">
-                <TextBlock Text="Перемещение в пространстве и времени" TextAlignment="Center" FontSize="18" VerticalAlignment="Center" Margin="10,0,10,5"/>
+                <TextBlock Text="Перемещение в пространстве и времени" Foreground="White" TextAlignment="Center" FontSize="24" VerticalAlignment="Center" Margin="10,0,10,5"/>
                 <ProgressBar Name="MoveProgress" Height="25" Margin="10, 5, 10, 0"></ProgressBar>
             </StackPanel>
         </Grid>
