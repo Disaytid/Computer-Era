@@ -126,7 +126,7 @@ namespace Computer_Era.Game.Forms
             if (GameEnvironment.Player.House != null)
             {
                 transition_time += Convert.ToInt32(Math.Floor(GameEnvironment.Player.House.Distance / (double)speed));
-                price *= Convert.ToInt32(GameEnvironment.Player.House.Distance / 1000 * fare * GameEnvironment.Money.PlayerCurrency[0].Course);
+                price += Convert.ToInt32(GameEnvironment.Player.House.Distance / 1000 * fare * GameEnvironment.Money.PlayerCurrency[0].Course);
             }
             if (GameMessageBox.Show("Оплата проезда", "Вы хотите купить билет за " + price + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation + "?", GameMessageBox.MessageBoxType.ConfirmationWithYesNo) == MessageBoxResult.Yes)
             {
