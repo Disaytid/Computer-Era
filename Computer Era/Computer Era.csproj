@@ -217,9 +217,12 @@
     <Compile Include="Game\GameMessages.cs" />
     <Compile Include="Game\Graphics\Graphics.cs" />
     <Compile Include="Game\Objects\Companies.cs" />
+    <Compile Include="Game\Objects\Items\Case.cs" />
     <Compile Include="Game\Objects\Items\Computers.cs" />
+    <Compile Include="Game\Objects\Items\CPU.cs" />
     <Compile Include="Game\Objects\Items\HardDrives.cs" />
     <Compile Include="Game\Objects\Items\Items.cs" />
+    <Compile Include="Game\Objects\Items\Motherboard.cs" />
     <Compile Include="Game\Objects\Items\OperatingSystem.cs" />
     <Compile Include="Game\Objects\Money.cs" />
     <Compile Include="Game\Objects\PlayerProfile.cs" />

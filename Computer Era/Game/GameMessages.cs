@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows;
-using System.Drawing;
 using System.Windows.Media;
-using Computer_Era.Game.Objects;
 
 namespace Computer_Era.Game
 {
@@ -18,7 +12,6 @@ namespace Computer_Era.Game
         readonly Button ViewMessages;
         readonly StackPanel MessagesPanel;
         readonly StackPanel Bubble;
-
         int count_messages;
 
         public GameMessages(GameEvents events, Button viewMessages, StackPanel messagesPanel, StackPanel bubble)

@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Threading;
 
 namespace Computer_Era.Game
@@ -15,7 +11,6 @@ namespace Computer_Era.Game
     public class GameEvents
     {
         public List<GameEvent> Events = new List<GameEvent>();
-
         public GameTimer GameTimer = new GameTimer();
 
         public GameEvents()
@@ -27,7 +22,6 @@ namespace Computer_Era.Game
             GameTimer.Month += Month;
             GameTimer.Year += Year;
         }
-
         private void EventRun(GameEvent game_event) //Запускает переданный эвент и удаляет в случае отключенного перезапуска
         {
             if (DateTime.Compare(game_event.ResponseTime, GameTimer.DateAndTime) <= 0)
@@ -63,8 +57,7 @@ namespace Computer_Era.Game
                 if (game_event.ResponseTime.Hour == GameTimer.DateAndTime.Hour)
                 {
                     if (game_event.Periodicity == Periodicity.Hour) { game_event.Periodicity = Periodicity.Minute; }
-                }
-                else { return; }
+                } else { return; }
             }
         }
 
@@ -97,54 +90,17 @@ namespace Computer_Era.Game
             }
             return newDateTime;
         }
-
-        private void Minute()
+        private void RunEvents(Periodicity periodicity)
         {
-            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Minute).ToList())
-            {
-                EventRun(game_event);
-            }
+            List<GameEvent> events = Events.Where(e => e.Periodicity == periodicity).ToList();
+            for (int i = 0; i < events.Count; i++) { EventRun(events[index: i]); }
         }
-
-        private void Hour()
-        {
-            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Hour).ToList())
-            {
-                EventRun(game_event);
-            }
-        }
-
-        private void Day()
-        {
-            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Day).ToList())
-            {
-                EventRun(game_event);
-            }
-        }
-
-        private void Week()
-        {
-            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Week).ToList())
-            {
-                EventRun(game_event);
-            }
-        }
-
-        private void Month()
-        {
-            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Month).ToList())
-            {
-                EventRun(game_event);
-            }
-        }
-
-        private void Year()
-        {
-            foreach (GameEvent game_event in Events.Where<GameEvent>(e => e.Periodicity == Periodicity.Year).ToList())
-            {
-                EventRun(game_event);
-            }
-        }
+        private void Minute() => RunEvents(Periodicity.Minute);
+        private void Hour() => RunEvents(Periodicity.Hour);
+        private void Day() => RunEvents(Periodicity.Day);
+        private void Week() => RunEvents(Periodicity.Week);
+        private void Month() => RunEvents(Periodicity.Month);
+        private void Year() => RunEvents(Periodicity.Year);
 
         public string FromPeriodicityToLocalizedString(Periodicity periodicity)
         {
@@ -190,7 +146,7 @@ namespace Computer_Era.Game
         }
     }
 
-    public class GameTimer  //Таймер
+    public class GameTimer
     {
         public DateTime DateAndTime = new DateTime(1990, 1, 1, 7, 0, 0); //Запилить защиту от изменений из вне
         public DispatcherTimer Timer = new DispatcherTimer();

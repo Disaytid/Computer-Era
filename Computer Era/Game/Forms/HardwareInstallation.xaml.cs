@@ -17,40 +17,42 @@ namespace Computer_Era.Game.Forms
     public partial class HardwareInstallation : UserControl
     {
         readonly GameEnvironment GameEnvironment;
-
         public HardwareInstallation(GameEnvironment gameEnvironment)
         {
             InitializeComponent();
-
             GameEnvironment = gameEnvironment;
             LoadItems(GameEnvironment.Items);
             LoadComputers(GameEnvironment.Computers);
         } 
-
         public void LoadItems(Items items) //Загрузка предметов в ListBox
         {
             List<ListBoxObject> items_source = new List<ListBoxObject>();
             ViewItems viewItems = new ViewItems();
             items_source = viewItems.GetSaveItemsSource(items, items_source, GameEnvironment.Computers.PlayerComputers);
-
             СomponentsList.ItemsSource = items_source;
         }
-
         public void LoadComputers(Computers computers)
         {
-            foreach (Computer computer in computers.PlayerComputers) { AssemblyList.Items.Add(computer.Name); }
+            for (int i = 0; i < computers.PlayerComputers.Count; i++) { Computer computer = computers.PlayerComputers[i]; _ = AssemblyList.Items.Add(computer.Name); }
         }
-
         private void AddAssemblyName(string name, bool isCleaningItemsSource = true)
         {
-            foreach (String item in AssemblyList.Items)
-            { if (item == name) { name = string.Empty; GameMessageBox.Show(Properties.Resources.AddAssembly, Properties.Resources.AssemblyMessage1, GameMessageBox.MessageBoxType.Warning); break; } }
+            for (int i = 0; i < AssemblyList.Items.Count; i++)
+            {
+                string item = (string)AssemblyList.Items[i];
+                if (item != name) { continue; }
+                name = string.Empty;
+                _ = GameMessageBox.Show(Properties.Resources.AddAssembly, Properties.Resources.AssemblyMessage1, GameMessageBox.MessageBoxType.Warning);
+                break;
+            }
 
             if (!string.IsNullOrEmpty(name))
-            { AssemblyList.Items.Add(name); if (isCleaningItemsSource) { ComputerСomponents.ItemsSource = new Collection<ListBoxObject>(); } }
+            {
+                AssemblyList.Items.Add(name);
+                if (isCleaningItemsSource) { ComputerСomponents.ItemsSource = new Collection<ListBoxObject>(); }
+            }
         }
         private void AddAssembly_Click(object sender, RoutedEventArgs e) => AddAssemblyName(AssemblyList.Text);
-
         private void DefaultBuild_Click(object sender, RoutedEventArgs e)
         {
             List<Computer> currentComputer = GameEnvironment.Computers.PlayerComputers.Where(n => n.Name == AssemblyList.Text).ToList();
@@ -80,42 +82,45 @@ namespace Computer_Era.Game.Forms
 
         private readonly Dictionary<Operators, Func<int, int, bool>> Operations = new Dictionary<Operators, Func<int, int, bool>>
         {
-                { Operators.More, (x, y) => x > y },
-                { Operators.Less, (x, y) => x < y },
-                { Operators.Equally, (x, y) => x == y },
-                { Operators.NotEqual, (x, y) => x != y },
-                { Operators.MoreOrEqual, (x, y) => x >= y },
-                { Operators.LessOrEqual, (x, y) => x <= y },
+            { Operators.More, (x, y) => x > y },
+            { Operators.Less, (x, y) => x < y },
+            { Operators.Equally, (x, y) => x == y },
+            { Operators.NotEqual, (x, y) => x != y },
+            { Operators.MoreOrEqual, (x, y) => x >= y },
+            { Operators.LessOrEqual, (x, y) => x <= y },
         };
         private bool IsEquality(int x, int y, Operators @operator, string problem_report)
         {
             if (!Operations.ContainsKey(@operator)) throw new ArgumentException(string.Format("Operation {0} is invalid", @operator), "op");
-
             bool isValid = Operations[@operator](x, y);
             if (!isValid) { ProblemReport(problem_report); } return isValid;
         }
         private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, Motherboard motherboard, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "case") == 0 || motherboard.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 || motherboard.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties))
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsNullOrCompatibleMotherboard(Collection<ListBoxObject> collection, Case @case, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "motherboard") == 0 || (GetSingleItem(collection, "motherboard") as Motherboard).CheckCompatibility(@case.Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "motherboard") == 0 || (GetSingleItem(collection, "motherboard") as Motherboard).CheckCompatibility(@case.Properties))
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsNullOrCompatibleCase(Collection<ListBoxObject> collection, PowerSupplyUnit psu, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "case") == 0 || psu.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 || psu.CheckCompatibility((GetSingleItem(collection, "case") as Case).Properties))
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsNullOrCompatiblePSU(Collection<ListBoxObject> collection, Case @case, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "psu") == 0 || (GetSingleItem(collection, "psu") as PowerSupplyUnit).CheckCompatibility(@case.Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "psu") == 0 || (GetSingleItem(collection, "psu") as PowerSupplyUnit).CheckCompatibility(@case.Properties))
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         static bool IsСompatibleSocket(Motherboard motherboard, CPU cpu, string problem_report)
@@ -127,19 +132,22 @@ namespace Computer_Era.Game.Forms
         private bool IsСompatibleRAMSlots(Collection<ListBoxObject> collection, RAM ram, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, ram.GetTypeValue()) < (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMSlots) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, ram.GetTypeValue()) < (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMSlots)
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsСompatibleRAMType(Collection<ListBoxObject> collection, RAM ram, string problem_report)
         {
             bool isValid = false;
-            if (ram.Properties.RAMTypes == (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RamType) { isValid = true; } else { ProblemReport(problem_report); }
+            if (ram.Properties.RAMTypes == (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RamType)
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsСompatibleCPU(Collection<ListBoxObject> collection, CPUCooler cpuCooler, string problem_report)
         {
             bool isValid = false;
-            if (cpuCooler.CheckCompatibility((GetSingleItem(collection, "cpu") as CPU).Properties)) { isValid = true; } else { ProblemReport(problem_report); }
+            if (cpuCooler.CheckCompatibility((GetSingleItem(collection, "cpu") as CPU).Properties))
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsСompatibleInterface(Collection<ListBoxObject> collection, VideoСard videoСard, string problem_report)
@@ -147,19 +155,21 @@ namespace Computer_Era.Game.Forms
             bool isValid = false;
 
             MotherboardProperties motherboard = (GetSingleItem(collection, "motherboard") as Motherboard).Properties;
-            if (GetCount(collection, "video_card") == 0)
+            switch (GetCount(collection, "video_card"))
             {
-                if (videoСard.IsCompatibility(motherboard)) { isValid = true; }
-            } else {
-                Collection<VideoСard> videoСards = new Collection<VideoСard>();
-
-                for (int i = 0; i > (collection.Where(m => m.Item.GetTypeValue() == "video_card").Count()); i++)
-                {
-                    VideoСard cVideoСard = collection[i].IObject as VideoСard;
-                    int mon_videoInterfaces = cVideoСard.Compatibility(((GetSingleItem(collection, "motherboard") as Motherboard).Properties));
-
-                    if (mon_videoInterfaces > 1) { if (cVideoСard.IsCompatibility(motherboard)) { isValid = true; break; } }
-                }
+                case 0:
+                    if (videoСard.IsCompatibility(motherboard)) { isValid = true; }
+                    break;
+                default:
+                    {
+                        for (int i = 0; i > collection.Where(m => m.Item.GetTypeValue() == "video_card").Count(); i++)
+                        {
+                            VideoСard cVideoСard = collection[i].IObject as VideoСard;
+                            int mon_videoInterfaces = cVideoСard.Compatibility(((GetSingleItem(collection, "motherboard") as Motherboard).Properties));
+                            if (mon_videoInterfaces > 1) { if (cVideoСard.IsCompatibility(motherboard)) { isValid = true; break; } }
+                        }
+                        break;
+                    }
             }
 
             if (!isValid) { ProblemReport(problem_report); } return isValid;
@@ -175,7 +185,8 @@ namespace Computer_Era.Game.Forms
         private bool IsEnteringRangeFrequency(RAM ram, Motherboard motherboard, string problem_report)
         {
             bool isValid = false;
-            if (motherboard.Properties.MinFrequency <= ram.Properties.ClockFrequency & ram.Properties.ClockFrequency <= motherboard.Properties.MaxFrequency) { isValid = true; } else { ProblemReport(problem_report); }
+            if (motherboard.Properties.MinFrequency <= ram.Properties.ClockFrequency & ram.Properties.ClockFrequency <= motherboard.Properties.MaxFrequency)
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsEnteringRangeVolume(Collection<ListBoxObject> collection, RAM ram, string problem_report)
@@ -184,13 +195,16 @@ namespace Computer_Era.Game.Forms
             int volume = 0;
 
             foreach (object obj in (collection.Where(i => i.Item.GetTypeValue() == "ram"))) { volume += ((obj as ListBoxObject).IObject as RAM).Properties.Volume; }
-            if (ram.Properties.Volume + volume <= (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMVolume) { isValid = true; } else { ProblemReport(problem_report); }
+            if (ram.Properties.Volume + volume <= (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RAMVolume)
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, HDD hdd, string problem_report)
         {
             bool isValid = false;
-            if (GetCount(collection, "case") == 0 || GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor))) { isValid = true; } else { ProblemReport(problem_report); }
+            if (GetCount(collection, "case") == 0 ||
+                GetCount(collection, hdd.GetTypeValue()) < ((GetSingleItem(collection, "case") as Case).GetCountCompatiblePlaces(hdd.Properties.FormFactor)))
+            { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
         private bool IsFreeSpaceInstallation(Collection<ListBoxObject> collection, OpticalDrive opticalDrive, string problem_report)
@@ -208,7 +222,8 @@ namespace Computer_Era.Game.Forms
                 if (collection[i].Item.Type == "optical_drive")
                 {
                     OpticalDrive od = collection[i].IObject as OpticalDrive;
-                    if ((hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30) && od.Properties.Interface == OpticalDriveInterface.SATA)
+                    if ((hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30) &&
+                        od.Properties.Interface == OpticalDriveInterface.SATA)
                     { count_interfaces++; }
                     else if (hdd.Properties.Interface == HDDInterface.IDE && od.Properties.Interface == OpticalDriveInterface.IDE)
                     { count_interfaces++; }
@@ -216,7 +231,8 @@ namespace Computer_Era.Game.Forms
                 else if (collection[i].Item.Type == "hdd")
                 {
                     HDD lhdd = collection[i].IObject as HDD;
-                    if ((hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30) && (lhdd.Properties.Interface == HDDInterface.sata_20 || lhdd.Properties.Interface == HDDInterface.sata_30))
+                    if ((hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30) &&
+                        (lhdd.Properties.Interface == HDDInterface.sata_20 || lhdd.Properties.Interface == HDDInterface.sata_30))
                     { count_interfaces++; }
                     else if (hdd.Properties.Interface == HDDInterface.IDE && lhdd.Properties.Interface == HDDInterface.IDE)
                     { count_interfaces++; }
@@ -235,8 +251,10 @@ namespace Computer_Era.Game.Forms
                 if (collection[i].Item.Type == "optical_drive")
                 {
                     OpticalDrive od = collection[i].IObject as OpticalDrive;
-                    if (opticalDrive.Properties.Interface == OpticalDriveInterface.SATA && od.Properties.Interface == OpticalDriveInterface.SATA) { count_interfaces++; }
-                    else if (opticalDrive.Properties.Interface == OpticalDriveInterface.IDE && od.Properties.Interface == OpticalDriveInterface.IDE) { count_interfaces++; }
+                    if (opticalDrive.Properties.Interface == OpticalDriveInterface.SATA && od.Properties.Interface == OpticalDriveInterface.SATA)
+                    { count_interfaces++; }
+                    else if (opticalDrive.Properties.Interface == OpticalDriveInterface.IDE && od.Properties.Interface == OpticalDriveInterface.IDE)
+                    { count_interfaces++; }
                 } else if (collection[i].Item.Type == "hdd") {
                     HDD hdd = collection[i].IObject as HDD;
                     if (opticalDrive.Properties.Interface == OpticalDriveInterface.SATA && hdd.Properties.Interface == HDDInterface.sata_20 || hdd.Properties.Interface == HDDInterface.sata_30)
@@ -315,7 +333,8 @@ namespace Computer_Era.Game.Forms
             }
             if (GetCount(collection, "case") == 1)
             {
-                if (count_interfaces < keyboard.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties, (GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; }
+                if (count_interfaces < keyboard.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties,
+                    (GetSingleItem(collection, "case") as Case).Properties)) { isValid = true; }
             } else {
                 if (count_interfaces < keyboard.Compatibility((GetSingleItem(collection, "motherboard") as Motherboard).Properties)) { isValid = true; }
             }
@@ -662,9 +681,6 @@ namespace Computer_Era.Game.Forms
             textBlock.Text = (Convert.ToInt32(textBlock.Text) * GameEnvironment.Money.PlayerCurrency[0].Course).ToString("N3") + " " + GameEnvironment.Money.PlayerCurrency[0].Abbreviation;
         }
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Visibility = Visibility.Hidden;
-        }
+        private void ButtonClose_Click(object sender, RoutedEventArgs e) => Visibility = Visibility.Hidden;
     }
 }

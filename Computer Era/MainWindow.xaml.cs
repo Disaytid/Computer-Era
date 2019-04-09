@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
 using System.Data.SQLite;
@@ -10,7 +9,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using Computer_Era.Game;
 using Computer_Era.Game.Forms;
 using Computer_Era.Game.Objects;
@@ -20,11 +18,6 @@ using Computer_Era.Game.Widgets;
 
 namespace Computer_Era
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    /// 
-
     public class GameEnvironment
     {
         public MainWindow Main;
@@ -39,37 +32,28 @@ namespace Computer_Era
         public Services Services;
         public Realty Realty;
         public IScenario Scenario;
-
         public Random Random = new Random(DateTime.Now.Millisecond);
     }
     public partial class MainWindow : Window
     { 
         readonly DataBase dataBase = new DataBase("ComputerEra.db3");
         public SQLiteConnection connection;
-
         readonly GameEnvironment GameEnvironment = new GameEnvironment();
-
         readonly Widgets Widgets = new Widgets();
-
         UserControl lastForm = null;
-
-        //DEV
-        //int dcout_click = 25;
-        //int dclick_fix;
 
         public MainWindow()
         {
             InitializeComponent();
             connection = dataBase.ConnectDB();
 
-            var instances = from t in Assembly.GetExecutingAssembly().GetTypes()
-                            where t.GetInterfaces().Contains(typeof(IScenario))
-                                     && t.GetConstructor(Type.EmptyTypes) != null
-                            select Activator.CreateInstance(t) as IScenario;
+            var instances = from t in Assembly.GetExecutingAssembly().GetTypes() //Получения списка сценариев реализовывающих интерфейс
+                where t.GetInterfaces().Contains(typeof(IScenario))
+                && t.GetConstructor(Type.EmptyTypes) != null
+                select Activator.CreateInstance(t) as IScenario;
             ScenariosList.ItemsSource = instances;
             if (ScenariosList.Items.Count > 0) { ScenariosList.SelectedIndex = 0; }
         }
-
         private void StartNewGame_Click(object sender, RoutedEventArgs e)
         {
             GameEnvironment.Main = this;
@@ -109,7 +93,7 @@ namespace Computer_Era
             }  
         }
 
-        enum ComputerStates
+        private enum ComputerStates
         {
             No,
             NoComputer,
@@ -190,7 +174,6 @@ namespace Computer_Era
                     Widgets.PlayerWidgets.Add(new Widget(new MoneyWidget(GameEnvironment)));
                     Widgets.PlayerWidgets.Add(new Widget(new ComputerWidget(GameEnvironment)));
                     Widgets.Draw(WidgetPanel);
-
                     // ================================================================================ //
 
                     ImageBrush brush = new ImageBrush
@@ -224,9 +207,7 @@ namespace Computer_Era
             if (opticalDiscs.Count == 0)
             {
                 OutputFromComputer.Text = "Reboot and Select proper Boot device \r or Insert Boot Media in selected Boot device";
-            }
-            else
-            {
+            } else {
                 OutputFromComputer.Text = "Load from CD...";
                 GameEnvironment.GameEvents.Events.Add(new GameEvent("", GameEnvironment.GameEvents.GameTimer.DateAndTime.AddHours(1), Periodicity.Hour, 1, LoadFromCD));
                 state = ComputerStates.BootFromDisk;
@@ -305,14 +286,12 @@ namespace Computer_Era
                     ImageSource = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.Properties.IconName + ".png")),
                     Stretch = Stretch.UniformToFill
                 };
-
-                 Image icon = new Image {
-                     Source = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.Properties.IconName + ".png")),
-                     Width = 60,
-                     Height = 60,
-                     HorizontalAlignment = HorizontalAlignment.Center
+                Image icon = new Image {
+                    Source = new BitmapImage(new Uri("pack://application:,,,/Resources/" + program.Properties.IconName + ".png")),
+                    Width = 60,
+                    Height = 60,
+                    HorizontalAlignment = HorizontalAlignment.Center
                 };
-
                 TextBlock textBlock = new TextBlock {
                     Text = program.Name,
                     TextWrapping = TextWrapping.Wrap,
@@ -320,7 +299,6 @@ namespace Computer_Era
                     Foreground = new SolidColorBrush(Colors.White),
                     HorizontalAlignment = HorizontalAlignment.Center
                 };
-
                 StackPanel stackPanel = new StackPanel
                 {
                     Margin = new Thickness(10, 10, 10, 10),
@@ -337,12 +315,11 @@ namespace Computer_Era
                         for (int row = 0; count_row > row; row++)
                         {
                             UIElementCollection children = Desktop.Children;
-                            if (Desktop.Children.Cast<UIElement>().Where(e => Grid.GetColumn(e) == collumn && Grid.GetRow(e) == row).Count() == 0)
-                            {
-                                program.Properties.Row = row;
-                                program.Properties.Column = collumn;
-                                goto InstallProgram;
-                            }
+                            if (Desktop.Children.Cast<UIElement>().Where(e => Grid.GetColumn(e) == collumn &&
+                                Grid.GetRow(e) == row).Count() != 0) { continue; }
+                            program.Properties.Row = row;
+                            program.Properties.Column = collumn;
+                            goto InstallProgram;
                         }
                     }
                 }
@@ -474,6 +451,11 @@ namespace Computer_Era
         {
             GameMessagePanel.Children.RemoveRange(1, GameMessagePanel.Children.Count - 1);
             GameMessage.Content = String.Empty;
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.Close();
         }
     }
 }
