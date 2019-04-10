@@ -23,7 +23,7 @@ namespace Computer_Era.Game.Objects
     }
     public class MotherboardProperties
     {
-        public MotherboardTypes MotherboardType;            //Тип корпуса
+        public MotherboardTypes MotherboardType;            //Тип материнской платы
         public Sockets Socket;                              //Сокет
         public bool MultiCoreProcessor;                     //Поддержка многоядерных процессоров
         public string Chipset;                              //Чипсет
@@ -47,9 +47,9 @@ namespace Computer_Era.Game.Objects
         public bool PCIE2_0;                                //Поддержка PCI-Express 2.0
         public bool PCIE3_0;                                //Поддержка PCI-Express 3.0
         public bool EmbeddedGraphics;                       //Поддержка встроенной графики
-        public Collection<VideoInterface> VideoInterfaces;  //Гнезда для вывода на монитор     
+        public Collection<VideoInterface> VideoInterfaces = new Collection<VideoInterface>();  //Гнезда для вывода на монитор     
         public bool Sound;                                  //Наличие встроенной звуковой карты
-        public int EthernetSpeed;                           //Скорость сетевой карты (если 0 карта отсутствует или вышла из строя)
+        public int EthernetSpeed;                           //Скорость сетевой карты (если 0 карта отсутствует или вышла из строя) килобит в секунду
         public bool PS2Keyboard;                            //PS/2 для клавиатуры
         public bool PS2Mouse;                               //PS/2 для мышки
         public int USB2_0;                                  //Количество USB гнезд 2.0

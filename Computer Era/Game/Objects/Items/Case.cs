@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Computer_Era.Game.Objects
 {
@@ -16,20 +17,35 @@ namespace Computer_Era.Game.Objects
     }
     public class CaseProperties
     {
+        [Required]
         public CaseTypes CaseType;  //Тип корпуса
-        public Collection<MotherboardTypes> FormFactor;
-        public Collection<PSUTypes> FormFactorPSU;
-        public int CoolerHeight;    //Максимальная высота куллера на процессоре до крышки
-        public int VideocardLength; //Максимальная длинна видеокарты до крышки
+        [Required]
+        public Collection<MotherboardTypes> FormFactor = new Collection<MotherboardTypes>();
+        [Required]
+        public Collection<PSUTypes> FormFactorPSU = new Collection<PSUTypes>();
+        [Required][Range(0, int.MaxValue)]
+        public int CoolerHeight;    //Максимальная высота куллера на процессоре до крышки в миллиметрах
+        [Required][Range(0, int.MaxValue)]
+        public int VideocardLength; //Максимальная длинна видеокарты до крышки в миллиметрах
+        [Required][Range(0, int.MaxValue)]
         public int Sections3_5;     //Секций 3.5
+        [Required][Range(0, int.MaxValue)]
         public int Sections2_5;     //Секций 2.5
+        [Required][Range(0, int.MaxValue)]
         public int ExpansionSlots;  //Слоты расширений
-        public int Builtin_Fans;    //Количество встроенных вентиляторов
+        [Required][Range(0, int.MaxValue)]
+        public int BuiltinFans;    //Количество встроенных вентиляторов
+        [Required][Range(0, int.MaxValue)]
         public int PlacesFans;      //Свободных мест для установки вентиляторов
-        public bool LiquidCooling;  //Возможность установки жидкостного охлождения]
+        [Required]
+        public bool LiquidCooling;  //Возможность установки жидкостного охлождения
+        [Required][Range(0, int.MaxValue)]
         public int USB2_0;          //Количество USB гнезд 2.0
+        [Required][Range(0, int.MaxValue)]
         public int USB3_0;          //Количество USB гнезд 3.0
+        [Required]
         public bool HeadphoneJack;  //Наличие гнезда для наушников
+        [Required]
         public bool MicrophoneJack; //Наличие гнезда для микрофона
     }
     public class Case : Item<CaseProperties>
@@ -41,7 +57,7 @@ namespace Computer_Era.Game.Objects
             info += "Тип корпуса: " + Properties.CaseType + Environment.NewLine;
             info += "Секций 3.5: " + Properties.Sections3_5 + Environment.NewLine;
             info += "Секций 2.5: " + Properties.Sections2_5 + Environment.NewLine;
-            info += "Встроенных вентиляторов: " + Properties.Builtin_Fans + Environment.NewLine;
+            info += "Встроенных вентиляторов: " + Properties.BuiltinFans + Environment.NewLine;
             info += "Мест для вентиляторов: " + Properties.PlacesFans + Environment.NewLine;
             info += "Поддержка жидкостного охлождения: " + (Properties.LiquidCooling ? "Да" : "Нет") + Environment.NewLine;
             info += "USB гнезд 2.0: " + Properties.USB2_0 + Environment.NewLine;

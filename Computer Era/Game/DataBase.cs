@@ -9,19 +9,17 @@ using System.Threading.Tasks;
 
 namespace Computer_Era.Game
 {
-    class DataBase
+    public class DataBase
     {
         public string Name;
 
         public DataBase (string name)
         {
-            this.Name = name;
+            Name = name;
         }
 
         public SQLiteConnection ConnectDB()
         {
-            string baseName = "ComputerEra.db3";
-
             if (System.IO.File.Exists(Name)) //Проверка наличия файла базы
             {
                 //Подключение при наличии файла
@@ -32,14 +30,14 @@ namespace Computer_Era.Game
             else
             {
                 //Создание фала базы данных и подключение
-                SQLiteConnection.CreateFile(baseName);
+                SQLiteConnection.CreateFile(Name);
 
-                SQLiteConnection.CreateFile(baseName);
+                SQLiteConnection.CreateFile(Name);
 
                 SQLiteFactory factory = (SQLiteFactory)DbProviderFactories.GetFactory("System.Data.SQLite");
                 using (SQLiteConnection connection = (SQLiteConnection)factory.CreateConnection())
                 {
-                    connection.ConnectionString = "Data Source = " + baseName;
+                    connection.ConnectionString = "Data Source = " + Name;
                     connection.Open();
 
                     //Создание таблиц

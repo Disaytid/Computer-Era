@@ -1,0 +1,223 @@
+﻿<Window x:Class="Computer_Era_Tools.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Computer_Era_Tools"
+        mc:Ignorable="d"
+        Title="MainWindow" MinHeight="480" MinWidth="640">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Корпуса">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="CaseName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="CasePrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="CaseManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Тип корпуса: "/>
+                                <ComboBox Name="CaseType"/>
+                                <Label Content="Форм фактор материнской платы: "/>
+                                <ListBox Name="CaseFormFactorMotherboard" Height="128" SelectionMode="Multiple"/>
+                                <Label Content="Форм фактор блока питания: "/>
+                                <ListBox Name="CaseFormFactorPSU" Height="128" SelectionMode="Multiple"/>
+                                <Label Content="Максимальная высота куллера, миллиметров: "/>
+                                <TextBox Name="CaseCoolerHeight"/>
+                                <Label Content="Максимальная длинна видеокарты, миллиметров: "/>
+                                <TextBox Name="CaseVideocardLength"/>
+                                <Label Content="Количество секций под 3.5: "/>
+                                <TextBox Name="CaseSections3_5"/>
+                                <Label Content="Количество секций под 2.5: "/>
+                                <TextBox Name="CaseSections2_5"/>
+                                <Label Content="Количество мест под слоты расширений: "/>
+                                <TextBox Name="CaseExpansionSlots"/>
+                                <Label Content="Установленно вентиляторов: "/>
+                                <TextBox Name="CaseBuiltinFans"/>
+                                <Label Content="Мест под установку вентиляторов: "/>
+                                <TextBox Name="CasePlacesFans"/>
+                                <CheckBox Name="CaseLiquidCooling" Content="Возможность установки водяной системы охлождения"/>
+                                <Label Content="Гнезд USB 2.0: "/>
+                                <TextBox Name="CaseUSB2_0"/>
+                                <Label Content="Гнезд USB 3.0: "/>
+                                <TextBox Name="CaseUSB3_0"/>
+                                <CheckBox Name="CaseHeadphoneJack" Content="Гнездо для наушников"/>
+                                <CheckBox Name="CaseMicrophoneJack" Content="Гнездо для микрофона"/>
+                                <Button Name="SaveCase" Content="Сохранить корпус" Click="SaveCase_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="Cases">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Материнские платы">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="MotherboardName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="MotherboardPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="MotherboardManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Формфактор: "/>
+                                <ComboBox Name="MotherboardType"/>
+                                <Label Content="Сокет: "/>
+                                <ComboBox Name="MotherboardCPUSocket"/>
+                                <CheckBox Name="MotherboardMultiCoreProcessor" Content="Поддержка многоядерных процессоров"/>
+                                <Label Content="Чипсет: "/>
+                                <TextBox Name="MotherboardChipset"/>
+                                <Label Content="BIOS: "/>
+                                <ComboBox Name="MotherboardBIOS"/>
+                                <CheckBox Name="MotherboardEFI" Content="EFI"/>
+                                <Label Content="Тип поддерживоемой памяти: "/>
+                                <ComboBox Name="MotherboardRamType"/>
+                                <Label Content="Количество слотов памяти: "/>
+                                <TextBox Name="MotherboardRAMSlots"/>
+                                <Label Content="Минимальная частота памяти: "/>
+                                <TextBox Name="MotherboardRamMinFrequency"/>
+                                <Label Content="Максимальная частота памяти: "/>
+                                <TextBox Name="MotherboardRamMaxFrequency"/>
+                                <Label Content="Максимальный объем памяти: "/>
+                                <TextBox Name="MotherboardRAMVolume"/>
+                                <Label Content="Количество гнезд IDE: "/>
+                                <TextBox Name="MotherboardIDE"/>
+                                <Label Content="Количество гнезд SATA 2.0: "/>
+                                <TextBox Name="MotherboardSATA2_0"/>
+                                <Label Content="Количество гнезд SATA 3.0: "/>
+                                <TextBox Name="MotherboardSATA3_0"/>
+                                <Label Content="Количество шин PCI: "/>
+                                <TextBox Name="MotherboardPCI"/>
+                                <Label Content="Количество шин PCI-Ex1: "/>
+                                <TextBox Name="MotherboardPCI_Ex1"/>
+                                <Label Content="Количество шин PCI-Ex4: "/>
+                                <TextBox Name="MotherboardPCI_Ex4"/>
+                                <Label Content="Количество шин PCI-Ex8: "/>
+                                <TextBox Name="MotherboardPCI_Ex8"/>
+                                <Label Content="Количество шин PCI-Ex16: "/>
+                                <TextBox Name="MotherboardPCI_Ex16"/>
+                                <CheckBox Name="MotherboardPCIE2_0" Content="Поддержка PCI Express 2.0"/>
+                                <CheckBox Name="MotherboardPCIE3_0" Content="Поддержка PCI Express 3.0"/>
+                                <CheckBox Name="MotherboardEmbeddedGraphics" Content="Встроенная видеокарта"/>
+                                <Label Content="Встроенные видеоинтерфейсы: "/>
+                                <ListBox Name="MotherboardVideoInterfaces" Height="128"/>
+                                <CheckBox Name="MotherboardSound" Content="Встроенная звуковая карта"/>
+                                <Label Content="Скорость сетевой карты (0 если нету), кбит/c: "/>
+                                <TextBox Name="MotherboardEthernetSpeed"/>
+                                <CheckBox Name="MotherboardPS2Keyboard" Content="Наличие гнезда PS/2 для клавиатуры"/>
+                                <CheckBox Name="MotherboardPS2Mouse" Content="Наличие гнезда PS/2 для мышки"/>
+                                <Label Content="Гнезд USB 2.0: "/>
+                                <TextBox Name="MotherboardUSB2_0"/>
+                                <Label Content="Гнезд USB 3.0: "/>
+                                <TextBox Name="MotherboardUSB3_0"/>
+                                <Button Name="SaveMotherboard" Content="Сохранить корпус" Click="SaveMotherboard_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="Motherboards">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Блоки питания">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="PSUName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="PSUPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="PSUManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Тип: "/>
+                                <ComboBox Name="PSUType"/>
+                                <Label Content="Тип коннектора питания МП: "/>
+                                <ComboBox Name="PSUTypeCM"/>
+                                <Label Content="Количество пинов 4+4 CPU: "/>
+                                <TextBox Name="PSUPin4plus4CPU"/>
+                                <Label Content="Количество пинов 6+2 PCI-E: "/>
+                                <TextBox Name="PSUPin6plus2PCIE"/>
+                                <Label Content="Количество 15 пинов SATA: "/>
+                                <TextBox Name="PSUPin15SATA"/>
+                                <Label Content="Количество 4 пинов IDE: "/>
+                                <TextBox Name="PSUPin4IDE"/>
+                                <Label Content="Минимальный уровень шума, ДБа: "/>
+                                <TextBox Name="PSUMinNoiseLevel"/>
+                                <Label Content="Максимальный уровень шума, ДБа: "/>
+                                <TextBox Name="PSUMaxNoiseLevel"/>
+                                <CheckBox Name="PSUOvervoltageProtection" Content="Защита от перенапряжения"/>
+                                <CheckBox Name="PSUOverloadProtection" Content="Защита от перегрузки"/>
+                                <CheckBox Name="PSUShortCircuitProtection" Content="Защита от короткого замыкания"/>
+                                <Button Name="SavePSU" Content="Сохранить блок питания" Click="SavePSU_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="PSUs">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Процесcоры">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="CPUName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="CPUPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="CPUManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Сокет: "/>
+                                <ComboBox Name="CPUSocket"/>
+                                <Label Content="Количество ядер: "/>
+                                <TextBox Name="CPUNumberCores"/>
+                                <Label Content="Минимальная частота, МГц: "/>
+                                <TextBox Name="CPUMinCPUFrequency"/>
+                                <Label Content="Максимальная частота МГц: "/>
+                                <TextBox Name="CPUMaxCPUFrequency"/>
+                                <Label Content="Минимальное тепловыделения: "/>
+                                <TextBox Name="CPUMinHeatDissipation"/>
+                                <Label Content="Максимальное тепловыделение: "/>
+                                <TextBox Name="CPUMaxHeatDissipation"/>
+                                <Label Content="Максимальная рабочая температура: "/>
+                                <TextBox Name="CPUMaximumTemperature"/>
+                                <Button Name="SaveCPU" Content="Сохранить процессор" Click="SaveCPU_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="CPUs">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

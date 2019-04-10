@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SQLite;
 using System.Windows.Media;
@@ -173,12 +174,16 @@ namespace Computer_Era.Game.Objects
 
     public class BaseItem
     {
+        [Required]
         public int Uid { get; set; }
         public ImageSource Image { get; set; }
+        [Required][StringLength(50, MinimumLength = 5)]
         public string Name { get; set; }
-
+        [Required][StringLength(50, MinimumLength = 5)]
         private string _type;
+        [Required][Range(0, int.MaxValue)]
         public int Price { get; set; }
+        [Required]
         public DateTime ManufacturingDate { get; set; }
 
         public readonly Dictionary<ItemTypes, string> ItemIcon = new Dictionary<ItemTypes, string>
