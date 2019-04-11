@@ -84,6 +84,7 @@ namespace Computer_Era.Game.Forms
 
         private void BuyButton_Click(object sender, RoutedEventArgs e)
         {
+            if (GameEnvironment.Player.House == null) { GameMessageBox.Show("Покупка", "Вам негде это хранить, для начала обзаведитесь жильем.", GameMessageBox.MessageBoxType.Information); return; }
             Button button = sender as Button;
 
             if (button.Tag is BaseItem)

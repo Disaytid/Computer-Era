@@ -52,7 +52,7 @@ namespace Computer_Era.Game.Objects
         public CPUCooler CPUCooler { get; set; }
         public Collection<RAM> RAMs { get; set; } = new Collection<RAM>();
         public Collection<HDD> HDDs { get; set; } = new Collection<HDD>();
-        public Collection<VideoСard> VideoСards { get; set; } = new Collection<VideoСard>();
+        public Collection<VideoCard> VideoCards { get; set; } = new Collection<VideoCard>();
         public Collection<OpticalDrive> OpticalDrives { get; set; } = new Collection<OpticalDrive>();
         public Collection<Monitor> Monitors { get; set; } = new Collection<Monitor>();
         public Collection<Mouse> Mice { get; set; } = new Collection<Mouse>();
@@ -166,7 +166,7 @@ namespace Computer_Era.Game.Objects
             if (CPUCooler == null) { errorСodes.Add(ErrorСodes.NoCPUCooler); }
             if (RAMs.Count == 0) { errorСodes.Add(ErrorСodes.NoRAM); }
             if (HDDs.Count == 0) { errorСodes.Add(ErrorСodes.NoHDD); }
-            if (Motherboard != null && !Motherboard.Properties.EmbeddedGraphics && VideoСards.Count == 0) { errorСodes.Add(ErrorСodes.NoVideoСard); }
+            if (Motherboard != null && !Motherboard.Properties.EmbeddedGraphics && VideoCards.Count == 0) { errorСodes.Add(ErrorСodes.NoVideoСard); }
 
             if (errorСodes.Count == 0) { errorСodes.Add(ErrorСodes.Ok); }
 

@@ -29,7 +29,7 @@ namespace Computer_Era.Game.Forms
                     if (computer.CPU != null && computer.CPU.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.CPU); }
                     if (computer.CPUCooler != null && computer.CPUCooler.GetType() == typeof(C)) { isInstalled = items[i].Equals(computer.CPUCooler); }
                     foreach (HDD hdd in computer.HDDs) { if (hdd != null && hdd.GetType() == typeof(C)) { if (items[i].Equals(hdd)) { isInstalled = true; break; } } }
-                    foreach (VideoСard videoСard in computer.VideoСards) { if (videoСard != null && videoСard.GetType() == typeof(C)) { if (items[i].Equals(videoСard)) { isInstalled = true; break; } } }
+                    foreach (VideoCard videoСard in computer.VideoCards) { if (videoСard != null && videoСard.GetType() == typeof(C)) { if (items[i].Equals(videoСard)) { isInstalled = true; break; } } }
                     foreach (Monitor monitor in computer.Monitors) { if (monitor != null && monitor.GetType() == typeof(C)) { if (items[i].Equals(monitor)) { isInstalled = true; break; } } }
                     foreach (OpticalDrive opticalDrive in computer.OpticalDrives) { if (opticalDrive != null && opticalDrive.GetType() == typeof(C)) { if (items[i].Equals(opticalDrive)) { isInstalled = true; break; } } }
                     foreach (Mouse mouse in computer.Mice) { if (mouse != null && mouse.GetType() == typeof(C)) { if (items[i].Equals(mouse)) { isInstalled = true; break; } } }
@@ -50,7 +50,7 @@ namespace Computer_Era.Game.Forms
             AddItemsToItemsSource(collection.CPUs, items_source, ItemTypes.cpu, computers);
             AddItemsToItemsSource(collection.CPUCoolers, items_source, ItemTypes.cpu_cooler, computers);
             AddItemsToItemsSource(collection.HDDs, items_source, ItemTypes.hdd, computers);
-            AddItemsToItemsSource(collection.VideoСards, items_source, ItemTypes.video_card, computers);
+            AddItemsToItemsSource(collection.VideoCards, items_source, ItemTypes.video_card, computers);
             AddItemsToItemsSource(collection.Monitors, items_source, ItemTypes.monitor, computers);
             AddItemsToItemsSource(collection.OpticalDrives, items_source, ItemTypes.optical_drive, computers);
             AddItemsToItemsSource(collection.Mice, items_source, ItemTypes.mouse, computers);

@@ -139,7 +139,7 @@ namespace Computer_Era.Game.Forms
         private bool IsСompatibleRAMType(Collection<ListBoxObject> collection, RAM ram, string problem_report)
         {
             bool isValid = false;
-            if (ram.Properties.RAMTypes == (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RamType)
+            if (ram.Properties.RAMType == (GetSingleItem(collection, "motherboard") as Motherboard).Properties.RamType)
             { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
@@ -150,7 +150,7 @@ namespace Computer_Era.Game.Forms
             { isValid = true; } else { ProblemReport(problem_report); }
             return isValid;
         }
-        private bool IsСompatibleInterface(Collection<ListBoxObject> collection, VideoСard videoСard, string problem_report)
+        private bool IsСompatibleInterface(Collection<ListBoxObject> collection, VideoCard videoСard, string problem_report)
         {
             bool isValid = false;
 
@@ -164,7 +164,7 @@ namespace Computer_Era.Game.Forms
                     {
                         for (int i = 0; i > collection.Where(m => m.Item.GetTypeValue() == "video_card").Count(); i++)
                         {
-                            VideoСard cVideoСard = collection[i].IObject as VideoСard;
+                            VideoCard cVideoСard = collection[i].IObject as VideoCard;
                             int mon_videoInterfaces = cVideoСard.Compatibility(((GetSingleItem(collection, "motherboard") as Motherboard).Properties));
                             if (mon_videoInterfaces > 1) { if (cVideoСard.IsCompatibility(motherboard)) { isValid = true; break; } }
                         }
@@ -418,11 +418,11 @@ namespace Computer_Era.Game.Forms
                     if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы!") &&
                         IsFreeVideoInterfaces(items, monitor, "Нет свободных гнезд для подключения."))
                     { InstallСomponent<Monitor>(items, monitor, button); }
-                } else if (button.Tag is VideoСard) {
-                    VideoСard videoCard = button.Tag as VideoСard;
+                } else if (button.Tag is VideoCard) {
+                    VideoCard videoCard = button.Tag as VideoCard;
                     if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, видеокарту куда вставлять прикажете?") &&
                         IsСompatibleInterface(items, videoCard, "Нет подходящего интерфейса!"))
-                    { InstallСomponent<VideoСard>(items, videoCard, button); }
+                    { InstallСomponent(items, videoCard, button); }
                 } else if (button.Tag is OpticalDrive) {
                     OpticalDrive opticalDrive = button.Tag as OpticalDrive;
                     if (IsEquality(GetCount(items, "motherboard"), 1, Operators.Equally, "У вас нет материнской платы, куда прикажете привод подключить?!") &&
@@ -471,9 +471,9 @@ namespace Computer_Era.Game.Forms
                         isChangedComputer = true;
                         foreach (HDD hdd in computer.HDDs) { isChangedComputer = hdd == (iobj as HDD) ? false : true; if (!isChangedComputer) { break; } }
                         break;
-                    case VideoСard _:
+                    case VideoCard _:
                         isChangedComputer = true;
-                        foreach (VideoСard videoСard in computer.VideoСards) { isChangedComputer = videoСard == (iobj as VideoСard) ? false : true; if (!isChangedComputer) { break; } }
+                        foreach (VideoCard videoCard in computer.VideoCards) { isChangedComputer = videoCard == (iobj as VideoCard) ? false : true; if (!isChangedComputer) { break; } }
                         break;
                     case OpticalDrive _:
                         isChangedComputer = true;
@@ -530,10 +530,10 @@ namespace Computer_Era.Game.Forms
                         foreach (HDD hdd in computer.HDDs) { if (iobj as HDD == hdd) { isNewHDD = false; } }
                         if (isNewHDD) { computer.HDDs.Add(iobj as HDD); }
                         break;
-                    case VideoСard _:
+                    case VideoCard _:
                         bool isNewVideoCard = true;
-                        foreach (VideoСard videoСard in computer.VideoСards) { if (iobj as VideoСard == videoСard) { isNewVideoCard = false; } }
-                        if (isNewVideoCard) { computer.VideoСards.Add(iobj as VideoСard); }
+                        foreach (VideoCard videoСard in computer.VideoCards) { if (iobj as VideoCard == videoСard) { isNewVideoCard = false; } }
+                        if (isNewVideoCard) { computer.VideoCards.Add(iobj as VideoCard); }
                         break;
                     case OpticalDrive _:
                         bool isNewOpticalDrive = true;
@@ -662,7 +662,7 @@ namespace Computer_Era.Game.Forms
                 if (computer[0].CPUCooler != null) { items.Add(new ListBoxObject(computer[0].CPUCooler)); }
                 if (computer[0].RAMs != null) { foreach (RAM ram in computer[0].RAMs) { items.Add(new ListBoxObject(ram)); } }
                 if (computer[0].HDDs != null) { foreach (HDD hdd in computer[0].HDDs) { items.Add(new ListBoxObject(hdd)); } }
-                if (computer[0].VideoСards != null) { foreach (VideoСard videoСard in computer[0].VideoСards) { items.Add(new ListBoxObject(videoСard)); } }
+                if (computer[0].VideoCards != null) { foreach (VideoCard videoСard in computer[0].VideoCards) { items.Add(new ListBoxObject(videoСard)); } }
                 if (computer[0].Monitors != null) { foreach (Monitor monitor in computer[0].Monitors) { items.Add(new ListBoxObject(monitor)); } }
                 if (computer[0].OpticalDrives != null) { foreach (OpticalDrive opticalDrive in computer[0].OpticalDrives) { items.Add(new ListBoxObject(opticalDrive)); } }
                 if (computer[0].Mice != null) { foreach (Mouse mouse in computer[0].Mice) { items.Add(new ListBoxObject(mouse)); } }

@@ -63,7 +63,7 @@ namespace Computer_Era.Game.Forms
                 AddItemsToItemsSource(collection.AllCPUs, items_source, ItemTypes.cpu);
                 AddItemsToItemsSource(collection.AllCPUCoolers, items_source, ItemTypes.cpu_cooler);
                 AddItemsToItemsSource(collection.AllHDDs, items_source, ItemTypes.hdd);
-                AddItemsToItemsSource(collection.AllVideoСards, items_source, ItemTypes.video_card);
+                AddItemsToItemsSource(collection.AllVideoCards, items_source, ItemTypes.video_card);
                 AddItemsToItemsSource(collection.AllMonitors, items_source, ItemTypes.monitor);
                 AddItemsToItemsSource(collection.AllOpticalDrives, items_source, ItemTypes.optical_drive);
                 AddItemsToItemsSource(collection.AllMice, items_source, ItemTypes.mouse);
@@ -83,7 +83,7 @@ namespace Computer_Era.Game.Forms
             } else if (type == Properties.Resources.HDD) {
                 AddItemsToItemsSource(collection.AllHDDs, items_source, ItemTypes.hdd);
             } else if (type == Properties.Resources.VideoCard) {
-                AddItemsToItemsSource(collection.AllVideoСards, items_source, ItemTypes.video_card);
+                AddItemsToItemsSource(collection.AllVideoCards, items_source, ItemTypes.video_card);
             } else if (type == Properties.Resources.Monitor) {
                 AddItemsToItemsSource(collection.AllMonitors, items_source, ItemTypes.monitor);
             } else if (type == Properties.Resources.OpticalDrive) {
@@ -99,6 +99,7 @@ namespace Computer_Era.Game.Forms
 
         private void BuyButton_Click(object sender, RoutedEventArgs e)
         {
+            if (GameEnvironment.Player.House == null) { GameMessageBox.Show("Покупка", "Вам негде это хранить, для начала обзаведитесь жильем.", GameMessageBox.MessageBoxType.Information); return; }
             Button button = sender as Button;
 
             if (button.Tag is BaseItem)
@@ -136,9 +137,9 @@ namespace Computer_Era.Game.Forms
                     } else if (button.Tag is Monitor) {
                         Monitor monitor = button.Tag as Monitor;
                         GameEnvironment.Items.Monitors.Add(new Monitor(monitor.Uid, monitor.Name, monitor.GetTypeValue(), monitor.Price, monitor.ManufacturingDate, monitor.Properties));
-                    } else if (button.Tag is VideoСard) {
-                        VideoСard videoCard = button.Tag as VideoСard;
-                        GameEnvironment.Items.VideoСards.Add(new VideoСard(videoCard.Uid, videoCard.Name, videoCard.GetTypeValue(), videoCard.Price, videoCard.ManufacturingDate, videoCard.Properties));
+                    } else if (button.Tag is VideoCard) {
+                        VideoCard videoCard = button.Tag as VideoCard;
+                        GameEnvironment.Items.VideoCards.Add(new VideoCard(videoCard.Uid, videoCard.Name, videoCard.GetTypeValue(), videoCard.Price, videoCard.ManufacturingDate, videoCard.Properties));
                     } else if (button.Tag is OpticalDrive) {
                         OpticalDrive opticalDrive = button.Tag as OpticalDrive;
                         GameEnvironment.Items.OpticalDrives.Add(new OpticalDrive(opticalDrive.Uid, opticalDrive.Name, opticalDrive.GetTypeValue(), opticalDrive.Price, opticalDrive.ManufacturingDate, opticalDrive.Properties));

@@ -218,6 +218,259 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
+            <TabItem Header="Оперативная память">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="RAMName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="RAMPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="RAMManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Тип: "/>
+                                <ComboBox Name="RAMType"/>
+                                <Label Content="Частота, МГц: "/>
+                                <TextBox Name="RAMClockFrequency"/>
+                                <Label Content="Объем, килобайт"/>
+                                <TextBox Name="RAMVolume"/>
+                                <Label Content="Напряжение питания: "/>
+                                <TextBox Name="RAMSupplyVoltage"/>
+                                <Button Name="SaveRAM" Content="Сохранить процессор" Click="SaveRAM_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="RAMs">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Воздушная система охлаждения">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="CPUCoolerName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="CPUCoolerPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="CPUCoolerManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Cокет:"/>
+                                <ListBox Name="CPUCoolerSockets" Height="128" SelectionMode="Multiple"/>
+                                <Label Content="Минимальная скорость вращения: "/>
+                                <TextBox Name="CPUCoolerMinRotationalSpeed"/>
+                                <Label Content="Максимальная скорость вращения: "/>
+                                <TextBox Name="CPUCoolerMaxRotationalSpeed"/>
+                                <Label Content="Воздушный поток, CFM: "/>
+                                <TextBox Name="CPUCoolerAirFlow"/>
+                                <Label Content="Минимальный уровень шума, дБ: "/>
+                                <TextBox Name="CPUCoolerMinNoiseLevel"/>
+                                <Label Content="Максимальный уровень шума, дБ: "/>
+                                <TextBox Name="CPUCoolerMaxNoiseLevel"/>
+                                <CheckBox Name="CPUCoolerSpeedController" Content="Регулятор оборотов"/>
+                                <Label Content="Ширина, мм: "/>
+                                <TextBox Name="CPUCoolerWidth"/>
+                                <Label Content="Высота, мм: "/>
+                                <TextBox Name="CPUCoolerHeight"/>
+                                <Label Content="Глубина, мм: "/>
+                                <TextBox Name="CPUCoolerDepth"/>
+                                <Button Name="SaveCPUCooler" Content="Сохранить куллер" Click="SaveCPUCooler_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="CPUCoolers">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Жесткие диски">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="HDDName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="HDDPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="HDDManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Форм фактор: "/>
+                                <ComboBox Name="HDDFormFactor"/>
+                                <Label Content="Объем, килобайт: "/>
+                                <TextBox Name="HDDVolume"/>
+                                <Label Content="Скорость записи, кб/c: "/>
+                                <TextBox Name="HDDWriteSpeed"/>
+                                <Label Content="Скорость чтения, кб/c: "/>
+                                <TextBox Name="HDDReadSpeed"/>
+                                <Label Content="Объем буфера: "/>
+                                <TextBox Name="HDDBufferCapacity"/>
+                                <Label Content="Интерфейс: "/>
+                                <ComboBox Name="HDDInterface"/>
+                                <Label Content="Максимальная рабочая температура: "/>
+                                <TextBox Name="HDDMaximumTemperature"/>
+                                <Button Name="SaveHDD" Content="Сохранить жесткий диск" Click="SaveHDD_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="HDDs">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Видеокарты">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="VideoСardName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="VideoCardPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="VideoCardManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Графический процессор: "/>
+                                <TextBox Name="VideoCardGraphicsProcessor"/>
+                                <Label Content="Интерфейс: "/>
+                                <ComboBox Name="VideoCardInterface"/>
+                                <Label Content="Ширина максимального разрешения"/>
+                                <TextBox Name="VideoCardMaxResolutionWidth"/>
+                                <Label Content="Высота максимального разрешения"/>
+                                <TextBox Name="VideoCardMaxResolutionHeight"/>
+                                <Label Content="Частота графического процессора, МГц: "/>
+                                <TextBox Name="VideoCardGPUFrequency"/>
+                                <Label Content="Память, килобайт:"/>
+                                <TextBox Name="VideoCardVideoMemory"/>
+                                <Label Content="Тип памяти: "/>
+                                <ComboBox Name="VideoCardTypeVideoMemory"/>
+                                <Label Content="Частота видеопамяти, МГц: "/>
+                                <TextBox Name="VideoCardVideoMemoryFrequency"/>
+                                <Label Content="Видеоинтерфейсы: "/>
+                                <ListBox Name="VideoCardVideoInterfaces" Height="128" SelectionMode="Multiple"/>
+                                <Button Name="SaveVideoСard" Content="Сохранить видеокарту" Click="SaveVideoСard_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="VideoCards">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Мониторы">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="MonitorName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="MonitorPrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="MonitorManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Размер, дюймы: "/>
+                                <TextBox Name="MonitorSize"/>
+                                <Label Content="Разрешение ширина: "/>
+                                <TextBox Name="MonitorResolutionWidth"/>
+                                <Label Content="Разрешение высота: "/>
+                                <TextBox Name="MonitorResolutionHeight"/>
+                                <Label Content="Максимальная частота обновления кадров, Гц: "/>
+                                <TextBox Name="MonitorMaxFrameRefreshRate"/>
+                                <Label Content="Видеоинтерфейс: "/>
+                                <ListBox Name="MonitorVideoInterfaces" Height="128" SelectionMode="Multiple"/>
+                                <Button Name="SaveMonitor" Content="Сохранить монитор" Click="SaveMonitor_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="Monitors">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Дисководы">
+                <Grid Background="White">
+                    <DockPanel>
+                        <ScrollViewer>
+                            <StackPanel Width="256" Margin="10, 0">
+                                <Label Content="Имя:"/>
+                                <TextBox Name="OpticalDriveName"/>
+                                <Label Content="Цена в универсальной игровой валюте: "/>
+                                <TextBox Name="OpticalDrivePrice"/>
+                                <Label Content="Дата выпуска: "/>
+                                <DatePicker Name="OpticalDriveManufacturingDate"/>
+                                <Separator Margin="0, 10"/>
+                                <Label Content="Интерфейс: "/>
+                                <ComboBox Name="OpticalDriveInterface"/>
+                                <Label Content="Ширина, мм: "/>
+                                <TextBox Name="OpticalDriveWidth"/>
+                                <Label Content="Высота, мм: "/>
+                                <TextBox Name="OpticalDriveHeight"/>
+                                <Label Content="Глубина, мм: "/>
+                                <TextBox Name="OpticalDriveDepth"/>
+                                <Label Content="Скорость записи CD-R, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedCD_R"/>
+                                <Label Content="Скорость записи CD-RW, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedCD_RW"/>
+                                <Label Content="Скорость записи DVD-R, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVD_R"/>
+                                <Label Content="Скорость записи DVD-R DL, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVD_R_DL"/>
+                                <Label Content="Скорость записи DVD-RW, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVD_RW"/>
+                                <Label Content="Скорость записи DV+R, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVDplusR"/>
+                                <Label Content="Скорость записи DVD+R DL, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVDplusR_DL"/>
+                                <Label Content="Скорость записи DVD+RW, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVDplusRW"/>
+                                <Label Content="Скорость записи DVD-RAM, x: "/>
+                                <TextBox Name="OpticalDriveMaxWritingSpeedDVD_RAM"/>
+                                <Label Content="Максимальная скорость чтения CD, x: "/>
+                                <TextBox Name="OpticalDriveMaxReadSpeedCD"/>
+                                <Label Content="Максимальная скорость чтения DVD, x:"/>
+                                <TextBox Name="OpticalDriveMaxReadSpeedDVD"/>
+                                <Label Content="Время доступа в режиме чтения CD, милисикунды: "/>
+                                <TextBox Name="OpticalDriveReadAccessTimeCD"/>
+                                <Label Content="Время доступа в режиме чтения DVD, милисикунды: "/>
+                                <TextBox Name="OpticalDriveReadAccessTimeDVD"/>
+                                <Button Name="SaveOpticalDrive" Content="Сохранить дисковод" Click="SaveOpticalDrive_Click"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <ListBox Name="OpticalDrives">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Label Content="{Binding Name}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
     </Grid>
 </Window>

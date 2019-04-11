@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Data.SQLite;
 using System.Windows;
+using Size = Computer_Era.Game.Objects.Size;
 
 namespace Computer_Era_Tools
 {
@@ -36,6 +37,27 @@ namespace Computer_Era_Tools
 
             CPUs.ItemsSource = items.AllCPUs;
             CPUSocket.ItemsSource = Enum.GetValues(typeof(Sockets));
+
+            RAMs.ItemsSource = items.AllRAMs;
+            RAMType.ItemsSource = Enum.GetValues(typeof(RAMTypes));
+
+            CPUCoolers.ItemsSource = items.AllCPUCoolers;
+            CPUCoolerSockets.ItemsSource = Enum.GetValues(typeof(Sockets));
+
+            HDDs.ItemsSource = items.AllHDDs;
+            HDDFormFactor.ItemsSource = Enum.GetValues(typeof(HDDFormFactor));
+            HDDInterface.ItemsSource = Enum.GetValues(typeof(HDDInterface));
+
+            VideoCards.ItemsSource = items.AllVideoCards;
+            VideoCardInterface.ItemsSource = Enum.GetValues(typeof(Interface));
+            VideoCardTypeVideoMemory.ItemsSource = Enum.GetValues(typeof(TypeVideoMemory));
+            VideoCardVideoInterfaces.ItemsSource = Enum.GetValues(typeof(VideoInterface));
+
+            Monitors.ItemsSource = items.AllMonitors;
+            MonitorVideoInterfaces.ItemsSource = Enum.GetValues(typeof(VideoInterface));
+
+            OpticalDrives.ItemsSource = items.AllOpticalDrives;
+            OpticalDriveInterface.ItemsSource = Enum.GetValues(typeof(OpticalDriveInterface));
         }
 
         private int InsertToDB<T>(Item<T> item)
@@ -197,6 +219,176 @@ namespace Computer_Era_Tools
                 cpu.Uid = id;
                 items.AllCPUs.Add(cpu);
                 CPUs.Items.Refresh();
+                MessageBox.Show("Запись добавлена!");
+            } catch {
+                MessageBox.Show("Запись не была добавлена в базу, вероятно не заполнено одно или несколько полей, либо заполнены неверно.");
+            }
+        }
+
+        private void SaveRAM_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RAMProperties ramProperties = new RAMProperties()
+                {
+                    RAMType = (RAMTypes)Enum.Parse(typeof(RAMTypes), RAMType.SelectedItem.ToString()),
+                    ClockFrequency = Convert.ToInt32(RAMClockFrequency.Text),
+                    Volume = Convert.ToInt32(RAMVolume.Text),
+                    SupplyVoltage = Convert.ToInt32(RAMSupplyVoltage.Text),
+                };
+                RAM ram = new RAM(0, RAMName.Text, "ram", Convert.ToInt32(RAMPrice.Text), RAMManufacturingDate.SelectedDate.Value, ramProperties);
+
+                int id = InsertToDB(ram);
+                ram.Uid = id;
+                items.AllRAMs.Add(ram);
+                RAMs.Items.Refresh();
+                MessageBox.Show("Запись добавлена!");
+            } catch {
+                MessageBox.Show("Запись не была добавлена в базу, вероятно не заполнено одно или несколько полей, либо заполнены неверно.");
+            }
+        }
+        private void SaveCPUCooler_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                CPUCoolerProperties cpuCoolerProperties = new CPUCoolerProperties()
+                {
+                    MinRotationalSpeed = Convert.ToInt32(CPUCoolerMinRotationalSpeed.Text),
+                    MaxRotationalSpeed = Convert.ToInt32(CPUCoolerMaxRotationalSpeed.Text),
+                    AirFlow = Convert.ToInt32(CPUCoolerAirFlow.Text),
+                    MinNoiseLevel = Convert.ToInt32(CPUCoolerMinNoiseLevel.Text),
+                    MaxNoiseLevel = Convert.ToInt32(CPUCoolerMaxNoiseLevel.Text),
+                    SpeedController = CPUCoolerSpeedController.IsChecked.Value,
+                    Size = new Size(Convert.ToInt32(CPUCoolerWidth.Text),
+                                    Convert.ToInt32(CPUCoolerHeight.Text),
+                                    Convert.ToInt32(CPUCoolerDepth.Text)),
+                };
+                for (int i = 0; CPUCoolerSockets.SelectedItems.Count > i; i++)
+                {
+                    cpuCoolerProperties.Sockets.Add((Sockets)Enum.Parse(typeof(Sockets), CPUCoolerSockets.SelectedItems[i].ToString()));
+                }
+                CPUCooler cpuCooler = new CPUCooler(0, CPUCoolerName.Text, "cpu_cooler", Convert.ToInt32(CPUCoolerPrice.Text), CPUCoolerManufacturingDate.SelectedDate.Value, cpuCoolerProperties);
+
+                int id = InsertToDB(cpuCooler);
+                cpuCooler.Uid = id;
+                items.AllCPUCoolers.Add(cpuCooler);
+                CPUCoolers.Items.Refresh();
+                MessageBox.Show("Запись добавлена!");
+            } catch {
+                MessageBox.Show("Запись не была добавлена в базу, вероятно не заполнено одно или несколько полей, либо заполнены неверно.");
+            }
+        }
+
+        private void SaveHDD_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                HDDProperties hddProperties = new HDDProperties()
+                {
+                    FormFactor = (HDDFormFactor)Enum.Parse(typeof(HDDFormFactor), HDDFormFactor.SelectedItem.ToString()),
+                    Volume = Convert.ToInt32(HDDVolume.Text),
+                    WriteSpeed = Convert.ToInt32(HDDWriteSpeed.Text),
+                    ReadSpeed = Convert.ToInt32(HDDReadSpeed.Text),
+                    BufferCapacity = Convert.ToInt32(HDDBufferCapacity.Text),
+                    Interface = (HDDInterface)Enum.Parse(typeof(HDDInterface), HDDInterface.SelectedItem.ToString()),
+                    MaximumTemperature = Convert.ToInt32(HDDMaximumTemperature.Text),
+                };
+                HDD hdd = new HDD(0, HDDName.Text, "hdd", Convert.ToInt32(HDDPrice.Text), HDDManufacturingDate.SelectedDate.Value, hddProperties);
+
+                int id = InsertToDB(hdd);
+                hdd.Uid = id;
+                items.AllHDDs.Add(hdd);
+                HDDs.Items.Refresh();
+                MessageBox.Show("Запись добавлена!");
+            } catch {
+                MessageBox.Show("Запись не была добавлена в базу, вероятно не заполнено одно или несколько полей, либо заполнены неверно.");
+            }
+        }
+
+        private void SaveMonitor_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                MonitorProperties monitorProperties = new MonitorProperties()
+                {
+                    Size = Convert.ToInt32(MonitorSize.Text),
+                    Resolution = new Resolution(Convert.ToInt32(MonitorResolutionWidth.Text), Convert.ToInt32(MonitorResolutionHeight.Text)),
+                    MaxFrameRefreshRate = Convert.ToInt32(MonitorMaxFrameRefreshRate.Text),
+                };
+                for (int i = 0; MonitorVideoInterfaces.SelectedItems.Count > i; i++)
+                {
+                    monitorProperties.VideoInterfaces.Add((VideoInterface)Enum.Parse(typeof(VideoInterface), MonitorVideoInterfaces.SelectedItems[i].ToString()));
+                }
+                Monitor monitor = new Monitor(0, MonitorName.Text, "monitor", Convert.ToInt32(MonitorPrice.Text), MonitorManufacturingDate.SelectedDate.Value, monitorProperties);
+
+                int id = InsertToDB(monitor);
+                monitor.Uid = id;
+                items.AllMonitors.Add(monitor);
+                Monitors.Items.Refresh();
+                MessageBox.Show("Запись добавлена!");
+            } catch {
+                MessageBox.Show("Запись не была добавлена в базу, вероятно не заполнено одно или несколько полей, либо заполнены неверно.");
+            }
+        }
+
+        private void SaveOpticalDrive_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                OpticalDriveProperties opticalDriveProperties = new OpticalDriveProperties()
+                {
+                    Interface = (OpticalDriveInterface)Enum.Parse(typeof(OpticalDriveInterface), OpticalDriveInterface.SelectedItem.ToString()),
+                    Size = new Size(Convert.ToInt32(OpticalDriveWidth.Text), Convert.ToInt32(OpticalDriveHeight.Text), Convert.ToInt32(OpticalDriveDepth.Text)),
+                    MaxWritingSpeed = new int[] { Convert.ToInt32(OpticalDriveMaxWritingSpeedCD_R.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedCD_RW.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVD_R.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVDplusR_DL.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVD_RW.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVDplusR.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVDplusR_DL.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVDplusRW.Text),
+                                              Convert.ToInt32(OpticalDriveMaxWritingSpeedDVD_RAM.Text) },
+                    MaxReadSpeedCD = Convert.ToInt32(OpticalDriveMaxReadSpeedCD.Text),
+                    MaxReadSpeedDVD = Convert.ToInt32(OpticalDriveMaxReadSpeedDVD.Text),
+                    ReadAccessTimeCD = Convert.ToInt32(OpticalDriveReadAccessTimeCD.Text),
+                    ReadAccessTimeDVD = Convert.ToInt32(OpticalDriveReadAccessTimeDVD.Text),
+                };
+                OpticalDrive opticalDrive = new OpticalDrive(0, OpticalDriveName.Text, "optical_drive", Convert.ToInt32(OpticalDrivePrice.Text), OpticalDriveManufacturingDate.SelectedDate.Value, opticalDriveProperties);
+
+                int id = InsertToDB(opticalDrive);
+                opticalDrive.Uid = id;
+                items.AllOpticalDrives.Add(opticalDrive);
+                OpticalDrives.Items.Refresh();
+                MessageBox.Show("Запись добавлена!");
+            } catch {
+                MessageBox.Show("Запись не была добавлена в базу, вероятно не заполнено одно или несколько полей, либо заполнены неверно.");
+            }
+        }
+
+        private void SaveVideoСard_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                VideoCardProperties videoCardProperties = new VideoCardProperties()
+                {
+                    GraphicsProcessor = VideoCardGraphicsProcessor.Text,
+                    Interface = (Interface)Enum.Parse(typeof(Interface), VideoCardInterface.SelectedItem.ToString()),
+                    MaxResolution = new Resolution(Convert.ToInt32(VideoCardMaxResolutionWidth.Text), Convert.ToInt32(VideoCardMaxResolutionHeight.Text)),
+                    GPUFrequency = Convert.ToInt32(VideoCardGPUFrequency.Text),
+                    VideoMemory = Convert.ToInt32(VideoCardVideoMemory.Text),
+                    TypeVideoMemory = (TypeVideoMemory)Enum.Parse(typeof(TypeVideoMemory), VideoCardTypeVideoMemory.SelectedItem.ToString()),
+                    VideoMemoryFrequency = Convert.ToInt32(VideoCardVideoMemoryFrequency.Text),
+                };
+                for (int i = 0; VideoCardVideoInterfaces.SelectedItems.Count > i; i++)
+                {
+                    videoCardProperties.VideoInterfaces.Add((VideoInterface)Enum.Parse(typeof(VideoInterface), VideoCardVideoInterfaces.SelectedItems[i].ToString()));
+                }
+                VideoCard videoCard = new VideoCard(0, VideoСardName.Text, "video_card", Convert.ToInt32(VideoCardPrice.Text), VideoCardManufacturingDate.SelectedDate.Value, videoCardProperties);
+
+                int id = InsertToDB(videoCard);
+                videoCard.Uid = id;
+                items.AllVideoCards.Add(videoCard);
+                Monitors.Items.Refresh();
                 MessageBox.Show("Запись добавлена!");
             }
             catch

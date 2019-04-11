@@ -18,7 +18,8 @@ namespace Computer_Era.Game.Forms
             InitializeComponent();
             GameEnvironment = gameEnvironment;
 
-            MaxSize = 16;
+            MaxSize = 0;
+            if (GameEnvironment.Player.House != null) { MaxSize = GameEnvironment.Player.House.StorageSize; }
             LoadItems(GameEnvironment.Items, GameEnvironment.Computers);
         }
 

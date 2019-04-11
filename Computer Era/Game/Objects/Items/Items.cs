@@ -39,7 +39,7 @@ namespace Computer_Era.Game.Objects
         public Collection<CPUCooler> AllCPUCoolers = new Collection<CPUCooler>();
         public Collection<HDD> AllHDDs = new Collection<HDD>();
         public Collection<Monitor> AllMonitors = new Collection<Monitor>();
-        public Collection<VideoСard> AllVideoСards = new Collection<VideoСard>();
+        public Collection<VideoCard> AllVideoCards = new Collection<VideoCard>();
         public Collection<OpticalDrive> AllOpticalDrives = new Collection<OpticalDrive>();
         public Collection<Mouse> AllMice = new Collection<Mouse>();
         public Collection<Keyboard> AllKeyboards = new Collection<Keyboard>();
@@ -55,7 +55,7 @@ namespace Computer_Era.Game.Objects
         public Collection<CPUCooler> CPUCoolers = new Collection<CPUCooler>();
         public Collection<HDD> HDDs = new Collection<HDD>();
         public Collection<Monitor> Monitors = new Collection<Monitor>();
-        public Collection<VideoСard> VideoСards = new Collection<VideoСard>();
+        public Collection<VideoCard> VideoCards = new Collection<VideoCard>();
         public Collection<OpticalDrive> OpticalDrives = new Collection<OpticalDrive>();
         public Collection<Mouse> Mice = new Collection<Mouse>();
         public Collection<Keyboard> Keyboards = new Collection<Keyboard>();
@@ -83,7 +83,7 @@ namespace Computer_Era.Game.Objects
 
                     string json = Convert.ToString(data_reader["properties"]);
                     AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
-                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoСards, OpticalDrives, Mice, Keyboards, OpticalDiscs, OperatingSystems, Programs);
+                                             Cases, Motherboards, RAMs, PowerSupplyUnits, CPUs, CPUCoolers, HDDs, Monitors, VideoCards, OpticalDrives, Mice, Keyboards, OpticalDiscs, OperatingSystems, Programs);
                 }
             }
 
@@ -103,7 +103,7 @@ namespace Computer_Era.Game.Objects
 
                     string json = Convert.ToString(data_reader["properties"]);
                     AddItemsToSaveCollection(id, name, type, price, manufacturing_date, json,
-                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoСards, AllOpticalDrives, AllMice,
+                                             AllCases, AllMotherboards, AllRAMs, AllPowerSupplyUnits, AllCPUs, AllCPUCoolers, AllHDDs, AllMonitors, AllVideoCards, AllOpticalDrives, AllMice,
                                              AllKeyboards, AllOpticalDiscs, AllOperatingSystems, AllPrograms);
                 }
             }
@@ -111,7 +111,7 @@ namespace Computer_Era.Game.Objects
 
         private void AddItemsToSaveCollection(int id, string name, string type, int price, DateTime manufacturing_date, string json,
                                               Collection<Case> cases, Collection<Motherboard> motherboards, Collection<RAM> rams, Collection<PowerSupplyUnit> powerSupplyUnits,
-                                              Collection<CPU> cpus, Collection<CPUCooler> cpu_coolers, Collection<HDD> hdds, Collection<Monitor> monitors, Collection<VideoСard> videoСards,
+                                              Collection<CPU> cpus, Collection<CPUCooler> cpu_coolers, Collection<HDD> hdds, Collection<Monitor> monitors, Collection<VideoCard> videoСards,
                                               Collection<OpticalDrive> opticalDrives, Collection<Mouse> mice, Collection<Keyboard> keyboards, Collection<OpticalDisc> discs,
                                               Collection<OperatingSystem> operatingSystems, Collection<Program> programs)
         {
@@ -135,7 +135,7 @@ namespace Computer_Era.Game.Objects
             } else if (itemType == ItemTypes.monitor) {
                 monitors.Add(new Monitor(id, name, type, price, manufacturing_date, AddItem<MonitorProperties>(json)));
             } else if (itemType == ItemTypes.video_card) {
-                videoСards.Add(new VideoСard(id, name, type, price, manufacturing_date, AddItem<VideoСardProperties>(json)));
+                videoСards.Add(new VideoCard(id, name, type, price, manufacturing_date, AddItem<VideoCardProperties>(json)));
             } else if (itemType == ItemTypes.optical_drive) {
                 opticalDrives.Add(new OpticalDrive(id, name, type, price, manufacturing_date, AddItem<OpticalDriveProperties>(json)));
             } else if (itemType == ItemTypes.mouse) {
@@ -171,7 +171,7 @@ namespace Computer_Era.Game.Objects
             Depth = depth;
         }
     }
-
+    
     public class BaseItem
     {
         [Required]
@@ -327,8 +327,8 @@ namespace Computer_Era.Game.Objects
 
     public class RAMProperties
     {
-        public RAMTypes RAMTypes { get; set; }      //Тип памяти
-        public int ClockFrequency { get; set; }     //Частота
+        public RAMTypes RAMType { get; set; }      //Тип памяти
+        public int ClockFrequency { get; set; }     //Частота МГц
         public int Volume { get; set; }             //Объем в мб.
         public double SupplyVoltage { get; set; }   //Напряжение питания
     }
@@ -340,7 +340,7 @@ namespace Computer_Era.Game.Objects
         public override string ToString()
         {
             string info = "Имя: " + Name + Environment.NewLine;
-            info += "Тип памяти: " + Properties.RAMTypes + Environment.NewLine;
+            info += "Тип памяти: " + Properties.RAMType + Environment.NewLine;
             info += "Частота: " + Properties.ClockFrequency + Environment.NewLine;
             info += "Объем: " + Properties.Volume + Environment.NewLine;
             info += "Напряжение: " + Properties.SupplyVoltage;
@@ -418,7 +418,7 @@ namespace Computer_Era.Game.Objects
 
     public class CPUCoolerProperties
     {
-        public Collection<Sockets> Sockets { get; set; }
+        public Collection<Sockets> Sockets { get; set; } = new Collection<Sockets>();
         public int MinRotationalSpeed { get; set; }
         public int MaxRotationalSpeed { get; set; }
         public int AirFlow { get; set; }                        //Воздушный поток в CFM
@@ -476,7 +476,7 @@ namespace Computer_Era.Game.Objects
         public double Size { get; set; }
         public Resolution Resolution {get; set;}
         public int MaxFrameRefreshRate { get; set; }                           //Максимальная частота обновления кадров (Гц)
-        public Collection<VideoInterface> VideoInterfaces { get; set; }
+        public Collection<VideoInterface> VideoInterfaces { get; set; } = new Collection<VideoInterface>();
     }
 
     public class Monitor : Item<MonitorProperties>
@@ -533,21 +533,21 @@ namespace Computer_Era.Game.Objects
     {
         GDDR5
     }
-    public class VideoСardProperties
+    public class VideoCardProperties
     {
         public string GraphicsProcessor { get; set; }
         public Interface Interface { get; set; }
         public Resolution MaxResolution { get; set; }
         public int GPUFrequency { get; set; } //МГц
-        public int VideoMemory { get; set; } //Кбит
+        public int VideoMemory { get; set; } //Кбайт
         public TypeVideoMemory TypeVideoMemory { get; set; }
         public int VideoMemoryFrequency { get; set; } //МГц
-        public Collection<VideoInterface> VideoInterfaces { get; set; }
+        public Collection<VideoInterface> VideoInterfaces { get; set; } = new Collection<VideoInterface>();
     }
 
-    public class VideoСard : Item<VideoСardProperties>
+    public class VideoCard : Item<VideoCardProperties>
     {
-        public VideoСard(int uid, string name, string type, int price, DateTime man_date, VideoСardProperties properties) : base(uid, name, type, price, man_date, properties) { }
+        public VideoCard(int uid, string name, string type, int price, DateTime man_date, VideoCardProperties properties) : base(uid, name, type, price, man_date, properties) { }
 
         public bool IsCompatibility(MotherboardProperties motherboard)
         {
