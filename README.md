@@ -1,2 +1,2 @@
 # Computer Era
-the game
+Cобери компьютер своей мечы!
