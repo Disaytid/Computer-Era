@@ -122,7 +122,7 @@
                                 <TextBox Name="MotherboardUSB2_0"/>
                                 <Label Content="Гнезд USB 3.0: "/>
                                 <TextBox Name="MotherboardUSB3_0"/>
-                                <Button Name="SaveMotherboard" Content="Сохранить корпус" Click="SaveMotherboard_Click"/>
+                                <Button Name="SaveMotherboard" Content="Сохранить" Click="SaveMotherboard_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="Motherboards">
@@ -149,16 +149,24 @@
                                 <Separator Margin="0, 10"/>
                                 <Label Content="Тип: "/>
                                 <ComboBox Name="PSUType"/>
+                                <Label Content="Мощность, W: "/>
+                                <TextBox Name="PSUPower"/>
                                 <Label Content="Тип коннектора питания МП: "/>
                                 <ComboBox Name="PSUTypeCM"/>
                                 <Label Content="Количество пинов 4+4 CPU: "/>
                                 <TextBox Name="PSUPin4plus4CPU"/>
                                 <Label Content="Количество пинов 6+2 PCI-E: "/>
                                 <TextBox Name="PSUPin6plus2PCIE"/>
+                                <Label Content="Количество пинов 6 PCI-E: "/>
+                                <TextBox Name="PSUPin6PCIE"/>
+                                <Label Content="Количество пинов 8 PCI-E: "/>
+                                <TextBox Name="PSUPin8PCIE"/>
                                 <Label Content="Количество 15 пинов SATA: "/>
                                 <TextBox Name="PSUPin15SATA"/>
                                 <Label Content="Количество 4 пинов IDE: "/>
                                 <TextBox Name="PSUPin4IDE"/>
+                                <Label Content="Количество 4 пинов Floppy: "/>
+                                <TextBox Name="PSUPin4Floppy"/>
                                 <Label Content="Минимальный уровень шума, ДБа: "/>
                                 <TextBox Name="PSUMinNoiseLevel"/>
                                 <Label Content="Максимальный уровень шума, ДБа: "/>
@@ -166,7 +174,7 @@
                                 <CheckBox Name="PSUOvervoltageProtection" Content="Защита от перенапряжения"/>
                                 <CheckBox Name="PSUOverloadProtection" Content="Защита от перегрузки"/>
                                 <CheckBox Name="PSUShortCircuitProtection" Content="Защита от короткого замыкания"/>
-                                <Button Name="SavePSU" Content="Сохранить блок питания" Click="SavePSU_Click"/>
+                                <Button Name="SavePSU" Content="Сохранить" Click="SavePSU_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="PSUs">
@@ -205,7 +213,7 @@
                                 <TextBox Name="CPUMaxHeatDissipation"/>
                                 <Label Content="Максимальная рабочая температура: "/>
                                 <TextBox Name="CPUMaximumTemperature"/>
-                                <Button Name="SaveCPU" Content="Сохранить процессор" Click="SaveCPU_Click"/>
+                                <Button Name="SaveCPU" Content="Сохранить" Click="SaveCPU_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="CPUs">
@@ -238,7 +246,7 @@
                                 <TextBox Name="RAMVolume"/>
                                 <Label Content="Напряжение питания: "/>
                                 <TextBox Name="RAMSupplyVoltage"/>
-                                <Button Name="SaveRAM" Content="Сохранить процессор" Click="SaveRAM_Click"/>
+                                <Button Name="SaveRAM" Content="Сохранить" Click="SaveRAM_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="RAMs">
@@ -282,7 +290,7 @@
                                 <TextBox Name="CPUCoolerHeight"/>
                                 <Label Content="Глубина, мм: "/>
                                 <TextBox Name="CPUCoolerDepth"/>
-                                <Button Name="SaveCPUCooler" Content="Сохранить куллер" Click="SaveCPUCooler_Click"/>
+                                <Button Name="SaveCPUCooler" Content="Сохранить" Click="SaveCPUCooler_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="CPUCoolers">
@@ -321,7 +329,7 @@
                                 <ComboBox Name="HDDInterface"/>
                                 <Label Content="Максимальная рабочая температура: "/>
                                 <TextBox Name="HDDMaximumTemperature"/>
-                                <Button Name="SaveHDD" Content="Сохранить жесткий диск" Click="SaveHDD_Click"/>
+                                <Button Name="SaveHDD" Content="Сохранить" Click="SaveHDD_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="HDDs">
@@ -364,7 +372,7 @@
                                 <TextBox Name="VideoCardVideoMemoryFrequency"/>
                                 <Label Content="Видеоинтерфейсы: "/>
                                 <ListBox Name="VideoCardVideoInterfaces" Height="128" SelectionMode="Multiple"/>
-                                <Button Name="SaveVideoСard" Content="Сохранить видеокарту" Click="SaveVideoСard_Click"/>
+                                <Button Name="SaveVideoСard" Content="Сохранить" Click="SaveVideoСard_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="VideoCards">
@@ -399,7 +407,7 @@
                                 <TextBox Name="MonitorMaxFrameRefreshRate"/>
                                 <Label Content="Видеоинтерфейс: "/>
                                 <ListBox Name="MonitorVideoInterfaces" Height="128" SelectionMode="Multiple"/>
-                                <Button Name="SaveMonitor" Content="Сохранить монитор" Click="SaveMonitor_Click"/>
+                                <Button Name="SaveMonitor" Content="Сохранить" Click="SaveMonitor_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="Monitors">
@@ -458,7 +466,7 @@
                                 <TextBox Name="OpticalDriveReadAccessTimeCD"/>
                                 <Label Content="Время доступа в режиме чтения DVD, милисикунды: "/>
                                 <TextBox Name="OpticalDriveReadAccessTimeDVD"/>
-                                <Button Name="SaveOpticalDrive" Content="Сохранить дисковод" Click="SaveOpticalDrive_Click"/>
+                                <Button Name="SaveOpticalDrive" Content="Сохранить" Click="SaveOpticalDrive_Click"/>
                             </StackPanel>
                         </ScrollViewer>
                         <ListBox Name="OpticalDrives">

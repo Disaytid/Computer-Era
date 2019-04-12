@@ -19,7 +19,8 @@ namespace Computer_Era.Game.Objects
         MicroBTX,
         BTX,
         LPX,
-        BabyAT
+        BabyAT,
+        EATX,
     }
     public class MotherboardProperties
     {

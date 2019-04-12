@@ -176,11 +176,15 @@ namespace Computer_Era_Tools
                 PowerSupplyUnitProperties psuProperties = new PowerSupplyUnitProperties()
                 {
                     PSUType = (PSUTypes)Enum.Parse(typeof(PSUTypes), PSUType.SelectedItem.ToString()),
+                    Power = Convert.ToInt32(PSUPower.Text),
                     TypeCM = (TypeConnectorMotherboard)Enum.Parse(typeof(TypeConnectorMotherboard), PSUTypeCM.SelectedItem.ToString()),
                     Pin4plus4CPU = Convert.ToInt32(PSUPin4plus4CPU.Text),
                     Pin6plus2PCIE = Convert.ToInt32(PSUPin6plus2PCIE.Text),
+                    Pin6PCIE = Convert.ToInt32(PSUPin6PCIE.Text),
+                    Pin8PCIE = Convert.ToInt32(PSUPin8PCIE.Text),
                     Pin15SATA = Convert.ToInt32(PSUPin15SATA.Text),
                     Pin4IDE = Convert.ToInt32(PSUPin4IDE.Text),
+                    Pin4Floppy = Convert.ToInt32(PSUPin4Floppy.Text),
                     MinNoiseLevel = Convert.ToInt32(PSUMinNoiseLevel.Text),
                     MaxNoiseLevel = Convert.ToInt32(PSUMaxNoiseLevel.Text),
                     OvervoltageProtection = PSUOvervoltageProtection.IsChecked.Value,
@@ -234,7 +238,7 @@ namespace Computer_Era_Tools
                     RAMType = (RAMTypes)Enum.Parse(typeof(RAMTypes), RAMType.SelectedItem.ToString()),
                     ClockFrequency = Convert.ToInt32(RAMClockFrequency.Text),
                     Volume = Convert.ToInt32(RAMVolume.Text),
-                    SupplyVoltage = Convert.ToInt32(RAMSupplyVoltage.Text),
+                    SupplyVoltage = Convert.ToDouble(RAMSupplyVoltage.Text),
                 };
                 RAM ram = new RAM(0, RAMName.Text, "ram", Convert.ToInt32(RAMPrice.Text), RAMManufacturingDate.SelectedDate.Value, ramProperties);
 

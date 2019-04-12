@@ -13,7 +13,8 @@ namespace Computer_Era.Game.Objects
         MidiTower,
         BigTower,
         Barebone,
-        Rack
+        Rack,
+        TinyTower,
     }
     public class CaseProperties
     {

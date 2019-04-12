@@ -268,6 +268,7 @@ namespace Computer_Era.Game.Objects
     public enum MotherboardBIOS
     {
         AMI,
+        Award,
     }
 
     public class BIOS
@@ -298,7 +299,11 @@ namespace Computer_Era.Game.Objects
         AM3plus,
         FM1,
         FM2,
-        FM2plus
+        FM2plus,
+        LGA1366,
+        Socket754,
+        Socket939,
+        Socket940,
     }
 
     public enum RAMTypes
@@ -363,12 +368,16 @@ namespace Computer_Era.Game.Objects
     public class PowerSupplyUnitProperties
     {
         public PSUTypes PSUType { get; set; }                   //Форм фактор
+        public int Power { get; set; }                          //Мощность W
         public TypeConnectorMotherboard TypeCM { get; set; }    //Тип коннектора питания к материнской плате
 
         public int Pin4plus4CPU { get; set; }                   //Количество пинов 4+4 CPU
         public int Pin6plus2PCIE { get; set; }                  //Количество PCI-E пинов 6+2
+        public int Pin6PCIE { get; set; }                      //Количество PCI-E пинов 6
+        public int Pin8PCIE { get; set; }                      //Количество PCI-E пинов 8
         public int Pin15SATA { get; set; }                      //Количество 15 пинов SATA
         public int Pin4IDE { get; set; }                        //Количество 4 пинов IDE
+        public int Pin4Floppy { get; set; }                        //Количество 4 пинов Floppy
 
         public int MinNoiseLevel { get; set; }                  //Минимальный уровень шума дБА
         public int MaxNoiseLevel { get; set; }                  //Максимальный уровень шума дБА
@@ -391,11 +400,15 @@ namespace Computer_Era.Game.Objects
         {
             string info = "Имя: " + Name + Environment.NewLine;
             info += "Форм фактор: " + Properties.PSUType + Environment.NewLine;
+            info += "Мощность: " + Properties.Power + " W" + Environment.NewLine;
             info += "Питание к материнской плате: " + Properties.TypeCM + Environment.NewLine;
             info += "Количество пинов CPU 4+4: " + Properties.Pin4plus4CPU + Environment.NewLine;
             info += "Количество пинов PCI-E 6+2: " + Properties.Pin6plus2PCIE + Environment.NewLine;
-            info += "Количество пинов SATA 15: " + Properties.Pin6plus2PCIE + Environment.NewLine;
-            info += "Количество пинов IDE 4: " + Properties.Pin6plus2PCIE + Environment.NewLine;
+            info += "Количество пинов PCI-E 6: " + Properties.Pin6PCIE + Environment.NewLine;
+            info += "Количество пинов PCI-E 8: " + Properties.Pin8PCIE + Environment.NewLine;
+            info += "Количество пинов SATA 15: " + Properties.Pin15SATA + Environment.NewLine;
+            info += "Количество пинов IDE 4: " + Properties.Pin4IDE + Environment.NewLine;
+            info += "Количество пинов IDE 4 Floppy: " + Properties.Pin4Floppy + Environment.NewLine;
             info += "Уровень шума: " + Properties.MinNoiseLevel + " - " + Properties.MaxNoiseLevel + Environment.NewLine;
             info += "Защита от перенапряжения: " + (Properties.OvervoltageProtection ? "Да" : "Нет") + Environment.NewLine;
             info += "Защита от перегрузки: " + (Properties.OverloadProtection ? "Да" : "Нет") + Environment.NewLine;
