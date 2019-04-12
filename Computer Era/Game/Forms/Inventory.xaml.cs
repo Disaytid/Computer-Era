@@ -34,7 +34,7 @@ namespace Computer_Era.Game.Forms
                 string path = "Resources/discs/" + opticalDisc.Properties.CoverName + ".png";
                 Uri uri = new Uri("pack://application:,,,/" + path);
 
-                if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
+                if (System.IO.File.Exists(System.IO.Path.GetFullPath(path)) == false)
                 {
                     uri = new Uri("pack://application:,,,/Resources/discs/disc-cover_empty.png");
                 }

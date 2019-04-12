@@ -21,7 +21,7 @@ namespace Computer_Era.Game.Forms
             MapReader mapReader = new MapReader(this);
             MapBrowser.ObjectForScripting = mapReader;
 
-            string path = System.IO.Path.GetFullPath("..\\..\\Game\\Leaflet\\index.html"); //Для релиза скорей всего нужна будет замена
+            string path = System.IO.Path.GetFullPath("Leaflet\\index.html");
             MapBrowser.Navigate(path);
         }
 

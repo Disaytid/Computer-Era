@@ -56,6 +56,9 @@ namespace Computer_Era.Game.Objects
         {
             string info = "Имя: " + Name + Environment.NewLine;
             info += "Тип корпуса: " + Properties.CaseType + Environment.NewLine;
+            info += "Форм фактор: ";
+            for (int i = 0; Properties.FormFactor.Count > i; i++) { if (i == 0) { info += Properties.FormFactor[i]; } else { info+= ",  " + Properties.FormFactor[i]; } }
+            info += Environment.NewLine;
             info += "Секций 3.5: " + Properties.Sections3_5 + Environment.NewLine;
             info += "Секций 2.5: " + Properties.Sections2_5 + Environment.NewLine;
             info += "Встроенных вентиляторов: " + Properties.BuiltinFans + Environment.NewLine;

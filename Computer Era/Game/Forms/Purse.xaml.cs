@@ -41,7 +41,7 @@ namespace Computer_Era.Game.Forms
                     string path = "Resources/currency/" + currency[i].SystemName + ".png";
                     Uri uri = new Uri("pack://application:,,,/" + path);
 
-                    if (System.IO.File.Exists(System.IO.Path.GetFullPath("../../" + path)) == false)
+                    if (System.IO.File.Exists(System.IO.Path.GetFullPath(path)) == false)
                     {
                         uri = new Uri("pack://application:,,,/Resources/currency/coin.png");
                     }

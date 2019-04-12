@@ -156,7 +156,7 @@ namespace Computer_Era.Game
         }
         private void SetImage(string imageName)
         {
-            string uri = string.Format("/Resources/message-icons/{0}", imageName);
+            string uri = string.Format("Resources/message-icons/{0}", imageName);
             var uriSource = new Uri(uri, UriKind.RelativeOrAbsolute);
             Icon.Source = new BitmapImage(uriSource);
         }

@@ -324,7 +324,8 @@ namespace Computer_Era.Game.Objects
         DVI,
         HDMI,
         DisplayPort,
-        DVI_D
+        DVI_D,
+        MiniHDMI,
     }
 
 
@@ -539,12 +540,18 @@ namespace Computer_Era.Game.Objects
 
     public enum Interface
     {
-        PCI_E16x3_0
+        PCI_E16x3_0,
+        PCI_E16x2_0,
+        PCI_E16,
     }
 
     public enum TypeVideoMemory
     {
-        GDDR5
+        GDDR5,
+        GDDR4,
+        GDDR3,
+        GDDR2,
+        GDDR,
     }
     public class VideoCardProperties
     {
